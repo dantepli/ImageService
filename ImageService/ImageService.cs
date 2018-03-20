@@ -64,7 +64,6 @@ namespace ImageService
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-
             eventLog.WriteEntry("Image Service Started");
 
             // Set up a timer to trigger every minute.  
