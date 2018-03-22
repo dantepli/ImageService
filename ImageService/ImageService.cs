@@ -43,7 +43,11 @@ namespace ImageService
 
     public partial class ImageService : ServiceBase
     {
+        // DLL import for service status function.
+        [DllImport("advapi32.dll", SetLastError = true)]
+            private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
+        private int eventId = 1;
         private ImageServer m_imageServer;          // The Image Server
 		private IImageServiceModal modal;
 		private IImageController controller;
@@ -52,12 +56,50 @@ namespace ImageService
 		// Here You will Use the App Config!
         protected override void OnStart(string[] args)
         {
+            // Update the service state to Start Pending.  
+            ServiceStatus serviceStatus = new ServiceStatus();
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
+            serviceStatus.dwWaitHint = 100000;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
+            eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information);
+            logging = new LoggingService();
+            logging.MessageRecieved += LoggingService_log;
+
+            // Update the service state to Running.
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
 
         protected override void OnStop()
         {
+            // Update the service state to Start Pending.  
+            ServiceStatus serviceStatus = new ServiceStatus();
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_STOP_PENDING;
+            serviceStatus.dwWaitHint = 100000;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
+            eventLog.WriteEntry("Image Service has Ended", EventLogEntryType.Information);
+
+            // Update the service state to Running.  
+            serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
+            SetServiceStatus(this.ServiceHandle, ref serviceStatus);
+        }
+
+        private void LoggingService_log(object sender, MessageRecievedEventArgs e)
+        {
+            switch(e.Status)
+            {
+                case MessageTypeEnum.FAIL:
+                        eventLog.WriteEntry(e.Message, EventLogEntryType.Error);
+                        break;
+                case MessageTypeEnum.INFO:
+                        eventLog.WriteEntry(e.Message, EventLogEntryType.Information);
+                        break;
+                case MessageTypeEnum.WARNING:
+                        eventLog.WriteEntry(e.Message, EventLogEntryType.Warning);
+                        break;
+            }
         }
     }
 }

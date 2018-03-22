@@ -15,10 +15,16 @@ namespace ImageService.Modal
     public class ImageServiceModal : IImageServiceModal
     {
         #region Members
+        private static Regex r = new Regex(":");
         private string m_OutputFolder;            // The Output Folder
-        private int m_thumbnailSize;              // The Size Of The Thumbnail Size
-       
+        private int m_thumbnailSize;              // The Size Of The Thumbnail Size 
         #endregion
+
+        public string AddFile(string path, out bool result)
+        {
+            // check if a folder exists
+            Directory.Exists(m_OutputFolder)
+        }
 
     }
 }
