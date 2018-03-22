@@ -14,9 +14,11 @@ namespace ImageService.Modal
 {
     public class ImageServiceModal : IImageServiceModal
     {
-        public string AddFile(string path, out bool result)
-        {
-            throw new NotImplementedException();
-        }
+        #region Members
+        private string m_OutputFolder;            // The Output Folder
+        private int m_thumbnailSize;              // The Size Of The Thumbnail Size
+       
+        #endregion
+
     }
 }

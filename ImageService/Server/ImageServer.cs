@@ -5,6 +5,9 @@ using ImageService.Logging;
 using ImageService.Modal;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ImageService.Server
 {
@@ -14,13 +17,11 @@ namespace ImageService.Server
         private IImageController m_controller;
         private ILoggingService m_logging;
         #endregion
-        List<IDirectoryHandler> directoryHandlers;
-        ILogging logger;
-
 
         #region Properties
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;          // The event that notifies about a new Command being recieved
         #endregion
 
+       
     }
 }
