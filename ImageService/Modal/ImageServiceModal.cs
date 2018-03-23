@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
+//using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,7 +23,9 @@ namespace ImageService.Modal
         public string AddFile(string path, out bool result)
         {
             // check if a folder exists
-            Directory.Exists(m_OutputFolder)
+            //Directory.Exists(m_OutputFolder);
+            result = true;
+            return null;
         }
 
     }

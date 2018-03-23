@@ -53,6 +53,21 @@ namespace ImageService
 		private IImageController controller;
 		private ILoggingService logging;
 
+        public ImageService()
+        {
+            InitializeComponent();
+            eventLog = new System.Diagnostics.EventLog();
+
+            if (!System.Diagnostics.EventLog.SourceExists("MySource"))
+            {
+                System.Diagnostics.EventLog.CreateEventSource(
+                    "MySource", "MyNewLog");
+            }
+            eventLog.Source = "MySource";
+            eventLog.Log = "MyNewLog";
+
+        }
+
 		// Here You will Use the App Config!
         protected override void OnStart(string[] args)
         {
@@ -79,25 +94,31 @@ namespace ImageService
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            eventLog.WriteEntry("Image Service has Ended", EventLogEntryType.Information);
+            eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information);
 
             // Update the service state to Running.  
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
 
+
+        /// <summary>
+        /// Logging Service log event, logs the event using the system event logger.
+        /// </summary>
+        /// <param name="sender">The object that triggered the event.</param>
+        /// <param name="e">The event arguments</param>
         private void LoggingService_log(object sender, MessageRecievedEventArgs e)
         {
             switch(e.Status)
             {
                 case MessageTypeEnum.FAIL:
-                        eventLog.WriteEntry(e.Message, EventLogEntryType.Error);
+                        eventLog.WriteEntry(e.Message, EventLogEntryType.Error, eventId++);
                         break;
                 case MessageTypeEnum.INFO:
-                        eventLog.WriteEntry(e.Message, EventLogEntryType.Information);
+                        eventLog.WriteEntry(e.Message, EventLogEntryType.Information, eventId++);
                         break;
                 case MessageTypeEnum.WARNING:
-                        eventLog.WriteEntry(e.Message, EventLogEntryType.Warning);
+                        eventLog.WriteEntry(e.Message, EventLogEntryType.Warning, eventId++);
                         break;
             }
         }
