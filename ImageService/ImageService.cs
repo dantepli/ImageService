@@ -79,7 +79,7 @@ namespace ImageService
 
             eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information);
             logging = new LoggingService();
-            logging.MessageRecieved += LoggingService_log;
+            logging.MessageRecieved += OnLog;
 
             // Update the service state to Running.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
@@ -107,7 +107,7 @@ namespace ImageService
         /// </summary>
         /// <param name="sender">The object that triggered the event.</param>
         /// <param name="e">The event arguments</param>
-        private void LoggingService_log(object sender, MessageRecievedEventArgs e)
+        private void OnLog(object sender, MessageRecievedEventArgs e)
         {
             switch(e.Status)
             {
