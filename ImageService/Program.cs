@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using ImageService.Modal;
 
 namespace ImageService
 {
@@ -14,12 +16,25 @@ namespace ImageService
         /// </summary>
         static void Main()
         {
-            ServiceBase[] ServicesToRun;
-            ServicesToRun = new ServiceBase[]
-            {
-                new ImageService()
-            };
-            ServiceBase.Run(ServicesToRun);
+            //ServiceBase[] ServicesToRun;
+            //ServicesToRun = new ServiceBase[]
+            //{
+            //    new ImageService()
+            //};
+            //ServiceBase.Run(ServicesToRun);
+
+
+
+            // -----------------------------------------------
+            // TEST SECTION
+
+            string folder = @"C:\Users\Dan\Desktop\OutputDir";
+            string path = @"C:\Users\Dan\Desktop\test.jpg";
+            IImageServiceModal service = new ImageServiceModal(folder, 100);
+            bool res;
+            service.AddFile(path, out res);
+
+            // -----------------------------------------------
         }
     }
 }
