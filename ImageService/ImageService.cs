@@ -48,10 +48,10 @@ namespace ImageService
             private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
 
         private int eventId = 1;
-        private ImageServer m_imageServer;          // The Image Server
-		private IImageServiceModal modal;
-		private IImageController controller;
-		private ILoggingService logging;
+        private ImageServer m_imageServer;      // The Image Server
+		private IImageServiceModal modal;       // TODO move to server
+		private IImageController controller;    // TODO move to server
+        private ILoggingService logging;
 
         public ImageService()
         {

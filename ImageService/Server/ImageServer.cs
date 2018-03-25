@@ -23,5 +23,31 @@ namespace ImageService.Server
         #endregion
 
        
+        public ImageServer()
+        {
+            IImageServiceModal imageModal = new ImageServiceModal(System.Configuration.ConfigurationSettings.AppSettings["OutputDir"],
+               Int32.Parse(System.Configuration.ConfigurationSettings.AppSettings["ThumbnailSize"]));
+
+            m_controller = new ImageController(imageModal);
+
+            m_logging = new LoggingService();
+        }
+
+        public void createHandler(string dir_path)
+        {
+            IDirectoryHandler h = new DirectoyHandler(dir_path, m_controller);
+            h.DirectoryClose += onCloseServer;
+            CommandRecieved += h.OnCommandRecieved;
+        }
+
+        private void onCloseServer(object sender, DirectoryCloseEventArgs e)
+        {
+
+        }
+
+        public void onCommand()
+        {
+            // onCommand("*", onCloseServer);
+        }
     }
 }
