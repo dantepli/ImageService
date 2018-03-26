@@ -1,5 +1,4 @@
-﻿using ImageService.Infrastructure;
-using ImageService.Modal;
+﻿using ImageService.Modal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +9,16 @@ namespace ImageService.Commands
 {
     public class NewFileCommand : ICommand
     {
-        private IImageServiceModal m_modal;
+        private IImageServiceModal modal;
 
-        public NewFileCommand(IImageServiceModal modal)
+        public NewFileCommand(IImageServiceModal m)
         {
-            m_modal = modal;            // Storing the Modal
+            this.modal = m;
         }
 
         public string Execute(string[] args, out bool result)
         {
-            // The String Will Return the New Path if result = true, and will return the error message
-            result = true;
-            return null;
+            return modal.AddFile(args[0], out result);
         }
     }
 }
