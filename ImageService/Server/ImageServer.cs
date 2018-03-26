@@ -17,6 +17,7 @@ namespace ImageService.Server
         #region Members
         private IImageController m_controller;
         private ILoggingService m_logging;
+        // TODO remove if needed
         private Dictionary<int, ICommand> commands;
         #endregion
 
@@ -53,6 +54,7 @@ namespace ImageService.Server
         {
             IDirectoryHandler h = (DirectoyHandler) sender;
             CommandRecieved -= h.OnCommandRecieved;
+            // TODO do we need onCommand -= h.onCloseServer;
         }
 
         public void sendCommand()
