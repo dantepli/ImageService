@@ -37,15 +37,16 @@ namespace ImageService.Server
 
             commands = new Dictionary<int, ICommand>()
             {
-                {(int) CommandEnum.CloseCommand, new CloseCommand(ref CommandRecieved)}
+                {(int) CommandEnum.CloseCommand, new CloseCommand(CommandRecieved)}
             };
         }
 
         public void createHandler(string dir_path)
         {
-            IDirectoryHandler h = new DirectoyHandler(dir_path, m_controller);
+            IDirectoryHandler h = new DirectoyHandler(m_controller, m_logging);
             h.DirectoryClose += onCloseServer;
             CommandRecieved += h.OnCommandRecieved;
+            h.StartHandleDirectory(dir_path);
         }
 
         private void onCloseServer(object sender, DirectoryCloseEventArgs e)
@@ -57,7 +58,7 @@ namespace ImageService.Server
         public void sendCommand()
         {
             // invoke the event - send a message to all handlers(*)
-            CommandRecieved?.Invoke(this, new CommandRecievedEventArgs(0, null, "*"));
+            CommandRecieved?.Invoke(this, new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, "*"));
         }
     }
 }
