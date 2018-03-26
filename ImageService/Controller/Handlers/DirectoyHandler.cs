@@ -68,13 +68,14 @@ namespace ImageService.Controller.Handlers
 
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            if(e.RequestDirPath == m_path)
+            if(e.RequestDirPath == "*" || e.RequestDirPath == m_path)
             {
                 bool result;
-                m_controller.ExecuteCommand(e.CommandID, e.Args, out result);
-                if(result)
+                // TO CHANGE?
+                if(e.CommandID == (int) CommandEnum.CloseCommand)
                 {
-                   // Log?
+                    m_dirWatcher.EnableRaisingEvents = false;
+                    m_dirWatcher.Dispose();
                 }
             }
         }
