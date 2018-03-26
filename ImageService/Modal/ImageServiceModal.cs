@@ -1,14 +1,10 @@
-﻿using ImageService.Infrastructure;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ImageService.Modal
 {
@@ -28,13 +24,16 @@ namespace ImageService.Modal
 
         public string AddFile(string path, out bool result)
         {
-            // check if a folder exists
-            Directory.CreateDirectory(m_OutputFolder);
+            string fileCreatedPath;
+            DirectoryInfo dir = Directory.CreateDirectory(m_OutputFolder);
+            dir.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+            Directory.CreateDirectory(Path.Combine(m_OutputFolder, "Thumbnails"));
             try
             {
                 DateTime dateTime = GetDateTakenFromImage(path);
-                CreateImageFolder(dateTime);
-                result = MoveFile(path, dateTime);
+                CreateImageFolder(dateTime, "");
+                fileCreatedPath = HandleNewFileAddition(path, dateTime, out result);
+                CreateThumbnail(fileCreatedPath, dateTime);
             }
             catch(ArgumentException e)
             {
@@ -42,38 +41,100 @@ namespace ImageService.Modal
                 result = false;
                 return "Error. Failed moving the file.";
             }
-            return null;
+            return fileCreatedPath;
         }
 
+        private bool CreateThumbnail(string path, DateTime dateTime)
+        {
+            bool result;
+            string thumbnailPath = Path.Combine(CreateImageFolder(dateTime, "Thumbnails"), Path.GetFileName(path));
+            Image img = Image.FromFile(path);
+            Image resized = ResizeImage(img, m_thumbnailSize, m_thumbnailSize);
+            resized.RotateFlip(RotateFlipType.Rotate270FlipY);
+            resized.Save(thumbnailPath);
+            return true;
+
+
+            // --------------------------------------------
+            // TO CHANGE
+            //try
+            //{
+            //    Image image = Image.FromFile(path);
+            //    Image thumb = image.GetThumbnailImage(m_thumbnailSize, m_thumbnailSize, () => false, IntPtr.Zero);
+            //    thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
+            //    return true;
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
+            // ----------------------------------------------
+        }
+
+
+        public Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
 
         /// <summary>
         /// Copies a file from path to the appropriate outputDir path, i.e: outputDir\year\month.
         /// </summary>
         /// <param name="path">a file path.</param>
         /// <param name="dateTime">a DateTime object corresponding to the file.</param>
-        /// <returns>true if successful.</returns>
-        private bool MoveFile(string path, DateTime dateTime) {
+        /// <param name="result">a result out boolean to indicate if the operation was successful</param>
+        /// <returns>The path to the new file added if successfull, null otherwise.</returns>
+        private string HandleNewFileAddition(string path, DateTime dateTime, out bool result)
+        {
             string fileName = Path.GetFileName(path);
-            string outputPath = Path.Combine(ParseMonthYearPath(dateTime), fileName);
-            try
-            {
-                File.Copy(path, outputPath);
-                return true;
-            }
-            catch(IOException e)
-            {
-                return HandleDuplicateFile(path, outputPath);
-            }
+            string outputPath = Path.Combine(ParseMonthYearPath(dateTime, ""), fileName);
+            return CopyFile(path, outputPath, out result);
         }
 
+        private string CopyFile(string srcPath, string outputPath, out bool result)
+        {
+            try
+            {
+                File.Copy(srcPath, outputPath);
+                result = true;
+                return outputPath;
+            }
+            catch (IOException e)
+            {
+                string newFilePath = HandleDuplicateFile(srcPath, outputPath, out result);
+                result = newFilePath != null; // true if the copying was successful.
+                return newFilePath;
+            }
+        }
 
         /// <summary>
         /// Moves a file from path to outputPath with duplications. For example, filename.txt will become filename(1).txt and etc.
         /// </summary>
-        /// <param name="path">a path to move a file from.</param>
+        /// <param name="srcPath">a path to move a file from.</param>
         /// <param name="outputPath">a path to move the file to.</param>
+        /// <param name="result">a result out boolean to indicate if the operation was successful</param>
         /// <returns>true if successful.</returns>
-        private bool HandleDuplicateFile(string path, string outputPath)
+        private string HandleDuplicateFile(string srcPath, string outputPath, out bool result)
         {
             string directory = Path.GetDirectoryName(outputPath);
             string fileName = Path.GetFileNameWithoutExtension(outputPath) + "({0})";
@@ -83,22 +144,24 @@ namespace ImageService.Modal
             {
                 string filePath = Path.Combine(directory, string.Format(fileName, i) + extension);
                 if(!File.Exists(filePath)) {
-                    File.Copy(path, filePath);
-                    return true;
+                    File.Copy(srcPath, filePath);
+                    result = true;
+                    return filePath;
                 }
             }
-            return false;
+            result = false;
+            return null;
         }
 
-
         /// <summary>
-        /// Creates a folder in the outputDir according to the year and month. Path is m_outputDir\month\year.
+        /// Creates a folder in the outputDir according to the year and month. Path is m_outputDir\subfolder\month\year.
         /// </summary>
         /// <param name="dateTime">a DateTime to extract year and month info from.</param>
-        private void CreateImageFolder(DateTime dateTime)
+        private string CreateImageFolder(DateTime dateTime, string subfolder)
         {
-            string path = ParseMonthYearPath(dateTime);
+            string path = ParseMonthYearPath(dateTime, subfolder);
             Directory.CreateDirectory(path);
+            return path;
         }
 
         /// <summary>
@@ -106,10 +169,9 @@ namespace ImageService.Modal
         /// </summary>
         /// <param name="dateTime">a DateTime object to parse Month and Year Properties from.</param>
         /// <returns>a string represntation of the path.</returns>
-        private string ParseMonthYearPath(DateTime dateTime)
+        private string ParseMonthYearPath(DateTime dateTime, string subfolder)
         {
-            string yearPath = Path.Combine(m_OutputFolder, dateTime.Year.ToString());
-            return Path.Combine(yearPath, dateTime.ToString("MMMM"));
+            return Path.Combine(m_OutputFolder, subfolder, dateTime.Year.ToString(), dateTime.Month.ToString());
         }
 
         /// <summary>
