@@ -56,11 +56,11 @@ namespace ImageService
         public ImageService()
         {
             InitializeComponent();
-            eventLog = new System.Diagnostics.EventLog();
+            eventLog = new EventLog();
 
-            if (!System.Diagnostics.EventLog.SourceExists(ConfigurationManager.AppSettings["SourceName"]))
+            if (!EventLog.SourceExists(ConfigurationManager.AppSettings["SourceName"]))
             {
-                System.Diagnostics.EventLog.CreateEventSource(
+                EventLog.CreateEventSource(
                     ConfigurationManager.AppSettings["SourceName"],
                     ConfigurationManager.AppSettings["LogName"]);
             }
@@ -71,7 +71,7 @@ namespace ImageService
 		/// <summary>
         /// Starts the service.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">arguments for the service.</param>
         protected override void OnStart(string[] args)
         {
             // Update the service state to Start Pending.  
