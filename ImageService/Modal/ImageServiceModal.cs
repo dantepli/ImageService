@@ -35,7 +35,7 @@ namespace ImageService.Modal
                 fileCreatedPath = HandleNewFileAddition(path, dateTime, out result);
                 CreateThumbnail(fileCreatedPath, dateTime);
             }
-            catch(ArgumentException e)
+            catch(Exception e)
             {
                 // handle error, currently error msg only
                 result = false;
@@ -48,10 +48,11 @@ namespace ImageService.Modal
         {
             bool result;
             string thumbnailPath = Path.Combine(CreateImageFolder(dateTime, "Thumbnails"), Path.GetFileName(path));
-            Image img = Image.FromFile(path);
-            Image resized = ResizeImage(img, m_thumbnailSize, m_thumbnailSize);
-            resized.RotateFlip(RotateFlipType.Rotate270FlipY);
-            resized.Save(thumbnailPath);
+            using (Image img = Image.FromFile(path),
+                         resized = ResizeImage(img, m_thumbnailSize, m_thumbnailSize)) {
+                resized.RotateFlip(RotateFlipType.Rotate270FlipY);
+                resized.Save(thumbnailPath);
+            }
             return true;
 
 

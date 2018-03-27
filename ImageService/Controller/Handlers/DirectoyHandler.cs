@@ -18,7 +18,7 @@ namespace ImageService.Controller.Handlers
         private ILoggingService m_logging;
         private FileSystemWatcher m_dirWatcher;             // The Watcher of the Dir
         private string m_path;                              // The Path of directory
-        private string[] m_filters = { "*.jpg", "*.png", "*.gif", "*.bmp" }; // file extensions to monitor.
+        private string[] m_filters = { ".jpg", ".png", ".gif", ".bmp" }; // file extensions to monitor.
         #endregion
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
@@ -29,11 +29,15 @@ namespace ImageService.Controller.Handlers
             m_logging = logging;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
             if (e.RequestDirPath == "*" || e.RequestDirPath == m_path)
             {
-                bool result;
                 // TO CHANGE?
                 if (e.CommandID == (int)CommandEnum.CloseCommand)
                 {
@@ -44,6 +48,10 @@ namespace ImageService.Controller.Handlers
             }
         }
 
+        /// <summary>
+        /// Starts monitoring the directory given.
+        /// </summary>
+        /// <param name="dirPath">a path to monitor.</param>
         public void StartHandleDirectory(string dirPath)
         {
             // set the path to handle.
@@ -57,6 +65,11 @@ namespace ImageService.Controller.Handlers
             m_dirWatcher.EnableRaisingEvents = true;
         }
 
+        /// <summary>
+        /// Moves the file created to the output directory.
+        /// </summary>
+        /// <param name="source">invoker object.</param>
+        /// <param name="e">arguments of the event.</param>
         private void OnCreated(object source, FileSystemEventArgs e)
         {
             string fileName = Path.GetFileName(e.FullPath);
@@ -86,7 +99,7 @@ namespace ImageService.Controller.Handlers
         {
             string fileExtension = Path.GetExtension(filePath);
             foreach(string extension in m_filters) {
-                if(extension == fileExtension)
+                if(String.Equals(extension, fileExtension, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

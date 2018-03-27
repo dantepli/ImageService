@@ -19,7 +19,8 @@ namespace ImageService.Commands
         public string Execute(string[] args, out bool result)
         {
             CommandRecieved?.Invoke(this, new CommandRecievedEventArgs(0, null, "*"));
-            
+            result = true;
+            return null;
         }
     }
 }

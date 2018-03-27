@@ -68,7 +68,10 @@ namespace ImageService
 
         }
 
-		// Here You will Use the App Config!
+		/// <summary>
+        /// Starts the service.
+        /// </summary>
+        /// <param name="args"></param>
         protected override void OnStart(string[] args)
         {
             // Update the service state to Start Pending.  
@@ -76,16 +79,21 @@ namespace ImageService
             serviceStatus.dwCurrentState = ServiceState.SERVICE_START_PENDING;
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
-
-            eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information);
+        
             logging = new LoggingService();
             logging.MessageRecieved += OnLog;
+            m_imageServer = new ImageServer();
+            m_imageServer.createHandler(ConfigurationManager.AppSettings["Handler"]);
+
+            eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information);
 
             // Update the service state to Running.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
-
+        /// <summary>
+        /// Stops the service.
+        /// </summary>
         protected override void OnStop()
         {
             // Update the service state to Start Pending.  
@@ -97,6 +105,7 @@ namespace ImageService
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information);
+            m_imageServer.sendCommand();
 
             // Update the service state to Stopped.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
