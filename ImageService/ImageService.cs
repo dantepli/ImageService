@@ -91,13 +91,9 @@ namespace ImageService
             
             m_imageServer = new ImageServer(m_logging, m_controller);
 
-            string[] handlers = Parser(ConfigurationManager.AppSettings["Handler"], ';');
-            foreach (var file_path in handlers)
-            {
-                m_imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
-            }
+            CreateHandlers(ConfigurationManager.AppSettings["Handler"]);
 
-            eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information);
+            eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information, eventId++);
 
             // Update the service state to Running.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_RUNNING;
@@ -116,7 +112,7 @@ namespace ImageService
             };
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information);
+            eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information, eventId++);
             m_imageServer.SendCommand();
 
             // Update the service state to Stopped.
@@ -143,6 +139,15 @@ namespace ImageService
                 case MessageTypeEnum.WARNING:
                         eventLog.WriteEntry(e.Message, EventLogEntryType.Warning, eventId++);
                         break;
+            }
+        }
+
+        private void CreateHandlers(string handles_paths)
+        {
+            string[] handlers = Parser(ConfigurationManager.AppSettings["Handler"], ';');
+            foreach (var file_path in handlers)
+            {
+                m_imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
             }
         }
 
