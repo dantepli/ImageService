@@ -29,6 +29,34 @@ namespace ImageService.Controller.Handlers
             m_logging = logging;
         }
 
+        public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
+        {
+            if (e.RequestDirPath == "*" || e.RequestDirPath == m_path)
+            {
+                bool result;
+                // TO CHANGE?
+                if (e.CommandID == (int)CommandEnum.CloseCommand)
+                {
+                    m_dirWatcher.EnableRaisingEvents = false;
+                    m_dirWatcher.Dispose();
+                    DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(m_path, $"Directory {m_path} closed successfully"));
+                }
+            }
+        }
+
+        public void StartHandleDirectory(string dirPath)
+        {
+            // set the path to handle.
+            m_path = dirPath;
+            m_dirWatcher = new FileSystemWatcher();
+            // set FileSystemWatcher Properties.
+            m_dirWatcher.Path = m_path;
+            m_dirWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastAccess | NotifyFilters.LastWrite
+                                        | NotifyFilters.DirectoryName;
+            m_dirWatcher.Created += new FileSystemEventHandler(OnCreated);
+            m_dirWatcher.EnableRaisingEvents = true;
+        }
+
         private void OnCreated(object source, FileSystemEventArgs e)
         {
             string fileName = Path.GetFileName(e.FullPath);
@@ -64,33 +92,6 @@ namespace ImageService.Controller.Handlers
                 }
             }
             return false;
-        }
-
-        public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
-        {
-            if(e.RequestDirPath == "*" || e.RequestDirPath == m_path)
-            {
-                bool result;
-                // TO CHANGE?
-                if(e.CommandID == (int) CommandEnum.CloseCommand)
-                {
-                    m_dirWatcher.EnableRaisingEvents = false;
-                    m_dirWatcher.Dispose();
-                }
-            }
-        }
-
-        public void StartHandleDirectory(string dirPath)
-        {
-            // set the path to handle.
-            m_path = dirPath;
-            m_dirWatcher = new FileSystemWatcher();
-            // set FileSystemWatcher Properties.
-            m_dirWatcher.Path = m_path;
-            m_dirWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastAccess | NotifyFilters.LastWrite
-                                        | NotifyFilters.DirectoryName;
-            m_dirWatcher.Created += new FileSystemEventHandler(OnCreated);
-            m_dirWatcher.EnableRaisingEvents = true;
         }
     }
 }

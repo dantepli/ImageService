@@ -98,7 +98,7 @@ namespace ImageService
 
             eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information);
 
-            // Update the service state to Running.  
+            // Update the service state to Stopped.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         }
