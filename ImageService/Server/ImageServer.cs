@@ -32,6 +32,10 @@ namespace ImageService.Server
             m_logging = log;
         }
 
+        /// <summary>
+        /// Creates handler.
+        /// </summary>
+        /// <param name="dir_path">path to directory</param>
         public void CreateHandler(string dir_path)
         {
             IDirectoryHandler h = new DirectoyHandler(m_controller, m_logging);
@@ -40,6 +44,11 @@ namespace ImageService.Server
             h.StartHandleDirectory(dir_path);
         }
 
+        /// <summary>
+        /// Handler notifies server it is closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnCloseServer(object sender, DirectoryCloseEventArgs e)
         {
             IDirectoryHandler h = (DirectoyHandler) sender;
@@ -47,7 +56,10 @@ namespace ImageService.Server
             // TODO do we need onCommand -= h.OnCloseServer;
         }
 
-        public void SendCommand()
+        /// <summary>
+        /// Close server, notifies handlers
+        /// </summary>
+        public void CloseServer()
         {
             // invoke the event - send a message to all handlers(*)
             CommandRecieved?.Invoke(this, new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, "*"));

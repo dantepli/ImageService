@@ -113,7 +113,7 @@ namespace ImageService
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information, eventId++);
-            m_imageServer.SendCommand();
+            m_imageServer.CloseServer();
 
             // Update the service state to Stopped.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
