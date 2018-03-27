@@ -91,7 +91,7 @@ namespace ImageService
             
             m_imageServer = new ImageServer(m_logging, m_controller);
 
-            string[] handlers = Praser(ConfigurationManager.AppSettings["Handler"], ';');
+            string[] handlers = Parser(ConfigurationManager.AppSettings["Handler"], ';');
             foreach (var file_path in handlers)
             {
                 m_imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
@@ -146,7 +146,7 @@ namespace ImageService
             }
         }
 
-        private string[] Praser(string str, char delimeter)
+        private string[] Parser(string str, char delimeter)
         {
             return str.Split(delimeter);
         }
