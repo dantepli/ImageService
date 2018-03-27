@@ -25,6 +25,7 @@ namespace ImageService.Modal
         public string AddFile(string path, out bool result)
         {
             string fileCreatedPath;
+            System.Threading.Thread.Sleep(1000);
             DirectoryInfo dir = Directory.CreateDirectory(m_OutputFolder);
             dir.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
             Directory.CreateDirectory(Path.Combine(m_OutputFolder, "Thumbnails"));
