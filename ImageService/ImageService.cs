@@ -58,7 +58,7 @@ namespace ImageService
             InitializeComponent();
             eventLog = new System.Diagnostics.EventLog();
 
-            if (!System.Diagnostics.EventLog.SourceExists(ConfigurationManager.AppSettings["Handler"]))
+            if (!System.Diagnostics.EventLog.SourceExists(ConfigurationManager.AppSettings["SourceName"]))
             {
                 System.Diagnostics.EventLog.CreateEventSource(
                     ConfigurationManager.AppSettings["SourceName"],
@@ -90,7 +90,12 @@ namespace ImageService
             m_controller = new ImageController(m_modal);
             
             m_imageServer = new ImageServer(m_logging, m_controller);
-            m_imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
+
+            string[] handlers = Praser(ConfigurationManager.AppSettings["Handler"], ';');
+            foreach (var file_path in handlers)
+            {
+                m_imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
+            }
 
             eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information);
 
@@ -139,6 +144,11 @@ namespace ImageService
                         eventLog.WriteEntry(e.Message, EventLogEntryType.Warning, eventId++);
                         break;
             }
+        }
+
+        private string[] Praser(string str, char delimeter)
+        {
+            return str.Split(delimeter);
         }
     }
 }
