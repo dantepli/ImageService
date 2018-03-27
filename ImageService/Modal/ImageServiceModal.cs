@@ -16,12 +16,25 @@ namespace ImageService.Modal
         private int m_thumbnailSize;              // The Size Of The Thumbnail Size 
         #endregion
 
+
+        /// <summary>
+        /// C'tor.
+        /// </summary>
+        /// <param name="outputFolder">an output folder path.</param>
+        /// <param name="thumbnailSize">the thumbnail size.</param>
         public ImageServiceModal(string outputFolder, int thumbnailSize)
         {
             m_OutputFolder = outputFolder;
             m_thumbnailSize = thumbnailSize;
         }
 
+        /// <summary>
+        /// Adds a file to the output directory, ordered by year\month.
+        /// </summary>
+        /// <param name="path">source path</param>
+        /// <param name="result">result of the operation</param>
+        /// <returns>The path of the added file, or an error message if there was a failure.
+        ///          result is true if the addition was successful.</returns>
         public string AddFile(string path, out bool result)
         {
             string fileCreatedPath;
@@ -45,6 +58,12 @@ namespace ImageService.Modal
             return fileCreatedPath;
         }
 
+        /// <summary>
+        /// Creates a thumbnail and adds it to the thumbnails folder.
+        /// </summary>
+        /// <param name="path">source path</param>
+        /// <param name="dateTime">date time object from the file in the path</param>
+        /// <returns>true if successful</returns>
         private bool CreateThumbnail(string path, DateTime dateTime)
         {
             bool result;
@@ -73,7 +92,13 @@ namespace ImageService.Modal
             // ----------------------------------------------
         }
 
-
+        /// <summary>
+        /// resizes an image.
+        /// </summary>
+        /// <param name="image">an image object of the file to be resized.</param>
+        /// <param name="width">width required.</param>
+        /// <param name="height">height required.</param>
+        /// <returns>a Bitmap object of the resized image.</returns>
         public Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);

@@ -23,6 +23,12 @@ namespace ImageService.Controller.Handlers
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
 
+
+        /// <summary>
+        /// C'tor.
+        /// </summary>
+        /// <param name="imageController">an image controller.</param>
+        /// <param name="logging">a logging service.</param>
         public DirectoyHandler(IImageController imageController, ILoggingService logging)
         {
             m_controller = imageController;
