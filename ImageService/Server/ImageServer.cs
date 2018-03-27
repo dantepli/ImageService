@@ -24,15 +24,12 @@ namespace ImageService.Server
         #endregion
 
        
-        public ImageServer()
+        public ImageServer(ILoggingService log, IImageController controller)
         {
-            IImageServiceModal imageModal = new ImageServiceModal(
-                System.Configuration.ConfigurationSettings.AppSettings["OutputDir"],
-                Int32.Parse(System.Configuration.ConfigurationSettings.AppSettings["ThumbnailSize"]));
 
-            m_controller = new ImageController(imageModal);
+            m_controller = controller;
 
-            m_logging = new LoggingService();
+            m_logging = log;
         }
 
         public void CreateHandler(string dir_path)
