@@ -142,18 +142,17 @@ namespace ImageService
             }
         }
 
-        private void CreateHandlers(string handles_paths)
+        /// <summary>
+        /// creates a handler for each path given.
+        /// </summary>
+        /// <param name="handlers_paths">paths for handlers, each path is seperated by ;.</param>
+        private void CreateHandlers(string handlers_paths)
         {
-            string[] handlers = Parser(ConfigurationManager.AppSettings["Handler"], ';');
-            foreach (var file_path in handlers)
+            string[] paths = handlers_paths.Split(';');
+            foreach (string dir_path in paths)
             {
-                m_imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
+                m_imageServer.CreateHandler(dir_path);
             }
-        }
-
-        private string[] Parser(string str, char delimeter)
-        {
-            return str.Split(delimeter);
         }
     }
 }
