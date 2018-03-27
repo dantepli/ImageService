@@ -11,7 +11,7 @@ namespace ImageService.Commands
     {
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
 
-        public CloseCommand(ref EventHandler<CommandRecievedEventArgs> _CommandRecieved)
+        public CloseCommand(EventHandler<CommandRecievedEventArgs> _CommandRecieved)
         {
             CommandRecieved = _CommandRecieved;
         }
