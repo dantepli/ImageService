@@ -49,23 +49,23 @@ namespace ImageService
 
         private int eventId = 1;
         private ImageServer m_imageServer;      // The Image Server
-		private IImageServiceModal modal;       // TODO move to server
-		private IImageController controller;    // TODO move to server
-        private ILoggingService logging;
+		private IImageServiceModal m_modal;
+		private IImageController m_controller;
+        private ILoggingService m_logging;
 
         public ImageService()
         {
             InitializeComponent();
             eventLog = new System.Diagnostics.EventLog();
 
-            if (!System.Diagnostics.EventLog.SourceExists("MySource"))
+            if (!System.Diagnostics.EventLog.SourceExists(ConfigurationManager.AppSettings["Handler"]))
             {
                 System.Diagnostics.EventLog.CreateEventSource(
-                    "MySource", "MyNewLog");
+                    ConfigurationManager.AppSettings["SourceName"],
+                    ConfigurationManager.AppSettings["LogName"]);
             }
-            eventLog.Source = "MySource";
-            eventLog.Log = "MyNewLog";
-
+            eventLog.Source = ConfigurationManager.AppSettings["SourceName"];
+            eventLog.Log = ConfigurationManager.AppSettings["LogName"];
         }
 
 		/// <summary>
@@ -80,10 +80,17 @@ namespace ImageService
             serviceStatus.dwWaitHint = 100000;
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
         
-            logging = new LoggingService();
-            logging.MessageRecieved += OnLog;
-            m_imageServer = new ImageServer();
-            m_imageServer.createHandler(ConfigurationManager.AppSettings["Handler"]);
+            m_logging = new LoggingService();
+            m_logging.MessageRecieved += OnLog;
+
+            m_modal = new ImageServiceModal(
+                ConfigurationManager.AppSettings["OutputDir"],
+                Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]));
+
+            m_controller = new ImageController(m_modal);
+            
+            m_imageServer = new ImageServer(m_logging, m_controller);
+            m_imageServer.CreateHandler(ConfigurationManager.AppSettings["Handler"]);
 
             eventLog.WriteEntry("Image Service has Started.", EventLogEntryType.Information);
 
@@ -105,7 +112,7 @@ namespace ImageService
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
             eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information);
-            m_imageServer.sendCommand();
+            m_imageServer.SendCommand();
 
             // Update the service state to Stopped.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
