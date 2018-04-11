@@ -3,6 +3,7 @@ using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
+using ImageService.Logging.Modal;
 using ImageService.Modal;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace ImageService.Server
         /// <summary>
         /// Creates handler.
         /// </summary>
-        /// <param name="dir_path">path to directory</param>
+        /// <param name="dir_path">path to directory.</param>
         public void CreateHandler(string dir_path)
         {
             IDirectoryHandler h = new DirectoyHandler(m_controller, m_logging);
@@ -53,11 +54,12 @@ namespace ImageService.Server
         {
             IDirectoryHandler h = (DirectoyHandler) sender;
             CommandRecieved -= h.OnCommandRecieved;
+            m_logging.Log(e.Message, MessageTypeEnum.INFO);
             // TODO do we need onCommand -= h.OnCloseServer;
         }
 
         /// <summary>
-        /// Close server, notifies handlers
+        /// Close server, notifies handlers.
         /// </summary>
         public void CloseServer()
         {

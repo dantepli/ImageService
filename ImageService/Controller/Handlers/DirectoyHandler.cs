@@ -18,7 +18,7 @@ namespace ImageService.Controller.Handlers
         private ILoggingService m_logging;
         private FileSystemWatcher m_dirWatcher;             // The Watcher of the Dir
         private string m_path;                              // The Path of directory
-        private string[] m_filters = { ".jpg", ".png", ".gif", ".bmp" }; // file extensions to monitor.
+        private static readonly string[] m_filters = { ".jpg", ".png", ".gif", ".bmp" }; // file extensions to monitor.
         #endregion
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
@@ -49,7 +49,7 @@ namespace ImageService.Controller.Handlers
                 {
                     m_dirWatcher.EnableRaisingEvents = false;
                     m_dirWatcher.Dispose();
-                    DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(m_path, $"Directory {m_path} closed successfully"));
+                    DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(m_path, $"Directory {m_path} closed successfully."));
                 }
             }
         }
@@ -62,11 +62,13 @@ namespace ImageService.Controller.Handlers
         {
             // set the path to handle.
             m_path = dirPath;
-            m_dirWatcher = new FileSystemWatcher();
-            // set FileSystemWatcher Properties.
-            m_dirWatcher.Path = m_path;
-            m_dirWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastAccess | NotifyFilters.LastWrite
-                                        | NotifyFilters.DirectoryName;
+            m_dirWatcher = new FileSystemWatcher
+            {
+                // set FileSystemWatcher Properties.
+                Path = m_path,
+                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastAccess | NotifyFilters.LastWrite
+                                        | NotifyFilters.DirectoryName
+            };
             m_dirWatcher.Created += new FileSystemEventHandler(OnCreated);
             m_dirWatcher.EnableRaisingEvents = true;
         }
@@ -104,8 +106,9 @@ namespace ImageService.Controller.Handlers
         private bool IsAMonitoredExtension(string filePath)
         {
             string fileExtension = Path.GetExtension(filePath);
-            foreach(string extension in m_filters) {
-                if(String.Equals(extension, fileExtension, StringComparison.OrdinalIgnoreCase))
+            foreach (string extension in m_filters)
+            {
+                if (String.Equals(extension, fileExtension, StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

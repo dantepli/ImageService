@@ -112,8 +112,8 @@ namespace ImageService
             };
             SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
-            eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information, eventId++);
             m_imageServer.CloseServer();
+            eventLog.WriteEntry("Image Service has Ended.", EventLogEntryType.Information, eventId++);
 
             // Update the service state to Stopped.
             serviceStatus.dwCurrentState = ServiceState.SERVICE_STOPPED;
@@ -125,7 +125,7 @@ namespace ImageService
         /// Logging Service log event, logs the event using the system event logger.
         /// </summary>
         /// <param name="sender">The object that triggered the event.</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnLog(object sender, MessageRecievedEventArgs e)
         {
             switch(e.Status)

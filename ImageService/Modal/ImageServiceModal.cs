@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -14,6 +15,18 @@ namespace ImageService.Modal
         private static Regex r = new Regex(":");
         private string m_OutputFolder;            // The Output Folder
         private int m_thumbnailSize;              // The Size Of The Thumbnail Size 
+
+        // Image rotation consts.
+        private const int OrientationKey = 0x0112;
+        private const int NotSpecified = 0;
+        private const int NormalOrientation = 1;
+        private const int MirrorHorizontal = 2;
+        private const int UpsideDown = 3;
+        private const int MirrorVertical = 4;
+        private const int MirrorHorizontalAndRotateRight = 5;
+        private const int RotateLeft = 6;
+        private const int MirorHorizontalAndRotateLeft = 7;
+        private const int RotateRight = 8;
         #endregion
 
 
@@ -38,7 +51,6 @@ namespace ImageService.Modal
         public string AddFile(string path, out bool result)
         {
             string fileCreatedPath;
-            System.Threading.Thread.Sleep(1000);
             DirectoryInfo dir = Directory.CreateDirectory(m_OutputFolder);
             dir.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
             Directory.CreateDirectory(Path.Combine(m_OutputFolder, "Thumbnails"));
@@ -46,10 +58,17 @@ namespace ImageService.Modal
             {
                 DateTime dateTime = GetDateTakenFromImage(path);
                 CreateImageFolder(dateTime, "");
-                fileCreatedPath = HandleNewFileAddition(path, dateTime, out result);
-                CreateThumbnail(fileCreatedPath, dateTime);
+                if (HandleLocked(path))
+                {
+                    fileCreatedPath = HandleNewFileAddition(path, dateTime, out result);
+                    CreateThumbnail(fileCreatedPath, dateTime);
+                } else
+                {
+                    result = false;
+                    return "Error. Failed moving the file.";
+                }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 // handle error, currently error msg only
                 result = false;
@@ -66,30 +85,74 @@ namespace ImageService.Modal
         /// <returns>true if successful</returns>
         private bool CreateThumbnail(string path, DateTime dateTime)
         {
-            bool result;
             string thumbnailPath = Path.Combine(CreateImageFolder(dateTime, "Thumbnails"), Path.GetFileName(path));
-            using (Image img = Image.FromFile(path),
-                         resized = ResizeImage(img, m_thumbnailSize, m_thumbnailSize)) {
-                resized.RotateFlip(RotateFlipType.Rotate270FlipY);
-                resized.Save(thumbnailPath);
+            //using (Image img = Image.FromFile(path),
+            //             resized = ResizeImage(img, m_thumbnailSize, m_thumbnailSize)) {
+            //    resized.Save(thumbnailPath);
+            //}
+            //return true;
+
+
+            //--------------------------------------------
+            //TO CHANGE
+            try
+            {
+                using (Image image = Image.FromFile(path),
+                       thumb = image.GetThumbnailImage(m_thumbnailSize, m_thumbnailSize, () => false, IntPtr.Zero))
+                {
+                    KeepOrientation(image, thumb);
+                    thumb.Save(thumbnailPath);
+                    return true;
+                }
             }
-            return true;
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
-
-            // --------------------------------------------
-            // TO CHANGE
-            //try
-            //{
-            //    Image image = Image.FromFile(path);
-            //    Image thumb = image.GetThumbnailImage(m_thumbnailSize, m_thumbnailSize, () => false, IntPtr.Zero);
-            //    thumb.Save(Path.ChangeExtension(thumbnailPath, "thumb"));
-            //    return true;
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
-            // ----------------------------------------------
+        /// <summary>
+        /// Checks the orientation property of the image, if exists, keeps the destination image
+        /// with the same orientation property.
+        /// </summary>
+        /// <param name="srcImg">source image to keep the orientation from.</param>
+        /// <param name="dstImg">destination image to keep the orientation.</param>
+        private void KeepOrientation(Image srcImg, Image dstImg)
+        {
+            if (srcImg.PropertyIdList.Contains(OrientationKey))
+            {
+                var orientation = (int)srcImg.GetPropertyItem(OrientationKey).Value[0];
+                switch (orientation)
+                {
+                    case NotSpecified: // Assume it is good.
+                    case NormalOrientation:
+                        // No rotation required.
+                        break;
+                    case MirrorHorizontal:
+                        dstImg.RotateFlip(RotateFlipType.RotateNoneFlipX);
+                        break;
+                    case UpsideDown:
+                        dstImg.RotateFlip(RotateFlipType.Rotate180FlipNone);
+                        break;
+                    case MirrorVertical:
+                        dstImg.RotateFlip(RotateFlipType.Rotate180FlipX);
+                        break;
+                    case MirrorHorizontalAndRotateRight:
+                        dstImg.RotateFlip(RotateFlipType.Rotate90FlipX);
+                        break;
+                    case RotateLeft:
+                        dstImg.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                        break;
+                    case MirorHorizontalAndRotateLeft:
+                        dstImg.RotateFlip(RotateFlipType.Rotate270FlipX);
+                        break;
+                    case RotateRight:
+                        dstImg.RotateFlip(RotateFlipType.Rotate270FlipNone);
+                        break;
+                    default:
+                        throw new NotImplementedException("An orientation of " + orientation + " isn't implemented.");
+                }
+            }
         }
 
         /// <summary>
@@ -99,7 +162,7 @@ namespace ImageService.Modal
         /// <param name="width">width required.</param>
         /// <param name="height">height required.</param>
         /// <returns>a Bitmap object of the resized image.</returns>
-        public Bitmap ResizeImage(Image image, int width, int height)
+        private Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
@@ -125,7 +188,7 @@ namespace ImageService.Modal
         }
 
         /// <summary>
-        /// Copies a file from path to the appropriate outputDir path, i.e: outputDir\year\month.
+        /// Moves a file from path to the appropriate outputDir path, i.e: outputDir\year\month.
         /// </summary>
         /// <param name="path">a file path.</param>
         /// <param name="dateTime">a DateTime object corresponding to the file.</param>
@@ -135,21 +198,28 @@ namespace ImageService.Modal
         {
             string fileName = Path.GetFileName(path);
             string outputPath = Path.Combine(ParseMonthYearPath(dateTime, ""), fileName);
-            return CopyFile(path, outputPath, out result);
+            return MoveFile(path, outputPath, out result);
         }
 
-        private string CopyFile(string srcPath, string outputPath, out bool result)
+        /// <summary>
+        /// Moves a file to the specified path, handles duplicated.
+        /// </summary>
+        /// <param name="srcPath">source path.</param>
+        /// <param name="outputPath">output path.</param>
+        /// <param name="result">indiciation of success.</param>
+        /// <returns>the path of the file.</returns>
+        private string MoveFile(string srcPath, string outputPath, out bool result)
         {
             try
             {
-                File.Copy(srcPath, outputPath);
+                File.Move(srcPath, outputPath);
                 result = true;
                 return outputPath;
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 string newFilePath = HandleDuplicateFile(srcPath, outputPath, out result);
-                result = newFilePath != null; // true if the copying was successful.
+                result = (newFilePath != null); // true if the Moveing was successful.
                 return newFilePath;
             }
         }
@@ -169,9 +239,9 @@ namespace ImageService.Modal
             int duplicatesAllowed = 10;
             for(int i = 1; i < duplicatesAllowed; ++i)
             {
-                string filePath = Path.Combine(directory, string.Format(fileName, i) + extension);
+                string filePath = Path.Combine(directory, string.Format(fileName, " ", i) + extension);
                 if(!File.Exists(filePath)) {
-                    File.Copy(srcPath, filePath);
+                    File.Move(srcPath, filePath);
                     result = true;
                     return filePath;
                 }
@@ -215,6 +285,41 @@ namespace ImageService.Modal
                   string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                   return DateTime.Parse(dateTaken);
             }
+        }
+
+        /// <summary>
+        /// handles a file that is still being used by another process.
+        /// timeout time set to 1 second, then the file will not be proccesed.
+        /// </summary>
+        /// <param name="filePath">a file path to check on.</param>
+        /// <returns>true if file is ready for use.</returns>
+        private bool HandleLocked(string filePath)
+        {
+            int intervalsAllowed = 100;
+            int i = 1;
+            while(IsFileLocked(filePath) && i <= 100)
+            {
+                System.Threading.Thread.Sleep(10);
+            }
+            return i != intervalsAllowed;
+        }
+
+        /// <summary>
+        /// checks if the file is locked.
+        /// </summary>
+        /// <param name="filePath">a file path to check on.</param>
+        /// <returns>true if locked.</returns>
+        public bool IsFileLocked(string filePath)
+        {
+            try
+            {
+                using (File.Open(filePath, FileMode.Open)) { }
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            return false;
         }
 
     }
