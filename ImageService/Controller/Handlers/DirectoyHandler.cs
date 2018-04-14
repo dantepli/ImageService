@@ -85,14 +85,14 @@ namespace ImageService.Controller.Handlers
             {
                 bool result;
                 string[] args = { e.FullPath };
-                m_controller.ExecuteCommand( (int)CommandEnum.NewFileCommand, args, out result);
+                string res = m_controller.ExecuteCommand( (int)CommandEnum.NewFileCommand, args, out result);
                 if (result)
                 {
-                    string msg = $"File {fileName} addition was successful.";
+                    string msg = $"The file {fileName} was added successfully to {res}.";
                     m_logging.Log(msg, Logging.Modal.MessageTypeEnum.INFO);
                 } else
                 {
-                    string msg = $"File {fileName} addition has failed.";
+                    string msg = $"File {fileName} addition has failed. {res}.";
                     m_logging.Log(msg, Logging.Modal.MessageTypeEnum.FAIL);
                 }
             }

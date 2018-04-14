@@ -65,14 +65,14 @@ namespace ImageService.Modal
                 } else
                 {
                     result = false;
-                    return "Error. Failed moving the file.";
+                    return "Error. Failed moving the file. HANDLE LOCKED.";
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
                 // handle error, currently error msg only
                 result = false;
-                return "Error. Failed moving the file.";
+                return "Error. Failed moving the file." + "Reason: " + e.Message;
             }
             return fileCreatedPath;
         }
@@ -234,12 +234,12 @@ namespace ImageService.Modal
         private string HandleDuplicateFile(string srcPath, string outputPath, out bool result)
         {
             string directory = Path.GetDirectoryName(outputPath);
-            string fileName = Path.GetFileNameWithoutExtension(outputPath) + "({0})";
+            string fileName = Path.GetFileNameWithoutExtension(outputPath) + " " + "({0})";
             string extension = Path.GetExtension(outputPath);
-            int duplicatesAllowed = 10;
+            int duplicatesAllowed = 100;
             for(int i = 1; i < duplicatesAllowed; ++i)
             {
-                string filePath = Path.Combine(directory, string.Format(fileName, " ", i) + extension);
+                string filePath = Path.Combine(directory, string.Format(fileName, i) + extension);
                 if(!File.Exists(filePath)) {
                     File.Move(srcPath, filePath);
                     result = true;
@@ -297,7 +297,7 @@ namespace ImageService.Modal
         {
             int intervalsAllowed = 100;
             int i = 1;
-            while(IsFileLocked(filePath) && i <= 100)
+            while(IsFileLocked(filePath) && i <= intervalsAllowed)
             {
                 System.Threading.Thread.Sleep(10);
             }
@@ -313,7 +313,11 @@ namespace ImageService.Modal
         {
             try
             {
-                using (File.Open(filePath, FileMode.Open)) { }
+                using (var stream = File.Open(filePath, FileMode.Open))
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
             }
             catch (IOException)
             {
