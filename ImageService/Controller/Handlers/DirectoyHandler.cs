@@ -44,12 +44,22 @@ namespace ImageService.Controller.Handlers
         {
             if (e.RequestDirPath == "*" || e.RequestDirPath == m_path)
             {
-                // TO CHANGE?
                 if (e.CommandID == (int)CommandEnum.CloseCommand)
                 {
                     m_dirWatcher.EnableRaisingEvents = false;
                     m_dirWatcher.Dispose();
                     DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(m_path, $"Directory {m_path} closed successfully."));
+                } else
+                {
+                    bool result;
+                    string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out result);
+                    if(result)
+                    {
+                        m_logging.Log(msg, Logging.Modal.MessageTypeEnum.INFO);
+                    } else
+                    {
+                        m_logging.Log(msg, Logging.Modal.MessageTypeEnum.WARNING);
+                    }
                 }
             }
         }
@@ -92,7 +102,7 @@ namespace ImageService.Controller.Handlers
                     m_logging.Log(msg, Logging.Modal.MessageTypeEnum.INFO);
                 } else
                 {
-                    string msg = $"File {fileName} addition has failed. {res}.";
+                    string msg = $"File {fileName} addition has failed. {res}";
                     m_logging.Log(msg, Logging.Modal.MessageTypeEnum.FAIL);
                 }
             }

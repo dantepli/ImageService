@@ -56,23 +56,23 @@ namespace ImageService.Modal
             Directory.CreateDirectory(Path.Combine(m_OutputFolder, "Thumbnails"));
             try
             {
-                DateTime dateTime = GetDateTakenFromImage(path);
-                CreateImageFolder(dateTime, "");
-                if (HandleLocked(path))
+                if(HandleLocked(path))
                 {
+                    DateTime dateTime = GetDateTakenFromImage(path);
+                    CreateImageFolder(dateTime, "");
                     fileCreatedPath = HandleNewFileAddition(path, dateTime, out result);
                     CreateThumbnail(fileCreatedPath, dateTime);
                 } else
                 {
                     result = false;
-                    return "Error. Failed moving the file. HANDLE LOCKED.";
+                    return "Error. Failed moving the file.";
                 }
             }
             catch(Exception e)
             {
                 // handle error, currently error msg only
                 result = false;
-                return "Error. Failed moving the file." + "Reason: " + e.Message;
+                return "Error. Failed moving the file." + " Reason: " + e.Message;
             }
             return fileCreatedPath;
         }
@@ -86,15 +86,6 @@ namespace ImageService.Modal
         private bool CreateThumbnail(string path, DateTime dateTime)
         {
             string thumbnailPath = Path.Combine(CreateImageFolder(dateTime, "Thumbnails"), Path.GetFileName(path));
-            //using (Image img = Image.FromFile(path),
-            //             resized = ResizeImage(img, m_thumbnailSize, m_thumbnailSize)) {
-            //    resized.Save(thumbnailPath);
-            //}
-            //return true;
-
-
-            //--------------------------------------------
-            //TO CHANGE
             try
             {
                 using (Image image = Image.FromFile(path),
@@ -156,38 +147,6 @@ namespace ImageService.Modal
         }
 
         /// <summary>
-        /// resizes an image.
-        /// </summary>
-        /// <param name="image">an image object of the file to be resized.</param>
-        /// <param name="width">width required.</param>
-        /// <param name="height">height required.</param>
-        /// <returns>a Bitmap object of the resized image.</returns>
-        private Bitmap ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
-        }
-
-        /// <summary>
         /// Moves a file from path to the appropriate outputDir path, i.e: outputDir\year\month.
         /// </summary>
         /// <param name="path">a file path.</param>
@@ -219,7 +178,7 @@ namespace ImageService.Modal
             catch (IOException)
             {
                 string newFilePath = HandleDuplicateFile(srcPath, outputPath, out result);
-                result = (newFilePath != null); // true if the Moveing was successful.
+                result = (newFilePath != null); // true if the Moving was successful.
                 return newFilePath;
             }
         }
@@ -295,7 +254,7 @@ namespace ImageService.Modal
         /// <returns>true if file is ready for use.</returns>
         private bool HandleLocked(string filePath)
         {
-            int intervalsAllowed = 100;
+            int intervalsAllowed = 10;
             int i = 1;
             while(IsFileLocked(filePath) && i <= intervalsAllowed)
             {
@@ -313,11 +272,7 @@ namespace ImageService.Modal
         {
             try
             {
-                using (var stream = File.Open(filePath, FileMode.Open))
-                {
-                    stream.Close();
-                    stream.Dispose();
-                }
+                using (var stream = File.Open(filePath, FileMode.Open)) { }
             }
             catch (IOException)
             {
