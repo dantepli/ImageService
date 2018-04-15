@@ -12,10 +12,10 @@ namespace ImageService.Controller
 {
     public class ImageController : IImageController
     {
-        private IImageServiceModal m_modal;                      // The Modal Object
+        private IImageServiceModel m_modal;                      // The Modal Object
         private Dictionary<int, ICommand> m_commands;
 
-        public ImageController(IImageServiceModal modal)
+        public ImageController(IImageServiceModel modal)
         {
             m_modal = modal;                    // Storing the Modal Of The System
             m_commands = new Dictionary<int, ICommand>()
@@ -27,10 +27,10 @@ namespace ImageService.Controller
         /// <summary>
         /// Execute given command in a new task.
         /// </summary>
-        /// <param name="commandID">id of command</param>
-        /// <param name="args">args to given command</param>
-        /// <param name="resultSuccesful">return true if successful</param>
-        /// <returns></returns>
+        /// <param name="commandID">id of command.</param>
+        /// <param name="args">args to given command.</param>
+        /// <param name="resultSuccesful">true if successful.</param>
+        /// <returns>string representing the result of the command.</returns>
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
             Task<Tuple<string, bool>> t = new Task<Tuple<string, bool>>(() => 

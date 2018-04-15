@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace ImageService.Modal
 {
-    public class ImageServiceModal : IImageServiceModal
+    public class ImageServiceModal : IImageServiceModel
     {
         #region Members
         private static Regex r = new Regex(":");

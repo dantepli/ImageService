@@ -36,10 +36,10 @@ namespace ImageService.Controller.Handlers
         }
 
         /// <summary>
-        /// 
+        /// handles the command, closes the handler or hands off the command to the controller.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">object that trigerred the event.</param>
+        /// <param name="e">arguments of the event.</param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
             if (e.RequestDirPath == "*" || e.RequestDirPath == m_path)

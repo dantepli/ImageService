@@ -22,19 +22,6 @@ namespace ImageService
                 new ImageService()
             };
             ServiceBase.Run(ServicesToRun);
-
-
-
-            //// -----------------------------------------------
-            //// TEST SECTION
-
-            //string folder = @"C:\Users\Dan\Desktop\OutputDir";
-            //string path = @"C:\Users\Dan\Desktop\test2.jpg";
-            //IImageServiceModal service = new ImageServiceModal(folder, 300);
-            //bool res;
-            //service.AddFile(path, out res);
-
-            //// -----------------------------------------------
         }
     }
 }

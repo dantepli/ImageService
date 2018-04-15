@@ -39,10 +39,17 @@ namespace ImageService.Server
         /// <param name="dir_path">path to directory.</param>
         public void CreateHandler(string dir_path)
         {
+            if(!System.IO.Directory.Exists(dir_path))
+            {
+                m_logging.Log($"Failed creating a handler for the following directory: {dir_path}." +
+                    $" Reason: Directory doesn't exist.", MessageTypeEnum.FAIL);
+                return;
+            }
             IDirectoryHandler h = new DirectoyHandler(m_controller, m_logging);
             h.DirectoryClose += OnCloseServer;
             CommandRecieved += h.OnCommandRecieved;
             h.StartHandleDirectory(dir_path);
+            m_logging.Log($"Handler created for the following directory: {dir_path}.", MessageTypeEnum.INFO);
         }
 
         /// <summary>

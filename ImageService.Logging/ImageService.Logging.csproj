@@ -40,8 +40,8 @@
   <ItemGroup>
     <Compile Include="ILoggingService.cs" />
     <Compile Include="LoggingService.cs" />
-    <Compile Include="Modal\MessageRecievedEventArgs.cs" />
-    <Compile Include="Modal\MessageTypeEnum.cs" />
+    <Compile Include="Model\MessageRecievedEventArgs.cs" />
+    <Compile Include="Model\MessageTypeEnum.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

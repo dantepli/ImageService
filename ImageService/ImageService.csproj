@@ -62,10 +62,10 @@
     <Compile Include="ImageService.Designer.cs">
       <DependentUpon>ImageService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Modal\Event\CommandRecievedEventArgs.cs" />
-    <Compile Include="Modal\Event\DirectoryCloseEventArgs.cs" />
-    <Compile Include="Modal\IImageServiceModal.cs" />
-    <Compile Include="Modal\ImageServiceModal.cs" />
+    <Compile Include="Model\Event\CommandRecievedEventArgs.cs" />
+    <Compile Include="Model\Event\DirectoryCloseEventArgs.cs" />
+    <Compile Include="Model\IImageServiceModel.cs" />
+    <Compile Include="Model\ImageServiceModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>

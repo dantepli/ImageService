@@ -49,7 +49,7 @@ namespace ImageService
 
         private int eventId = 1;
         private ImageServer m_imageServer;      // The Image Server
-		private IImageServiceModal m_modal;
+		private IImageServiceModel m_modal;
 		private IImageController m_controller;
         private ILoggingService m_logging;
 
