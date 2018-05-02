@@ -23,15 +23,10 @@ namespace ImageServiceGUI.Views
     /// </summary>
     public partial class SettingsView : UserControl
     {
-        private SettingsViewModel vm;
-
         public SettingsView()
         {
             InitializeComponent();
-            vm = new SettingsViewModel();
-            this.DataContext = vm;
-
-            //HandlersList.ItemsSource = vm.DirectoryPaths;
+            this.DataContext = new SettingsViewModel();
         }
     }
 }
