@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace ImageServiceGUI.ViewModels
 {
@@ -26,8 +27,10 @@ namespace ImageServiceGUI.ViewModels
 
         public LogViewModel()
         {
-            // TODO assign model
-            this.m_model = null;
+            m_model = new LogModel();
+            m_model.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e) {
+                if(e.PropertyName == "")
+            };
 
             m_log = new ObservableCollection<LogRecord>();
 

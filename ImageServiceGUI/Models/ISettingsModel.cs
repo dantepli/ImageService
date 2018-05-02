@@ -13,6 +13,6 @@ namespace ImageServiceGUI.Models
         string LogName { get; }
         int ThumbnailSize { get; }
 
-        void RemoveHandler();
+        bool RemoveHandler(DirectoryPath rmPath);
     }
 }
