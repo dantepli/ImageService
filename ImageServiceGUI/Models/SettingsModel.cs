@@ -28,9 +28,10 @@ namespace ImageServiceGUI.Models
             get { return 5; }
         }
 
-        public void RemoveHandler()
+        public bool RemoveHandler(DirectoryPath rmPath)
         {
-
+            // TODO ask server to remove handler and get response
+            return true;
         }
     }
 }

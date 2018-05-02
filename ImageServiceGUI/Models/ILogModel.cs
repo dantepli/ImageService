@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,5 +12,8 @@ namespace ImageServiceGUI.Models
     {
         MessageTypeEnum Type { get; set; }
         string Message { get; set; }
+
+        event PropertyChangedEventHandler PropertyChanged;
+        void NotifyPropertyChanged(string name);
     }
 }

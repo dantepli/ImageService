@@ -40,8 +40,7 @@ namespace ImageServiceGUI.ViewModels
 
         public SettingsViewModel()
         {
-            // TODO assign model
-            this.m_model = null;
+            this.m_model = new SettingsModel();
             RemoveCommand = new DelegateCommand<object>(OnRemove, CanRemove);
             this.PropertyChanged += RemoveCommandPropertyChanged;
             m_directoryPaths = new ObservableCollection<DirectoryPath>();
@@ -105,9 +104,13 @@ namespace ImageServiceGUI.ViewModels
 
         private void OnRemove(object obj)
         {
-            // TODO send path to model
-            m_directoryPaths.Remove(SelectedPath);
-            SelectedPath = null;
+            bool success = m_model.RemoveHandler(SelectedPath);
+
+            if (success)
+            {
+                m_directoryPaths.Remove(SelectedPath);
+                SelectedPath = null;
+            }
         }
     }
 }
