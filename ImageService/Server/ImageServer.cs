@@ -24,7 +24,7 @@ namespace ImageService.Server
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;          // The event that notifies about a new Command being recieved
         #endregion
 
-       
+
         public ImageServer(ILoggingService log, IImageController controller)
         {
 
@@ -39,7 +39,7 @@ namespace ImageService.Server
         /// <param name="dir_path">path to directory.</param>
         public void CreateHandler(string dir_path)
         {
-            if(!System.IO.Directory.Exists(dir_path))
+            if (!System.IO.Directory.Exists(dir_path))
             {
                 m_logging.Log($"Failed creating a handler for the following directory: {dir_path}." +
                     $" Reason: Directory doesn't exist.", MessageTypeEnum.FAIL);
@@ -59,7 +59,7 @@ namespace ImageService.Server
         /// <param name="e"></param>
         private void OnCloseServer(object sender, DirectoryCloseEventArgs e)
         {
-            IDirectoryHandler h = (DirectoyHandler) sender;
+            IDirectoryHandler h = (DirectoyHandler)sender;
             CommandRecieved -= h.OnCommandRecieved;
             m_logging.Log(e.Message, MessageTypeEnum.INFO);
             // TODO do we need onCommand -= h.OnCloseServer;

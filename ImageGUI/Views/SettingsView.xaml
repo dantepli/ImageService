@@ -17,7 +17,7 @@
         <TextBlock Grid.Row="6" Text="Thumbnail Size:" HorizontalAlignment="Left" Margin="20,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <TextBlock Grid.Row="7" x:Name="ThumbnailSize" Text="{Binding ThumbnailSize, Mode=OneTime}" HorizontalAlignment="Left" Margin="150,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Button Grid.Row="8"  x:Name="RemoveHandlerBtn" Content="Remove" Height="30" Width="700" HorizontalAlignment="Left" Margin="20,140,0,0" VerticalAlignment="Top"/>
-        <ListBox Grid.Row="9" x:Name="HandlersList" DisplayMemberPath="DirPath" HorizontalAlignment="Left" Height="150" Margin="20,170,0,0" VerticalAlignment="Top" Width="700"/>
+        <ListBox Grid.Row="9" ItemsSource="{Binding DirectoryPaths}" x:Name="HandlersList" DisplayMemberPath="DirPath" HorizontalAlignment="Left" Height="150" Margin="20,170,0,0" VerticalAlignment="Top" Width="700"/>
 
     </Grid>
 </UserControl>

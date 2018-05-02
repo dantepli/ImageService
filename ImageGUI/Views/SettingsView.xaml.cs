@@ -32,8 +32,7 @@ namespace ImageServiceGUI.Views
             vm = new SettingsViewModel();
             this.DataContext = vm;
 
-            m_directoryPaths = new ObservableCollection<DirectoryPath>();
-            HandlersList.ItemsSource = m_directoryPaths;
+            HandlersList.ItemsSource = vm.DirectoryPaths;
         }
     }
 }
