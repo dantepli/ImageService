@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 
-namespace ImageService.Server
+namespace ImageService.Communication
 {
-    class Server
+    class TcpServer
     {
         private int port;
         private TcpListener listener;
         private IClientHandler ch;
-        public Server(int port, IClientHandler ch)
+        public TcpServer(int port, IClientHandler ch)
         {
             this.port = port;
             this.ch = ch;

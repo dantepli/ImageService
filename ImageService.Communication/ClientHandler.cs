@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.IO;
 
-namespace ImageService.Server
+namespace ImageService.Communication
 {
     class ClientHandler : IClientHandler
     {
