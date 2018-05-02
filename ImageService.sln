@@ -13,7 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService.Logging", "ImageService.Logging\ImageService.Logging.csproj", "{D552A48C-16AA-4590-A439-DF7CC43DB755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageServiceGUI", "ImageGUI\ImageServiceGUI.csproj", "{B8D95F3E-61C1-4836-B37D-2F60FD304241}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageService.Communication", "ImageService.Communication\ImageService.Communication.csproj", "{DD83D665-F456-4020-B3DE-193F0212F354}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageServiceGUI", "ImageServiceGUI\ImageServiceGUI.csproj", "{B8D95F3E-61C1-4836-B37D-2F60FD304241}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D552A48C-16AA-4590-A439-DF7CC43DB755}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D552A48C-16AA-4590-A439-DF7CC43DB755}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D552A48C-16AA-4590-A439-DF7CC43DB755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD83D665-F456-4020-B3DE-193F0212F354}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD83D665-F456-4020-B3DE-193F0212F354}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD83D665-F456-4020-B3DE-193F0212F354}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD83D665-F456-4020-B3DE-193F0212F354}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8D95F3E-61C1-4836-B37D-2F60FD304241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8D95F3E-61C1-4836-B37D-2F60FD304241}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8D95F3E-61C1-4836-B37D-2F60FD304241}.Release|Any CPU.ActiveCfg = Release|Any CPU
