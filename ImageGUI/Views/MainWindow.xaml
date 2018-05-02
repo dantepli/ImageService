@@ -12,7 +12,12 @@
                 <local:SettingsView/>
             </TabItem>
             <TabItem Header="Log">
-                <local:LogView/>
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="761*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </TabItem>
         </TabControl>
 

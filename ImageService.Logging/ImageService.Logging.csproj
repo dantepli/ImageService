@@ -41,12 +41,7 @@
     <Compile Include="ILoggingService.cs" />
     <Compile Include="LoggingService.cs" />
     <Compile Include="Model\MessageRecievedEventArgs.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ImageService.Infrastructure\ImageService.Infrastructure.csproj">
-      <Project>{a4ee932e-c317-4f04-a480-057258784ab2}</Project>
-      <Name>ImageService.Infrastructure</Name>
-    </ProjectReference>
+    <Compile Include="Model\MessageTypeEnum.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

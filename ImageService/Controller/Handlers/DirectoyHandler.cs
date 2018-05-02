@@ -55,10 +55,10 @@ namespace ImageService.Controller.Handlers
                     string msg = m_controller.ExecuteCommand(e.CommandID, e.Args, out result);
                     if(result)
                     {
-                        m_logging.Log(msg, MessageTypeEnum.INFO);
+                        m_logging.Log(msg, Logging.Modal.MessageTypeEnum.INFO);
                     } else
                     {
-                        m_logging.Log(msg, MessageTypeEnum.WARNING);
+                        m_logging.Log(msg, Logging.Modal.MessageTypeEnum.WARNING);
                     }
                 }
             }
@@ -99,11 +99,11 @@ namespace ImageService.Controller.Handlers
                 if (result)
                 {
                     string msg = $"The file {fileName} was added successfully to {res}.";
-                    m_logging.Log(msg, MessageTypeEnum.INFO);
+                    m_logging.Log(msg, Logging.Modal.MessageTypeEnum.INFO);
                 } else
                 {
                     string msg = $"File {fileName} addition has failed. {res}";
-                    m_logging.Log(msg, MessageTypeEnum.FAIL);
+                    m_logging.Log(msg, Logging.Modal.MessageTypeEnum.FAIL);
                 }
             }
         }

@@ -13,7 +13,7 @@ namespace ImageServiceGUI.ViewModels
 {
     class SettingsViewModel : ViewModel
     {
-        private ISettingsModel m_model;
+        private ISettingsModel model;
         private ObservableCollection<DirectoryPath> m_directoryPaths;
         private DirectoryPath m_selectedPath;
 
@@ -41,7 +41,7 @@ namespace ImageServiceGUI.ViewModels
         public SettingsViewModel()
         {
             // TODO assign model
-            this.m_model = null;
+            this.model = null;
             RemoveCommand = new DelegateCommand<object>(OnRemove, CanRemove);
             this.PropertyChanged += RemoveCommandPropertyChanged;
             m_directoryPaths = new ObservableCollection<DirectoryPath>();

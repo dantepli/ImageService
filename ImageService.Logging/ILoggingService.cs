@@ -1,5 +1,4 @@
 ﻿using ImageService.Logging.Modal;
-using ImageService.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
