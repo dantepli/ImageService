@@ -24,7 +24,6 @@ namespace ImageServiceGUI.Views
     public partial class SettingsView : UserControl
     {
         private SettingsViewModel vm;
-        private ObservableCollection<DirectoryPath> m_directoryPaths;
 
         public SettingsView()
         {

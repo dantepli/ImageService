@@ -14,6 +14,9 @@ namespace ImageServiceGUI.ViewModels
         private ISettingsModel model;
         private ObservableCollection<DirectoryPath> m_directoryPaths;
 
+        public ICommand RemoveCommand { get; private set; }
+        public DirectoryPath SelectedPath { get; set; }
+
         public ObservableCollection<DirectoryPath> DirectoryPaths
         {
             get { return m_directoryPaths; }
@@ -60,6 +63,20 @@ namespace ImageServiceGUI.ViewModels
         public int ThumbnailSize
         {
             get { return 120; }
+        }
+
+        private bool CanRemove(object obj)
+        {
+            if(SelectedPath == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void OnRemove(object obj)
+        {
+            // TODO sent path to model
         }
     }
 }
