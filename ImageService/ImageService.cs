@@ -14,7 +14,7 @@ using ImageService.Modal;
 using ImageService.Logging;
 using ImageService.Logging.Modal;
 using System.Configuration;
-using ImageService.Infrastructure;
+using ImageService.Infrastructure.Enums;
 
 namespace ImageService
 {
