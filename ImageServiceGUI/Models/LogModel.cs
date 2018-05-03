@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
+using ImageService.Communication;
 
 namespace ImageServiceGUI.Models
 {
@@ -28,8 +29,7 @@ namespace ImageServiceGUI.Models
         {
             m_ModelLogs = new ObservableCollection<LogRecord>();
 
-            m_ModelLogs.Add(new LogRecord() { Type = MessageTypeEnum.INFO, Message = "text about log..." });
-            m_ModelLogs.Add(new LogRecord() { Type = MessageTypeEnum.INFO, Message = "text about log..." });
+            //Client.Instance.sendCommand(CommandEnum.AllLogCommand);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

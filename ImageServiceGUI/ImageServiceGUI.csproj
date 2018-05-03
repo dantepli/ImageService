@@ -157,6 +157,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ImageService.Communication\ImageService.Communication.csproj">
+      <Project>{dd83d665-f456-4020-b3de-193f0212f354}</Project>
+      <Name>ImageService.Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageService.Infrastructure\ImageService.Infrastructure.csproj">
       <Project>{a4ee932e-c317-4f04-a480-057258784ab2}</Project>
       <Name>ImageService.Infrastructure</Name>

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Objects;
+using ImageService.Infrastructure.Enums;
+using Newtonsoft.Json.Linq;
 
 namespace ImageServiceGUI.Models
 {
@@ -33,16 +35,31 @@ namespace ImageServiceGUI.Models
 
         public SettingsModel()
         {
-            OutputDir = "output";
-            SourceName = "source";
-            LogName = "log";
-            ThumbnailSize = 120;
-
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
 
-            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "I" });
-            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "AM" });
-            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "THE" });
+            string properties = Client.Instance.sendCommand(CommandEnum.GetConfigCommand);
+            
+            FromJSON(properties);
+        }
+
+        public void FromJSON(string properties)
+        {
+            JObject appConfigObj = JObject.Parse(properties);
+
+            OutputDir = (string)appConfigObj["OutputDir"];
+            SourceName = (string)appConfigObj["SourceName"];
+            LogName = (string)appConfigObj["LogName"];
+            ThumbnailSize = (int)appConfigObj["ThumbnailSize"];
+
+            string handlers = (string)appConfigObj["Handler"];
+            string[] handlersNames = handlers.Split(';');
+
+            foreach(string hand in handlersNames)
+            {
+                m_ModelDirPaths.Add(new DirectoryPath() { DirPath = hand });
+            }
+
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
