@@ -73,5 +73,14 @@ namespace ImageService.Server
             // invoke the event - send a message to all handlers(*)
             CommandRecieved?.Invoke(this, new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, "*"));
         }
+
+        /// <summary>
+        /// Closes a handler with the specified path.
+        /// </summary>
+        /// <param name="path">Path of the handler to close.</param>
+        public void CloseHandler(string path)
+        {
+            CommandRecieved?.Invoke(this, new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, path));
+        }
     }
 }
