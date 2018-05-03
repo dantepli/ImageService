@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,10 @@ using ImageService.Infrastructure.Enums;
 
 namespace ImageServiceGUI.Models
 {
-    interface ILogModel
+    interface ILogModel : INotifyPropertyChanged
     {
-        MessageTypeEnum Type { get; set; }
-        string Message { get; set; }
-
-        event PropertyChangedEventHandler PropertyChanged;
+        ObservableCollection<LogRecord> ModelLogs { get; set; }
+        
         void NotifyPropertyChanged(string name);
     }
 }

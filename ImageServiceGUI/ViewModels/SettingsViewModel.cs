@@ -14,7 +14,6 @@ namespace ImageServiceGUI.ViewModels
     class SettingsViewModel : ViewModel
     {
         private ISettingsModel m_model;
-        private ObservableCollection<DirectoryPath> m_directoryPaths;
         private DirectoryPath m_selectedPath;
 
         public ICommand RemoveCommand { get; private set; }
@@ -30,31 +29,25 @@ namespace ImageServiceGUI.ViewModels
 
         public ObservableCollection<DirectoryPath> DirectoryPaths
         {
-            get { return m_directoryPaths; }
+            get { return m_model.ModelDirPaths; }
             set
             {
-                m_directoryPaths = value;
-                NotifyPropertyChanged("DirectoryPaths");
+                m_model.ModelDirPaths = value;
             }
         }
 
-        public SettingsViewModel()
+        public SettingsViewModel(ISettingsModel sm)
         {
-            this.m_model = new SettingsModel();
+            this.m_model = sm;
             RemoveCommand = new DelegateCommand<object>(OnRemove, CanRemove);
             this.PropertyChanged += RemoveCommandPropertyChanged;
-            m_directoryPaths = new ObservableCollection<DirectoryPath>();
 
-
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "I" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "AM" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "THE" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "LORD" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "OF" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "BINDING" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "BOW" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "BEFORE" });
-            m_directoryPaths.Add(new DirectoryPath() { DirPath = "ME" });
+            m_model.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e) {
+                if (e.PropertyName == "ModelDirPaths")
+                {
+                    NotifyPropertyChanged("DirectoryPaths");
+                }
+            };
         }
 
         /// <summary>
@@ -108,7 +101,7 @@ namespace ImageServiceGUI.ViewModels
 
             if (success)
             {
-                m_directoryPaths.Remove(SelectedPath);
+                m_model.ModelDirPaths.Remove(SelectedPath);
                 SelectedPath = null;
             }
         }
