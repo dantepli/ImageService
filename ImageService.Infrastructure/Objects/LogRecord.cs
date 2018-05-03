@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 
-namespace ImageServiceGUI.Models
+namespace ImageService.Infrastructure.Objects
 {
-    class LogRecord
+    public class LogRecord
     {
         public MessageTypeEnum Type { get; set; }
         public string Message { get; set; }

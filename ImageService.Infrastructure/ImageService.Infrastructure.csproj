@@ -41,6 +41,7 @@
     <Compile Include="Enums\CommandEnum.cs" />
     <Compile Include="Enums\MessageTypeEnum.cs" />
     <Compile Include="Objects\DirectoryPath.cs" />
+    <Compile Include="Objects\LogRecord.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

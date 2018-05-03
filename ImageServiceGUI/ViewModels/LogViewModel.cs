@@ -1,5 +1,6 @@
 ﻿using ImageServiceGUI.Models;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Objects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
