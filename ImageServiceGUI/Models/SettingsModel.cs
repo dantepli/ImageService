@@ -5,30 +5,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImageService.Infrastructure.Objects;
 
 namespace ImageServiceGUI.Models
 {
     class SettingsModel : ISettingsModel
     {
-        public string OutputDir
-        {
-            get { return null ; }
-        }
+        public string OutputDir{ get; set; }
 
-        public string SourceName
-        {
-            get { return null; }
-        }
+        public string SourceName{ get; set; }
 
-        public string LogName
-        {
-            get { return null; }
-        }
+        public string LogName{ get; set; }
 
-        public int ThumbnailSize
-        {
-            get { return 5; }
-        }
+        public int ThumbnailSize{ get; set; }
 
         private ObservableCollection<DirectoryPath> m_ModelDirPaths;
 
@@ -44,6 +33,11 @@ namespace ImageServiceGUI.Models
 
         public SettingsModel()
         {
+            OutputDir = "output";
+            SourceName = "source";
+            LogName = "log";
+            ThumbnailSize = 120;
+
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
 
             m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "I" });

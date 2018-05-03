@@ -83,7 +83,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\DirectoryPath.cs" />
     <Compile Include="Models\ILogModel.cs" />
     <Compile Include="Models\ISettingsModel.cs" />
     <Compile Include="Models\LogModel.cs" />

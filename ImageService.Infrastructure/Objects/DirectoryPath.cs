@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageServiceGUI.Models
+namespace ImageService.Infrastructure.Objects
 {
-    class DirectoryPath
+    public class DirectoryPath
     {
         public string DirPath { get; set; }
     }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ImageServiceGUI.Models;
+using ImageService.Infrastructure.Objects;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
@@ -63,22 +64,22 @@ namespace ImageServiceGUI.ViewModels
 
         public string OutputDir
         {
-            get { return "output"; }
+            get { return m_model.OutputDir; }
         }
 
         public string SourceName
         {
-            get { return "source"; }
+            get { return m_model.SourceName; }
         }
 
         public string LogName
         {
-            get { return "log"; }
+            get { return m_model.LogName; }
         }
 
         public int ThumbnailSize
         {
-            get { return 120; }
+            get { return m_model.ThumbnailSize; }
         }
 
         /// <summary>
