@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
 using ImageService.Communication;
+using Newtonsoft.Json.Linq;
 
 namespace ImageServiceGUI.Models
 {
@@ -29,7 +30,30 @@ namespace ImageServiceGUI.Models
         {
             m_ModelLogs = new ObservableCollection<LogRecord>();
 
-            //Client.Instance.sendCommand(CommandEnum.AllLogCommand);
+            string[] args = { "*" };
+            bool result;
+            string logsJSON = Client.Instance.ExecuteCommand(CommandEnum.LogCommand, args, out result);
+
+            FromJSON(logsJSON);
+        }
+
+        public void FromJSON(string LogsJSON)
+        {
+            JObject logsObj = JObject.Parse(LogsJSON);
+
+            string allLogs = (string)logsObj["Logs"];
+            string[] logs = allLogs.Split(';');
+
+            foreach (string log in logs)
+            {
+                string[] logDetails = log.Split(',');
+                int type;
+                int.TryParse(logDetails[0], out type);
+
+                m_ModelLogs.Add(new LogRecord() { Type = (MessageTypeEnum)type, Message = logDetails[1] });
+            }
+
+            // NotifyPropertyChanged("ModelLogs");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

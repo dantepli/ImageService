@@ -13,13 +13,13 @@ namespace ImageServiceGUI.Models
 {
     class SettingsModel : ISettingsModel
     {
-        public string OutputDir{ get; set; }
+        public string OutputDir { get; set; }
 
-        public string SourceName{ get; set; }
+        public string SourceName { get; set; }
 
-        public string LogName{ get; set; }
+        public string LogName { get; set; }
 
-        public int ThumbnailSize{ get; set; }
+        public int ThumbnailSize { get; set; }
 
         private ObservableCollection<DirectoryPath> m_ModelDirPaths;
 
@@ -37,8 +37,10 @@ namespace ImageServiceGUI.Models
         {
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
 
-            string properties = Client.Instance.sendCommand(CommandEnum.GetConfigCommand);
-            
+            string[] args = { };
+            bool result;
+            string properties = Client.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
+
             FromJSON(properties);
         }
 
@@ -51,15 +53,15 @@ namespace ImageServiceGUI.Models
             LogName = (string)appConfigObj["LogName"];
             ThumbnailSize = (int)appConfigObj["ThumbnailSize"];
 
-            string handlers = (string)appConfigObj["Handler"];
-            string[] handlersNames = handlers.Split(';');
+            string allHandlers = (string)appConfigObj["Handler"];
+            string[] handlers = allHandlers.Split(';');
 
-            foreach(string hand in handlersNames)
+            foreach (string handler in handlers)
             {
-                m_ModelDirPaths.Add(new DirectoryPath() { DirPath = hand });
+                m_ModelDirPaths.Add(new DirectoryPath() { DirPath = handler });
             }
 
-
+            // NotifyPropertyChanged("ModelDirPaths");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -74,8 +76,11 @@ namespace ImageServiceGUI.Models
 
         public bool RemoveHandler(DirectoryPath rmPath)
         {
-            // TODO ask server to remove handler and get response
-            return true;
+            string[] args = { rmPath.DirPath };
+            bool result;
+            string success = Client.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
+
+            return result;
         }
     }
 }
