@@ -1,5 +1,6 @@
 ﻿using ImageServiceGUI.Models;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Objects;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,31 +14,26 @@ namespace ImageServiceGUI.ViewModels
     class LogViewModel : ViewModel
     {
         private ILogModel m_model;
-        private ObservableCollection<LogRecord> m_log;
 
         public ObservableCollection<LogRecord> Logs
         {
-            get { return m_log; }
+            get { return m_model.ModelLogs; }
             set
             {
-                m_log = value;
-                NotifyPropertyChanged("Logs");
+                m_model.ModelLogs = value;
             }
         }
 
-        public LogViewModel()
+        public LogViewModel(ILogModel lm)
         {
-            m_model = new LogModel();
+            m_model = lm;
+
             m_model.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e) {
-                if(e.PropertyName == "")
+                if(e.PropertyName == "ModelLogs")
+                {
+                    NotifyPropertyChanged("Logs");
+                }
             };
-
-            m_log = new ObservableCollection<LogRecord>();
-
-            m_log.Add(new LogRecord() { Type = MessageTypeEnum.INFO, Message = "textttt" });
-            m_log.Add(new LogRecord() { Type = MessageTypeEnum.INFO, Message = "textttt" });
-            m_log.Add(new LogRecord() { Type = MessageTypeEnum.INFO, Message = "textttt" });
-            m_log.Add(new LogRecord() { Type = MessageTypeEnum.INFO, Message = "textttt" });
         }
     }
 }

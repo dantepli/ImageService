@@ -1,31 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImageService.Infrastructure.Objects;
 
 namespace ImageServiceGUI.Models
 {
     class SettingsModel : ISettingsModel
     {
-        public string OutputDir
+        public string OutputDir{ get; set; }
+
+        public string SourceName{ get; set; }
+
+        public string LogName{ get; set; }
+
+        public int ThumbnailSize{ get; set; }
+
+        private ObservableCollection<DirectoryPath> m_ModelDirPaths;
+
+        public ObservableCollection<DirectoryPath> ModelDirPaths
         {
-            get { return null ; }
+            get { return m_ModelDirPaths; }
+            set
+            {
+                m_ModelDirPaths = value;
+                NotifyPropertyChanged("ModelDirPaths");
+            }
         }
 
-        public string SourceName
+        public SettingsModel()
         {
-            get { return null; }
+            OutputDir = "output";
+            SourceName = "source";
+            LogName = "log";
+            ThumbnailSize = 120;
+
+            m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
+
+            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "I" });
+            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "AM" });
+            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "THE" });
         }
 
-        public string LogName
-        {
-            get { return null; }
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public int ThumbnailSize
+        public void NotifyPropertyChanged(string name)
         {
-            get { return 5; }
+            if (PropertyChanged != null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
         }
 
         public bool RemoveHandler(DirectoryPath rmPath)

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Objects;
 
 namespace ImageServiceGUI.Models
 {
-    interface ILogModel
+    interface ILogModel : INotifyPropertyChanged
     {
-        MessageTypeEnum Type { get; set; }
-        string Message { get; set; }
-
-        event PropertyChangedEventHandler PropertyChanged;
+        ObservableCollection<LogRecord> ModelLogs { get; set; }
+        
         void NotifyPropertyChanged(string name);
     }
 }
