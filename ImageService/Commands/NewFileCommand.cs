@@ -9,11 +9,11 @@ namespace ImageService.Commands
 {
     public class NewFileCommand : ICommand
     {
-        private IImageServiceModel m_modal;
+        private IImageServiceModel m_model;
 
         public NewFileCommand(IImageServiceModel m)
         {
-            this.m_modal = m;
+            this.m_model = m;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace ImageService.Commands
         /// <returns>path is successful, error message otherwise.</returns>
         public string Execute(string[] args, out bool result)
         {
-            return m_modal.AddFile(args[0], out result);
+            return m_model.AddFile(args[0], out result);
         }
     }
 }
