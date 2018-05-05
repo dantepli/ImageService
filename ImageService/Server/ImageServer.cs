@@ -18,6 +18,7 @@ namespace ImageService.Server
         #region Members
         private IImageController m_controller;
         private ILoggingService m_logging;
+        private ITcpServer m_tcpServer;
         #endregion
 
         #region Properties
@@ -31,6 +32,11 @@ namespace ImageService.Server
             m_controller = controller;
 
             m_logging = log;
+
+            m_tcpServer = new TcpServer(8000, new ClientHandler(controller));
+
+            // starts the tcp server in a seperate thread.
+            new Task(() => { m_tcpServer.Start(); }).Start();
         }
 
         /// <summary>

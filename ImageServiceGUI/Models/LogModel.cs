@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
-using ImageService.Communication;
 using Newtonsoft.Json.Linq;
+using ImageServiceGUI.Communication;
 
 namespace ImageServiceGUI.Models
 {
@@ -32,9 +32,9 @@ namespace ImageServiceGUI.Models
 
             string[] args = { "*" };
             bool result;
-            string logsJSON = Client.Instance.ExecuteCommand(CommandEnum.LogCommand, args, out result);
+            //string logsJSON = SingletonClient.Instance.ExecuteCommand(CommandEnum.LogCommand, args, out result);
 
-            FromJSON(logsJSON);
+            //FromJSON(logsJSON);
         }
 
         public void FromJSON(string LogsJSON)

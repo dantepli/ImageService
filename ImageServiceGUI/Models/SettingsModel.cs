@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ImageService.Infrastructure.Objects;
 using ImageService.Infrastructure.Enums;
 using Newtonsoft.Json.Linq;
+using ImageServiceGUI.Communication;
 
 namespace ImageServiceGUI.Models
 {
@@ -39,9 +40,11 @@ namespace ImageServiceGUI.Models
 
             string[] args = { };
             bool result;
-            string properties = Client.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
-
-            FromJSON(properties);
+            string properties = SingletonClient.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
+            if (!String.IsNullOrEmpty(properties))
+            {
+                FromJSON(properties);
+            }
         }
 
         public void FromJSON(string properties)
@@ -78,7 +81,7 @@ namespace ImageServiceGUI.Models
         {
             string[] args = { rmPath.DirPath };
             bool result;
-            string success = Client.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
+            string success = SingletonClient.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
 
             return result;
         }
