@@ -10,5 +10,6 @@ namespace ImageService.Server
     {
         void Start();
         void Stop();
+        void SendToAll(string msg);
     }
 }

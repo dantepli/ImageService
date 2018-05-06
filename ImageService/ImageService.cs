@@ -49,7 +49,7 @@ namespace ImageService
 
         private int eventId = 1;
         private ImageServer m_imageServer;      // The Image Server
-		private IImageServiceModel m_modal;
+		private IImageServiceModel m_model;
 		private IImageController m_controller;
         private ILoggingService m_logging;
 
@@ -83,11 +83,11 @@ namespace ImageService
             m_logging = new LoggingService();
             m_logging.MessageRecieved += OnLog;
 
-            m_modal = new ImageServiceModal(
+            m_model = new ImageServiceModal(
                 ConfigurationManager.AppSettings["OutputDir"],
                 Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]));
 
-            m_controller = new ImageController(m_modal);
+            m_controller = new ImageController(m_model);
             
             m_imageServer = new ImageServer(m_logging, m_controller);
 

@@ -1,4 +1,5 @@
 ﻿using ImageService.Infrastructure.Enums;
+using ImageServiceGUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace ImageServiceGUI.Communication
         bool IsConnected { get; set; }
         bool CanWrite { get; set; }
         TcpClient Client { get; }
+        event EventHandler<DirectoryPathRemovedEventArgs> DirectoryPathRemoved;
 
         /// <summary>
         /// connects to the given IP:port.
@@ -36,7 +38,7 @@ namespace ImageServiceGUI.Communication
         /// <returns>the server's response.</returns>
         string ExecuteCommand(CommandEnum command, string[] args, out bool result);
 
-
+        void WaitForResponse();
 
 
     }

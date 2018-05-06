@@ -98,13 +98,7 @@ namespace ImageServiceGUI.ViewModels
 
         private void OnRemove(object obj)
         {
-            bool success = m_model.RemoveHandler(SelectedPath);
-
-            if (success)
-            {
-                m_model.ModelDirPaths.Remove(SelectedPath);
-                SelectedPath = null;
-            }
+            m_model.RemoveHandler(SelectedPath);
         }
     }
 }

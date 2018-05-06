@@ -19,6 +19,6 @@ namespace ImageServiceGUI.Models
         ObservableCollection<DirectoryPath> ModelDirPaths { get; set; }
 
         void NotifyPropertyChanged(string name);
-        bool RemoveHandler(DirectoryPath rmPath);
+        void RemoveHandler(DirectoryPath rmPath);
     }
 }

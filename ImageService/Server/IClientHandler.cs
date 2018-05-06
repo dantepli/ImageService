@@ -14,5 +14,11 @@ namespace ImageService.Server
         /// </summary>
         /// <param name="client">a tcp client object.</param>
         void HandleClient(TcpClient client);
+
+        /// <summary>
+        /// sends to all connected clients the message given.
+        /// </summary>
+        /// <param name="msg">a message to send.</param>
+        void SendToAll(string msg);
     }
 }

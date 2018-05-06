@@ -2,6 +2,7 @@
 using ImageService.Infrastructure;
 using ImageService.Infrastructure.Enums;
 using ImageService.Modal;
+using ImageService.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,12 @@ namespace ImageService.Controller
 {
     public class ImageController : IImageController
     {
-        private IImageServiceModel m_model;                      // The Modal Object
+        private IImageServiceModel m_model;                      // The Model Object
         private Dictionary<int, ICommand> m_commands;
 
         public ImageController(IImageServiceModel model)
         {
-            m_model = model;                    // Storing the Modal Of The System
+            m_model = model;                    // Storing the Model Of The System
             m_commands = new Dictionary<int, ICommand>()
             {
                 {(int) CommandEnum.NewFileCommand, new NewFileCommand(m_model)},
@@ -46,6 +47,15 @@ namespace ImageService.Controller
             resultSuccesful = result.Item2;
 
             return result.Item1;
+        }
+
+        /// <summary>
+        /// adds a close command.
+        /// </summary>
+        /// <param name="server">the server to send the command to.</param>
+        public void AddCloseCommand(ImageServer server)
+        {
+            m_commands.Add((int)CommandEnum.CloseCommand, new CloseCommand(server));
         }
     }
 }

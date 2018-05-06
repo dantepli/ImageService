@@ -48,12 +48,22 @@ namespace ImageService.Server
             });
             task.Start();
         }
+
         /// <summary>
         /// stops the server.
         /// </summary>
         public void Stop()
         {
             m_listener.Stop();
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        public void SendToAll(string msg)
+        {
+            m_ch.SendToAll(msg);
         }
     }
 }

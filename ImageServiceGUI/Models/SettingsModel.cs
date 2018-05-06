@@ -38,6 +38,7 @@ namespace ImageServiceGUI.Models
         {
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
 
+            SingletonClient.Instance.DirectoryPathRemoved += OnRemoveHandler;
             string[] args = { };
             bool result;
             string properties = SingletonClient.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
@@ -77,13 +78,24 @@ namespace ImageServiceGUI.Models
             }
         }
 
-        public bool RemoveHandler(DirectoryPath rmPath)
+        public void RemoveHandler(DirectoryPath rmPath)
         {
             string[] args = { rmPath.DirPath };
             bool result;
             string success = SingletonClient.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
+            SingletonClient.Instance.WaitForResponse();
+        }
 
-            return result;
+        private void OnRemoveHandler(object sender, DirectoryPathRemovedEventArgs e)
+        {
+            foreach (DirectoryPath path in m_ModelDirPaths)
+            {
+                if(path.DirPath == e.Path)
+                {
+                    m_ModelDirPaths.Remove(path);
+                    break;
+                }
+            }
         }
     }
 }

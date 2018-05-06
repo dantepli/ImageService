@@ -85,6 +85,7 @@
     </ApplicationDefinition>
     <Compile Include="Communication\SingletonClient.cs" />
     <Compile Include="Communication\IClient.cs" />
+    <Compile Include="Models\DirectoryPathRemovedEventArgs.cs" />
     <Compile Include="Models\ILogModel.cs" />
     <Compile Include="Models\ISettingsModel.cs" />
     <Compile Include="Models\LogModel.cs" />

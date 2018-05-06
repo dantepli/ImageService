@@ -2,6 +2,7 @@
 using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Objects;
 using ImageService.Logging;
 using ImageService.Logging.Modal;
 using ImageService.Modal;
@@ -30,6 +31,8 @@ namespace ImageService.Server
         {
 
             m_controller = controller;
+
+            m_controller.AddCloseCommand(this);
 
             m_logging = log;
 
@@ -68,6 +71,7 @@ namespace ImageService.Server
             IDirectoryHandler h = (DirectoyHandler)sender;
             CommandRecieved -= h.OnCommandRecieved;
             m_logging.Log(e.Message, MessageTypeEnum.INFO);
+            m_tcpServer.SendToAll(e.DirectoryPath);
             // TODO do we need onCommand -= h.OnCloseServer;
         }
 
