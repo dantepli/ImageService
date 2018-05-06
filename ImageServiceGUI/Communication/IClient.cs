@@ -1,4 +1,5 @@
-﻿using ImageService.Infrastructure.Enums;
+﻿using ImageService.Infrastructure.Commands;
+using ImageService.Infrastructure.Enums;
 using ImageServiceGUI.Models;
 using ImageServiceGUI.Models.Events;
 using System;
@@ -31,11 +32,10 @@ namespace ImageServiceGUI.Communication
         void Disconnect();
 
         /// <summary>
-        /// sends the command to the server and awaits it's response.
+        /// sends a command to the server.
         /// </summary>
-        /// <param name="command">The command enum.</param>
-        /// <param name="args">the arguments.</param>
-        void SendCommand(CommandEnum command, string[] args);
+        /// <param name="cmdMsg">A command message object to send to the server.</param>
+        void SendCommand(CommandMessage cmdMsg);
 
 
     }

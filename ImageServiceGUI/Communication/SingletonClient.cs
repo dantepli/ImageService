@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Commands;
 using ImageServiceGUI.Models;
 using ImageServiceGUI.Models.Events;
 
@@ -67,6 +68,7 @@ namespace ImageServiceGUI.Communication
             m_streamWriter = new StreamWriter(m_networkStream);
             IsConnected = true;
             CanWrite = true;
+            new Task(() => { ReadDataFromServer(); }).Start();
             return IsConnected;
 
         }
@@ -76,44 +78,33 @@ namespace ImageServiceGUI.Communication
         /// </summary>
         public void Disconnect()
         {
+            m_streamReader.Close();
+            m_streamWriter.Close();
+            m_networkStream.Close();
             Client.Close();
         }
 
-        public string ExecuteCommand(CommandEnum command, string[] args)
+        /// <summary>
+        /// sends a command to the server.
+        /// </summary>
+        /// <param name="command">command id.</param>
+        /// <param name="args">arguments for the command.</param>
+        public void SendCommand(CommandMessage cmdMsg)
         {
-            m_streamWriter.AutoFlush = true;
-            string toSend = ((int)command).ToString();
-            string response = "";
-            toSend = toSend + ";" + String.Join(";", args);
+            string toSend = cmdMsg.ToJSON();
             m_streamWriter.WriteLine(toSend);
             m_streamWriter.Flush();
-            while (m_streamReader.Peek() > 0)
-            {
-                response += m_streamReader.ReadLine();
-            }
-            if (!String.IsNullOrEmpty(response))
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-            return response;
         }
 
-        public void WaitForResponse()
+        private void ReadDataFromServer()
         {
-            string path = "";
-            while (true)
+            string data;
+            data = m_streamReader.ReadLine();
+            while (m_streamReader.Peek() > 0)
             {
-                path = m_streamReader.ReadLine();
-                if (Directory.Exists(path))
-                {
-                    break;
-                }
+                data += m_streamReader.ReadLine();
             }
-            DirectoryPathRemoved?.Invoke(this, new DirectoryPathRemovedEventArgs() { Path = path });
+            DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
         }
     }
 }
