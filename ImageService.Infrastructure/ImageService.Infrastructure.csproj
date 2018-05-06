@@ -42,6 +42,7 @@
     <Compile Include="Commands\CommandMessage.cs" />
     <Compile Include="Enums\CommandEnum.cs" />
     <Compile Include="Enums\MessageTypeEnum.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Objects\DirectoryPath.cs" />
     <Compile Include="Objects\LogRecord.cs" />
   </ItemGroup>
