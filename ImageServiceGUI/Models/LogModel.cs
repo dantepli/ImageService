@@ -33,13 +33,13 @@ namespace ImageServiceGUI.Models
 
         public LogModel()
         {
-            SingletonClient.Instance.DataRecived += OnDataRecived;
+            SingletonClient.Instance.DataRecieved += OnDataRecieved;
 
             m_ModelLogs = new ObservableCollection<LogRecord>();
 
-            string[] args = { "*" };
-            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.LogCommand, CommandArgs = args };
-            SingletonClient.Instance.SendCommand(message);
+            //string[] args = { "*" };
+            //CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.LogCommand, CommandArgs = args };
+            //SingletonClient.Instance.SendCommand(message);
 
             m_actions = new Dictionary<int, CommandAction>()
             {
@@ -47,7 +47,7 @@ namespace ImageServiceGUI.Models
             };
         }
 
-        public void OnDataRecived(object sender, DataReceivedEventArgs e)
+        public void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             CommandMessage message = CommandMessage.FromJSON(e.Data);
 

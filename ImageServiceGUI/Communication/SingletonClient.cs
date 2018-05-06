@@ -11,6 +11,7 @@ using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Commands;
 using ImageServiceGUI.Models;
 using ImageServiceGUI.Models.Events;
+using System.Windows.Threading;
 
 namespace ImageServiceGUI.Communication
 {
@@ -68,7 +69,8 @@ namespace ImageServiceGUI.Communication
             m_streamWriter = new StreamWriter(m_networkStream);
             IsConnected = true;
             CanWrite = true;
-            new Task(() => { ReadDataFromServer(); }).Start();
+            Task t = new Task(() => { ReadDataFromServer(); });
+            t.Start();
             return IsConnected;
 
         }
@@ -98,13 +100,20 @@ namespace ImageServiceGUI.Communication
 
         private void ReadDataFromServer()
         {
-            string data;
-            data = m_streamReader.ReadLine();
-            while (m_streamReader.Peek() > 0)
+            while(true)
             {
-                data += m_streamReader.ReadLine();
+                string data;
+                data = m_streamReader.ReadLine();
+                while (m_streamReader.Peek() > 0)
+                {
+                    data += m_streamReader.ReadLine();
+                }
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
+                });
             }
-            DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
+            //DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
         }
     }
 }

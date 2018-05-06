@@ -71,7 +71,7 @@ namespace ImageService.Server
             IDirectoryHandler h = (DirectoyHandler)sender;
             CommandRecieved -= h.OnCommandRecieved;
             m_logging.Log(e.Message, MessageTypeEnum.INFO);
-            m_tcpServer.SendToAll(e.DirectoryPath);
+            m_tcpServer.SendToAll(CommandEnum.CloseCommand, e.DirectoryPath);
             // TODO do we need onCommand -= h.OnCloseServer;
         }
 

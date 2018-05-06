@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using ImageService.Infrastructure.Enums;
 
 namespace ImageService.Server
 {
@@ -19,6 +20,6 @@ namespace ImageService.Server
         /// sends to all connected clients the message given.
         /// </summary>
         /// <param name="msg">a message to send.</param>
-        void SendToAll(string msg);
+        void SendToAll(CommandEnum commandEnum,string msg);
     }
 }

@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.IO;
 using ImageService.Controller;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Commands;
 
 namespace ImageService.Server
 {
@@ -34,13 +35,17 @@ namespace ImageService.Server
                 while(true)
                 {
                     clientInfo.StreamWriter.AutoFlush = true;
-                    string args = clientInfo.StreamReader.ReadLine();
-                    string[] splitArgs = args.Split(';');
-                    int commandID = int.Parse(splitArgs[0]);
-                    splitArgs = splitArgs.Skip(1).ToArray();
+                    string json = clientInfo.StreamReader.ReadLine();
+                    while(clientInfo.StreamReader.Peek() > 0)
+                    {
+                        json += clientInfo.StreamReader.ReadLine();
+                    }
+                    CommandMessage cmdMsg = CommandMessage.FromJSON(json);
                     bool result;
-                    string response = m_controller.ExecuteCommand(commandID, splitArgs, out result);
-                    clientInfo.StreamWriter.WriteLine(response);
+                    string msg = m_controller.ExecuteCommand(cmdMsg.CommandID, cmdMsg.CommandArgs, out result);
+                    string[] args = { msg };
+                    CommandMessage response = new CommandMessage() { CommandID = cmdMsg.CommandID, CommandArgs = args };
+                    clientInfo.StreamWriter.WriteLine(response.ToJSON());
                     clientInfo.StreamWriter.Flush();
                 }
                 //client.Close();
@@ -51,15 +56,17 @@ namespace ImageService.Server
         /// sends to all connected clients the message given.
         /// </summary>
         /// <param name="msg">a message to send.</param>
-        public void SendToAll(string msg)
+        public void SendToAll(CommandEnum commandEnum,string msg)
         {
             new Task(() =>
             {
-                foreach (ClientInfo clientInfo in m_clients)
+                foreach (ClientInfo clientInfo in m_clients.ToList())
                 {
                     if (clientInfo.Client.Connected == true)
                     {
-                        clientInfo.StreamWriter.WriteLine(msg);
+                        string[] args = { msg };
+                        CommandMessage cmdMsg = new CommandMessage() { CommandID = (int)commandEnum, CommandArgs = args };
+                        clientInfo.StreamWriter.WriteLine(cmdMsg.ToJSON());
                         clientInfo.StreamWriter.Flush();
                     }
                     else

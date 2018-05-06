@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ImageService.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,6 @@ namespace ImageService.Server
     {
         void Start();
         void Stop();
-        void SendToAll(string msg);
+        void SendToAll(CommandEnum commandEnum, string msg);
     }
 }

@@ -43,7 +43,7 @@ namespace ImageServiceGUI.Models
         {
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
             
-            SingletonClient.Instance.DataRecived += OnDataRecived;
+            SingletonClient.Instance.DataRecieved += OnDataRecieved;
 
             string[] args = { };
             CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.GetConfigCommand, CommandArgs = args };
@@ -56,7 +56,7 @@ namespace ImageServiceGUI.Models
             };
         }
 
-        public void OnDataRecived(object sender, DataReceivedEventArgs e)
+        public void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             CommandMessage message = CommandMessage.FromJSON(e.Data);
 
@@ -75,6 +75,7 @@ namespace ImageServiceGUI.Models
         {
             JObject appConfigObj = JObject.Parse(properties);
 
+            
             OutputDir = (string)appConfigObj["OutputDir"];
             SourceName = (string)appConfigObj["SourceName"];
             LogName = (string)appConfigObj["LogName"];

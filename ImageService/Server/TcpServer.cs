@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using ImageService.Infrastructure.Enums;
 
 namespace ImageService.Server
 {
@@ -56,14 +57,14 @@ namespace ImageService.Server
         {
             m_listener.Stop();
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="msg"></param>
-        public void SendToAll(string msg)
+        public void SendToAll(CommandEnum commandEnum, string msg)
         {
-            m_ch.SendToAll(msg);
+            m_ch.SendToAll(commandEnum, msg);
         }
     }
 }
