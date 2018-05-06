@@ -68,6 +68,7 @@ namespace ImageServiceGUI.Communication
             m_streamWriter = new StreamWriter(m_networkStream);
             IsConnected = true;
             CanWrite = true;
+            new Task(() => { ReadDataFromServer(); }).Start();
             return IsConnected;
 
         }
@@ -88,9 +89,8 @@ namespace ImageServiceGUI.Communication
         /// </summary>
         /// <param name="command">command id.</param>
         /// <param name="args">arguments for the command.</param>
-        public void SendCommand(CommandEnum command, string[] args)
+        public void SendCommand(CommandMessage cmdMsg)
         {
-            CommandMessage cmdMsg = new CommandMessage() { CommandID = (int)command, CommandArgs = args };
             string toSend = cmdMsg.ToJSON();
             m_streamWriter.WriteLine(toSend);
             m_streamWriter.Flush();
@@ -98,7 +98,13 @@ namespace ImageServiceGUI.Communication
 
         private void ReadDataFromServer()
         {
-
+            string data;
+            data = m_streamReader.ReadLine();
+            while (m_streamReader.Peek() > 0)
+            {
+                data += m_streamReader.ReadLine();
+            }
+            DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
         }
     }
 }
