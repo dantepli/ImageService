@@ -55,7 +55,6 @@
   <ItemGroup>
     <Compile Include="Commands\GetConfigCommand.cs" />
     <Compile Include="Commands\NewFileCommand.cs" />
-    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\CloseCommand.cs" />
     <Compile Include="Controller\Handlers\DirectoyHandler.cs" />
     <Compile Include="Controller\Handlers\IDirectoryHandler.cs" />

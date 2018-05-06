@@ -9,11 +9,15 @@ using ImageService.Infrastructure.Objects;
 using ImageService.Infrastructure.Enums;
 using Newtonsoft.Json.Linq;
 using ImageServiceGUI.Communication;
+using ImageService.Infrastructure.Commands;
 
 namespace ImageServiceGUI.Models
 {
     class SettingsModel : ISettingsModel
     {
+        delegate void CommandAction(string message);
+        private Dictionary<int, CommandAction> m_actions;
+
         public string OutputDir { get; set; }
 
         public string SourceName { get; set; }
@@ -39,6 +43,7 @@ namespace ImageServiceGUI.Models
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
 
             SingletonClient.Instance.DirectoryPathRemoved += OnRemoveHandler;
+            SingletonClient.Instance.DataRecived += OnDataRecived;
             string[] args = { };
             bool result;
             string properties = SingletonClient.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
@@ -46,6 +51,16 @@ namespace ImageServiceGUI.Models
             {
                 FromJSON(properties);
             }
+
+            m_actions = new Dictionary<int, CommandAction>()
+            {
+                { (int)CommandEnum.GetConfigCommand, OnConfigRecived }
+            };
+        }
+
+        public void OnConfigRecived(string message)
+        {
+
         }
 
         public void FromJSON(string properties)
@@ -83,7 +98,6 @@ namespace ImageServiceGUI.Models
             string[] args = { rmPath.DirPath };
             bool result;
             string success = SingletonClient.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
-            SingletonClient.Instance.WaitForResponse();
         }
 
         private void OnRemoveHandler(object sender, DirectoryPathRemovedEventArgs e)
