@@ -9,11 +9,16 @@ using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
 using Newtonsoft.Json.Linq;
 using ImageServiceGUI.Communication;
+using ImageService.Infrastructure.Commands;
+using ImageServiceGUI.Models.Events;
 
 namespace ImageServiceGUI.Models
 {
     class LogModel : ILogModel
     {
+        delegate void CommandAction(CommandMessage message);
+        private Dictionary<int, CommandAction> m_actions;
+
         private ObservableCollection<LogRecord> m_ModelLogs;
 
         public ObservableCollection<LogRecord> ModelLogs
@@ -28,22 +33,37 @@ namespace ImageServiceGUI.Models
 
         public LogModel()
         {
+            SingletonClient.Instance.DataRecived += OnDataRecived;
+
             m_ModelLogs = new ObservableCollection<LogRecord>();
 
             string[] args = { "*" };
-            bool result;
-            //string logsJSON = SingletonClient.Instance.ExecuteCommand(CommandEnum.LogCommand, args, out result);
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.LogCommand, CommandArgs = args };
+            SingletonClient.Instance.SendCommand(message);
 
-            //FromJSON(logsJSON);
+            m_actions = new Dictionary<int, CommandAction>()
+            {
+                { (int)CommandEnum.LogCommand, OnLogRecived }
+            };
         }
 
-        public void FromJSON(string LogsJSON)
+        public void OnDataRecived(object sender, DataReceivedEventArgs e)
         {
-            JObject logsObj = JObject.Parse(LogsJSON);
+            CommandMessage message = CommandMessage.FromJSON(e.Data);
 
-            string allLogs = (string)logsObj["Logs"];
-            string[] logs = allLogs.Split(';');
+            if (m_actions.ContainsKey(message.CommandID))
+            {
+                m_actions[message.CommandID](message);
+            }
+        }
 
+        private void OnLogRecived(CommandMessage message)
+        {
+            InterpretLogs(message.CommandArgs);
+        }
+
+        public void InterpretLogs(string[] logs)
+        {
             foreach (string log in logs)
             {
                 string[] logDetails = log.Split(',');
@@ -52,8 +72,6 @@ namespace ImageServiceGUI.Models
 
                 m_ModelLogs.Add(new LogRecord() { Type = (MessageTypeEnum)type, Message = logDetails[1] });
             }
-
-            // NotifyPropertyChanged("ModelLogs");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

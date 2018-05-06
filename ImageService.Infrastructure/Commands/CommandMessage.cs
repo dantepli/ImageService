@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImageService.Infrastructure.Commands
 {
-    class CommandMessage
+    public class CommandMessage
     {
         public int CommandID { get; set; }
         public string[] CommandArgs { get; set; }

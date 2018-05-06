@@ -10,12 +10,13 @@ using ImageService.Infrastructure.Enums;
 using Newtonsoft.Json.Linq;
 using ImageServiceGUI.Communication;
 using ImageService.Infrastructure.Commands;
+using ImageServiceGUI.Models.Events;
 
 namespace ImageServiceGUI.Models
 {
     class SettingsModel : ISettingsModel
     {
-        delegate void CommandAction(string message);
+        delegate void CommandAction(CommandMessage message);
         private Dictionary<int, CommandAction> m_actions;
 
         public string OutputDir { get; set; }
@@ -41,29 +42,36 @@ namespace ImageServiceGUI.Models
         public SettingsModel()
         {
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
-
-            SingletonClient.Instance.DirectoryPathRemoved += OnRemoveHandler;
+            
             SingletonClient.Instance.DataRecived += OnDataRecived;
+
             string[] args = { };
-            bool result;
-            string properties = SingletonClient.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
-            if (!String.IsNullOrEmpty(properties))
-            {
-                FromJSON(properties);
-            }
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.GetConfigCommand, CommandArgs = args };
+            SingletonClient.Instance.SendCommand(message);
 
             m_actions = new Dictionary<int, CommandAction>()
             {
-                { (int)CommandEnum.GetConfigCommand, OnConfigRecived }
+                { (int)CommandEnum.GetConfigCommand, OnConfigRecived },
+                { (int)CommandEnum.CloseCommand, OnRemoveHandler }
             };
         }
 
-        public void OnConfigRecived(string message)
+        public void OnDataRecived(object sender, DataReceivedEventArgs e)
         {
+            CommandMessage message = CommandMessage.FromJSON(e.Data);
 
+            if(m_actions.ContainsKey(message.CommandID))
+            {
+                m_actions[message.CommandID](message);
+            }
         }
 
-        public void FromJSON(string properties)
+        private void OnConfigRecived(CommandMessage message)
+        {
+            InterpretProperties(message.CommandArgs[0]);
+        }
+
+        public void InterpretProperties(string properties)
         {
             JObject appConfigObj = JObject.Parse(properties);
 
@@ -79,8 +87,6 @@ namespace ImageServiceGUI.Models
             {
                 m_ModelDirPaths.Add(new DirectoryPath() { DirPath = handler });
             }
-
-            // NotifyPropertyChanged("ModelDirPaths");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -96,15 +102,15 @@ namespace ImageServiceGUI.Models
         public void RemoveHandler(DirectoryPath rmPath)
         {
             string[] args = { rmPath.DirPath };
-            bool result;
-            string success = SingletonClient.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.CloseCommand, CommandArgs = args };
+            SingletonClient.Instance.SendCommand(message);
         }
 
-        private void OnRemoveHandler(object sender, DirectoryPathRemovedEventArgs e)
+        private void OnRemoveHandler(CommandMessage message)
         {
             foreach (DirectoryPath path in m_ModelDirPaths)
             {
-                if (path.DirPath == e.Path)
+                if (path.DirPath == message.CommandArgs[0])
                 {
                     m_ModelDirPaths.Remove(path);
                     break;
