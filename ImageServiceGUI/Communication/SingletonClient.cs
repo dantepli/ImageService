@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageServiceGUI.Models;
+using ImageServiceGUI.Models.Events;
 
 namespace ImageServiceGUI.Communication
 {
@@ -25,7 +26,7 @@ namespace ImageServiceGUI.Communication
         public bool CanWrite { get; set; }
         public TcpClient Client { get; private set; }
 
-        public event EventHandler<DirectoryPathRemovedEventArgs> DirectoryPathRemoved;
+        public event EventHandler<DataReceivedEventArgs> DataRecieved;
 
         public static IClient Instance
         {
@@ -78,43 +79,15 @@ namespace ImageServiceGUI.Communication
             Client.Close();
         }
 
-        public string ExecuteCommand(CommandEnum command, string[] args, out bool result)
+        public string ExecuteCommand(CommandEnum command, string[] args)
         {
-            if (!IsConnected)
-            {
-                result = false;
-                return null;
-            }
-            //while (!CanWrite)
-            //{
-            //    Thread.Sleep(1000);
-            //}
-            //writer.Write((int)command);
-            //string toSend = String.Join(";", args);
-            //writer.Write(toSend);
-            //string serverResponse = null;
-            //Thread.Sleep(50);
-            //if (stream.DataAvailable)
-            //{
-            //    serverResponse = reader.ReadString();
-            //}
-            //if (!String.IsNullOrEmpty(serverResponse))
-            //{
-            //    result = true;
-            //}
-            //else
-            //{
-            //    result = false;
-            //}
-            //return serverResponse;
-
             m_streamWriter.AutoFlush = true;
             string toSend = ((int)command).ToString();
             string response = "";
             toSend = toSend + ";" + String.Join(";", args);
             m_streamWriter.WriteLine(toSend);
             m_streamWriter.Flush();
-            while(m_streamReader.Peek() > 0)
+            while (m_streamReader.Peek() > 0)
             {
                 response += m_streamReader.ReadLine();
             }
@@ -132,10 +105,13 @@ namespace ImageServiceGUI.Communication
         public void WaitForResponse()
         {
             string path = "";
-            Thread.Sleep(1000);
-            while (m_streamReader.Peek() > 0)
+            while (true)
             {
-                path += m_streamReader.ReadLine();
+                path = m_streamReader.ReadLine();
+                if (Directory.Exists(path))
+                {
+                    break;
+                }
             }
             DirectoryPathRemoved?.Invoke(this, new DirectoryPathRemovedEventArgs() { Path = path });
         }

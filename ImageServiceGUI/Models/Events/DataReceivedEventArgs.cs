@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageServiceGUI.Models
+namespace ImageServiceGUI.Models.Events
 {
-    class DirectoryPathRemovedEventArgs : EventArgs
+    class DataReceivedEventArgs
     {
-        public string Path { get; set; }
+
     }
 }

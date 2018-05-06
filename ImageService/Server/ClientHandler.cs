@@ -24,21 +24,25 @@ namespace ImageService.Server
         public void HandleClient(TcpClient client)
         {
             ClientInfo clientInfo = new ClientInfo();
+            clientInfo.Client = client;
             clientInfo.NetworkStream = client.GetStream();
             clientInfo.StreamReader = new StreamReader(clientInfo.NetworkStream);
             clientInfo.StreamWriter = new StreamWriter(clientInfo.NetworkStream);
             m_clients.Add(clientInfo);
             new Task(() =>
             {
-                clientInfo.StreamWriter.AutoFlush = true;
-                string args = clientInfo.StreamReader.ReadLine();
-                string[] splitArgs = args.Split(';');
-                int commandID = int.Parse(splitArgs[0]);
-                splitArgs = splitArgs.Skip(1).ToArray();
-                bool result;
-                string response = m_controller.ExecuteCommand(commandID, splitArgs, out result);
-                clientInfo.StreamWriter.WriteLine(response);
-                clientInfo.StreamWriter.Flush();
+                while(true)
+                {
+                    clientInfo.StreamWriter.AutoFlush = true;
+                    string args = clientInfo.StreamReader.ReadLine();
+                    string[] splitArgs = args.Split(';');
+                    int commandID = int.Parse(splitArgs[0]);
+                    splitArgs = splitArgs.Skip(1).ToArray();
+                    bool result;
+                    string response = m_controller.ExecuteCommand(commandID, splitArgs, out result);
+                    clientInfo.StreamWriter.WriteLine(response);
+                    clientInfo.StreamWriter.Flush();
+                }
                 //client.Close();
             }).Start();
         }

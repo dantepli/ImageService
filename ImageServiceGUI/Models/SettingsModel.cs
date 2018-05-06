@@ -104,7 +104,7 @@ namespace ImageServiceGUI.Models
         {
             foreach (DirectoryPath path in m_ModelDirPaths)
             {
-                if(path.DirPath == e.Path)
+                if (path.DirPath == e.Path)
                 {
                     m_ModelDirPaths.Remove(path);
                     break;
