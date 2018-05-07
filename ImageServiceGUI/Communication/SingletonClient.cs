@@ -12,6 +12,7 @@ using ImageService.Infrastructure.Commands;
 using ImageServiceGUI.Models;
 using ImageServiceGUI.Models.Events;
 using System.Windows.Threading;
+using System.Windows;
 
 namespace ImageServiceGUI.Communication
 {
@@ -98,9 +99,13 @@ namespace ImageServiceGUI.Communication
             m_streamWriter.Flush();
         }
 
+        /// <summary>
+        /// reads data from server as long as the client is connected.
+        /// once data is received, invokes an event on the main GUI thread.
+        /// </summary>
         private void ReadDataFromServer()
         {
-            while(true)
+            while(Client.Client.Connected)
             {
                 string data;
                 data = m_streamReader.ReadLine();
@@ -108,10 +113,11 @@ namespace ImageServiceGUI.Communication
                 {
                     data += m_streamReader.ReadLine();
                 }
-                Dispatcher.CurrentDispatcher.Invoke(() =>
+                // update GUI thread on data received.
+                Application.Current.Dispatcher.BeginInvoke((Action)(() =>
                 {
                     DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
-                });
+                }));
             }
             //DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
         }
