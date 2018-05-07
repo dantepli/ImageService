@@ -8,7 +8,7 @@ using System.Net.Sockets;
 
 namespace ImageService.Communication
 {
-    class TcpServer
+    public class TcpServer
     {
         private int port;
         private TcpListener listener;

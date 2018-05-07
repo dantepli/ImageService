@@ -6,18 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Objects;
+using ImageService.Infrastructure.Enums;
+using Newtonsoft.Json.Linq;
 
 namespace ImageServiceGUI.Models
 {
     class SettingsModel : ISettingsModel
     {
-        public string OutputDir{ get; set; }
+        public string OutputDir { get; set; }
 
-        public string SourceName{ get; set; }
+        public string SourceName { get; set; }
 
-        public string LogName{ get; set; }
+        public string LogName { get; set; }
 
-        public int ThumbnailSize{ get; set; }
+        public int ThumbnailSize { get; set; }
 
         private ObservableCollection<DirectoryPath> m_ModelDirPaths;
 
@@ -33,16 +35,33 @@ namespace ImageServiceGUI.Models
 
         public SettingsModel()
         {
-            OutputDir = "output";
-            SourceName = "source";
-            LogName = "log";
-            ThumbnailSize = 120;
-
             m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
 
-            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "I" });
-            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "AM" });
-            m_ModelDirPaths.Add(new DirectoryPath() { DirPath = "THE" });
+            string[] args = { };
+            bool result;
+            string properties = Client.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
+
+            FromJSON(properties);
+        }
+
+        public void FromJSON(string properties)
+        {
+            JObject appConfigObj = JObject.Parse(properties);
+
+            OutputDir = (string)appConfigObj["OutputDir"];
+            SourceName = (string)appConfigObj["SourceName"];
+            LogName = (string)appConfigObj["LogName"];
+            ThumbnailSize = (int)appConfigObj["ThumbnailSize"];
+
+            string allHandlers = (string)appConfigObj["Handler"];
+            string[] handlers = allHandlers.Split(';');
+
+            foreach (string handler in handlers)
+            {
+                m_ModelDirPaths.Add(new DirectoryPath() { DirPath = handler });
+            }
+
+            // NotifyPropertyChanged("ModelDirPaths");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -57,8 +76,11 @@ namespace ImageServiceGUI.Models
 
         public bool RemoveHandler(DirectoryPath rmPath)
         {
-            // TODO ask server to remove handler and get response
-            return true;
+            string[] args = { rmPath.DirPath };
+            bool result;
+            string success = Client.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
+
+            return result;
         }
     }
 }

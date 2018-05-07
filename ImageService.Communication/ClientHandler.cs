@@ -8,7 +8,7 @@ using System.IO;
 
 namespace ImageService.Communication
 {
-    class ClientHandler : IClientHandler
+    public class ClientHandler : IClientHandler
     {
         public void HandleClient(TcpClient client)
         {
@@ -19,6 +19,7 @@ namespace ImageService.Communication
                 using (StreamWriter writer = new StreamWriter(stream))
                 {
                     string commandLine = reader.ReadLine();
+
                 }
                 client.Close();
             }).Start();
