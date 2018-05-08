@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +18,12 @@ namespace ImageService.Infrastructure.Commands
         /// <returns>a json object in string format.</returns>
         public string ToJSON()
         {
-            JObject command = new JObject();
-            command["CommandID"] = CommandID;
-            JArray args = new JArray(CommandArgs);
-            command["CommandArgs"] = args;
-            return command.ToString();
+            //JObject command = new JObject();
+            //command["CommandID"] = CommandID;
+            //JArray args = new JArray(CommandArgs);
+            //command["CommandArgs"] = args;
+            //return command.ToString();
+            return JsonConvert.SerializeObject(this);
         }
 
         /// <summary>
@@ -33,12 +34,13 @@ namespace ImageService.Infrastructure.Commands
         /// <returns>CommandMessage object.</returns>
         public static CommandMessage FromJSON(string json)
         {
-            CommandMessage cmdMessage = new CommandMessage();
-            JObject command = JObject.Parse(json);
-            cmdMessage.CommandID = (int)command["CommandID"];
-            JArray args = (JArray)command["CommandArgs"];
-            cmdMessage.CommandArgs = args.ToObject<string[]>();
-            return cmdMessage;
+            //CommandMessage cmdMessage = new CommandMessage();
+            //JObject command = JObject.Parse(json);
+            //cmdMessage.CommandID = (int)command["CommandID"];
+            //JArray args = (JArray)command["CommandArgs"];
+            //cmdMessage.CommandArgs = args.ToObject<string[]>();
+            //return cmdMessage;
+            return JsonConvert.DeserializeObject<CommandMessage>(json);
         }
     }
 }

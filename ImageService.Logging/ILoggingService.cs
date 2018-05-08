@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImageService.Infrastructure.Objects;
 
 namespace ImageService.Logging
 {
     public interface ILoggingService
     {
         event EventHandler<MessageRecievedEventArgs> MessageRecieved;
+        ICollection<LogRecord> LogRecords { get; }
         /// <summary>
         /// Logs the message to the event logger.
         /// </summary>

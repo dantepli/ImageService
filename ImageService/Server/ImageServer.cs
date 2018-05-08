@@ -7,6 +7,7 @@ using ImageService.Infrastructure.Objects;
 using ImageService.Logging;
 using ImageService.Logging.Modal;
 using ImageService.Modal;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,11 +37,27 @@ namespace ImageService.Server
             m_controller.AddCloseCommand(this);
 
             m_logging = log;
+            m_logging.MessageRecieved += OnLogEntry;
 
             m_tcpServer = new TcpServer(8000, new ClientHandler(controller));
 
             // starts the tcp server in a seperate thread.
             new Task(() => { m_tcpServer.Start(); }).Start();
+        }
+
+        private void OnLogEntry(object sender, MessageRecievedEventArgs e)
+        {
+            LogRecord logRecord = new LogRecord()
+            {
+                Message = e.Message,
+                Type = e.Status
+            };
+            // TODO: CHANGE ICOLLECTION
+            ICollection<LogRecord> logRecords = new List<LogRecord>
+            {
+                logRecord
+            };
+            m_tcpServer.SendToAll(CommandEnum.LogCommand, JsonConvert.SerializeObject(logRecords));
         }
 
         /// <summary>
@@ -57,6 +74,7 @@ namespace ImageService.Server
             }
             IDirectoryHandler h = new DirectoyHandler(m_controller, m_logging);
             h.DirectoryClose += OnCloseServer;
+            h.DirectoryClose += AppConfig.OnHandlerClose;
             CommandRecieved += h.OnCommandRecieved;
             h.StartHandleDirectory(dir_path);
             m_logging.Log($"Handler created for the following directory: {dir_path}.", MessageTypeEnum.INFO);

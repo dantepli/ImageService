@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using ImageServiceGUI.Communication;
 using ImageService.Infrastructure.Commands;
 using ImageServiceGUI.Models.Events;
+using ImageService.Infrastructure;
 
 namespace ImageServiceGUI.Models
 {
@@ -38,7 +39,8 @@ namespace ImageServiceGUI.Models
             }
         }
 
-        public string SourceName {
+        public string SourceName
+        {
             get
             {
                 return m_sourceName;
@@ -50,7 +52,8 @@ namespace ImageServiceGUI.Models
             }
         }
 
-        public string LogName {
+        public string LogName
+        {
             get
             {
                 return m_logName;
@@ -62,7 +65,8 @@ namespace ImageServiceGUI.Models
             }
         }
 
-        public int ThumbnailSize {
+        public int ThumbnailSize
+        {
             get
             {
                 return m_thumbnailSize;
@@ -119,7 +123,7 @@ namespace ImageServiceGUI.Models
             ThumbnailSize = (int)appConfigObj["ThumbnailSize"];
 
             string allHandlers = (string)appConfigObj["Handler"];
-            string[] handlers = allHandlers.Split(';');
+            string[] handlers = allHandlers.Split(new char[] { Consts.DELIM }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string handler in handlers)
             {

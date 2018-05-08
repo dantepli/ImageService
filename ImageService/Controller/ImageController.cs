@@ -9,21 +9,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Commands;
+using ImageService.Logging;
 
 namespace ImageService.Controller
 {
     public class ImageController : IImageController
     {
         private IImageServiceModel m_model;                      // The Model Object
+        private ILoggingService m_logging;
         private Dictionary<int, ICommand> m_commands;
 
-        public ImageController(IImageServiceModel model)
+        public ImageController(IImageServiceModel model, ILoggingService logging)
         {
             m_model = model;                    // Storing the Model Of The System
+            m_logging = logging;
             m_commands = new Dictionary<int, ICommand>()
             {
                 {(int) CommandEnum.NewFileCommand, new NewFileCommand(m_model)},
-                {(int) CommandEnum.GetConfigCommand, new GetConfigCommand()}
+                {(int) CommandEnum.GetConfigCommand, new GetConfigCommand()},
+                {(int) CommandEnum.LogCommand, new LogCommand(m_logging)}
             };
         }
 

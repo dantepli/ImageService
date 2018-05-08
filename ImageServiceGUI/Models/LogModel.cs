@@ -11,6 +11,8 @@ using Newtonsoft.Json.Linq;
 using ImageServiceGUI.Communication;
 using ImageService.Infrastructure.Commands;
 using ImageServiceGUI.Models.Events;
+using ImageService.Infrastructure;
+using Newtonsoft.Json;
 
 namespace ImageServiceGUI.Models
 {
@@ -37,13 +39,13 @@ namespace ImageServiceGUI.Models
 
             m_ModelLogs = new ObservableCollection<LogRecord>();
 
-            //string[] args = { "*" };
-            //CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.LogCommand, CommandArgs = args };
-            //SingletonClient.Instance.SendCommand(message);
+            string[] args = { Consts.ALL };
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.LogCommand, CommandArgs = args };
+            SingletonClient.Instance.SendCommand(message);
 
             m_actions = new Dictionary<int, CommandAction>()
             {
-                { (int)CommandEnum.LogCommand, OnLogRecived }
+                { (int)CommandEnum.LogCommand, OnLogReceived }
             };
         }
 
@@ -57,28 +59,34 @@ namespace ImageServiceGUI.Models
             }
         }
 
-        private void OnLogRecived(CommandMessage message)
+        private void OnLogReceived(CommandMessage message)
         {
             InterpretLogs(message.CommandArgs);
         }
 
         public void InterpretLogs(string[] logs)
         {
-            foreach (string log in logs)
-            {
-                string[] logDetails = log.Split(',');
-                int type;
-                int.TryParse(logDetails[0], out type);
+            //foreach (string log in logs)
+            //{
+            //    string[] logDetails = log.Split(',');
+            //    int type;
+            //    int.TryParse(logDetails[0], out type);
 
-                m_ModelLogs.Add(new LogRecord() { Type = (MessageTypeEnum)type, Message = logDetails[1] });
+            //    m_ModelLogs.Add(new LogRecord() { Type = (MessageTypeEnum)type, Message = logDetails[1] });
+            //}
+            ICollection<LogRecord> logRecords = JsonConvert.DeserializeObject<ICollection<LogRecord>>(logs[0]);
+            foreach (LogRecord logRecord in logRecords)
+            {
+                m_ModelLogs.Add(logRecord);
             }
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string name)
         {
-            if(PropertyChanged != null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }

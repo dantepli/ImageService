@@ -88,7 +88,7 @@ namespace ImageService
                 ConfigurationManager.AppSettings["OutputDir"],
                 Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]));
 
-            m_controller = new ImageController(m_model);
+            m_controller = new ImageController(m_model, m_logging);
             
             m_imageServer = new ImageServer(m_logging, m_controller);
 
