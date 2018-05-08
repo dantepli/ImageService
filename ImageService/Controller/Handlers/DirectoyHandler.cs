@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Logging;
 using System.Text.RegularExpressions;
+using ImageService.Infrastructure;
 
 namespace ImageService.Controller.Handlers
 {
@@ -42,7 +43,7 @@ namespace ImageService.Controller.Handlers
         /// <param name="e">arguments of the event.</param>
         public void OnCommandRecieved(object sender, CommandRecievedEventArgs e)
         {
-            if (e.RequestDirPath == "*" || e.RequestDirPath == m_path)
+            if (e.RequestDirPath == Consts.ALL || e.RequestDirPath == m_path)
             {
                 if (e.CommandID == (int)CommandEnum.CloseCommand)
                 {

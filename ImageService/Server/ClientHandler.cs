@@ -32,17 +32,22 @@ namespace ImageService.Server
             m_clients.Add(clientInfo);
             new Task(() =>
             {
-                while(true)
+                while (true)
                 {
                     clientInfo.StreamWriter.AutoFlush = true;
                     string json = clientInfo.StreamReader.ReadLine();
-                    while(clientInfo.StreamReader.Peek() > 0)
+                    while (clientInfo.StreamReader.Peek() > 0)
                     {
                         json += clientInfo.StreamReader.ReadLine();
                     }
                     CommandMessage cmdMsg = CommandMessage.FromJSON(json);
                     bool result;
                     string msg = m_controller.ExecuteCommand(cmdMsg.CommandID, cmdMsg.CommandArgs, out result);
+                    if (String.IsNullOrEmpty(msg))
+                    {
+                        // no msg to pass on to client.
+                        continue;
+                    }
                     string[] args = { msg };
                     CommandMessage response = new CommandMessage() { CommandID = cmdMsg.CommandID, CommandArgs = args };
                     clientInfo.StreamWriter.WriteLine(response.ToJSON());
@@ -56,7 +61,7 @@ namespace ImageService.Server
         /// sends to all connected clients the message given.
         /// </summary>
         /// <param name="msg">a message to send.</param>
-        public void SendToAll(CommandEnum commandEnum,string msg)
+        public void SendToAll(CommandEnum commandEnum, string msg)
         {
             new Task(() =>
             {

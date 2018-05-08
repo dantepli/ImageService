@@ -1,6 +1,7 @@
 ﻿using ImageService.Commands;
 using ImageService.Controller;
 using ImageService.Controller.Handlers;
+using ImageService.Infrastructure;
 using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
 using ImageService.Logging;
@@ -81,7 +82,7 @@ namespace ImageService.Server
         public void CloseServer()
         {
             // invoke the event - send a message to all handlers(*)
-            CommandRecieved?.Invoke(this, new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, "*"));
+            CommandRecieved?.Invoke(this, new CommandRecievedEventArgs((int)CommandEnum.CloseCommand, null, Consts.ALL));
         }
 
         /// <summary>

@@ -19,30 +19,67 @@ namespace ImageServiceGUI.Models
         delegate void CommandAction(CommandMessage message);
         private Dictionary<int, CommandAction> m_actions;
 
-        public string OutputDir { get; set; }
+        private string m_outputDir;
+        private string m_sourceName;
+        private string m_logName;
+        private int m_thumbnailSize;
 
-        public string SourceName { get; set; }
-
-        public string LogName { get; set; }
-
-        public int ThumbnailSize { get; set; }
-
-        private ObservableCollection<DirectoryPath> m_ModelDirPaths;
-
-        public ObservableCollection<DirectoryPath> ModelDirPaths
+        public event PropertyChangedEventHandler PropertyChanged;
+        public string OutputDir
         {
-            get { return m_ModelDirPaths; }
+            get
+            {
+                return m_outputDir;
+            }
             set
             {
-                m_ModelDirPaths = value;
-                NotifyPropertyChanged("ModelDirPaths");
+                m_outputDir = value;
+                NotifyPropertyChanged("OutputDir");
             }
         }
 
+        public string SourceName {
+            get
+            {
+                return m_sourceName;
+            }
+            set
+            {
+                m_sourceName = value;
+                NotifyPropertyChanged("SourceName");
+            }
+        }
+
+        public string LogName {
+            get
+            {
+                return m_logName;
+            }
+            set
+            {
+                m_logName = value;
+                NotifyPropertyChanged("LogName");
+            }
+        }
+
+        public int ThumbnailSize {
+            get
+            {
+                return m_thumbnailSize;
+            }
+            set
+            {
+                m_thumbnailSize = value;
+                NotifyPropertyChanged("ThumbnailSize");
+            }
+        }
+
+        public ObservableCollection<DirectoryPath> DirectoryPaths { get; set; }
+
         public SettingsModel()
         {
-            m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
-            
+            DirectoryPaths = new ObservableCollection<DirectoryPath>();
+
             SingletonClient.Instance.DataRecieved += OnDataRecieved;
 
             string[] args = { };
@@ -60,7 +97,7 @@ namespace ImageServiceGUI.Models
         {
             CommandMessage message = CommandMessage.FromJSON(e.Data);
 
-            if(m_actions.ContainsKey(message.CommandID))
+            if (m_actions.ContainsKey(message.CommandID))
             {
                 m_actions[message.CommandID](message);
             }
@@ -75,7 +112,7 @@ namespace ImageServiceGUI.Models
         {
             JObject appConfigObj = JObject.Parse(properties);
 
-            
+
             OutputDir = (string)appConfigObj["OutputDir"];
             SourceName = (string)appConfigObj["SourceName"];
             LogName = (string)appConfigObj["LogName"];
@@ -86,11 +123,10 @@ namespace ImageServiceGUI.Models
 
             foreach (string handler in handlers)
             {
-                m_ModelDirPaths.Add(new DirectoryPath() { DirPath = handler });
+                DirectoryPaths.Add(new DirectoryPath() { DirPath = handler });
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string name)
         {
@@ -109,11 +145,11 @@ namespace ImageServiceGUI.Models
 
         private void OnRemoveHandler(CommandMessage message)
         {
-            foreach (DirectoryPath path in m_ModelDirPaths)
+            foreach (DirectoryPath path in DirectoryPaths)
             {
                 if (path.DirPath == message.CommandArgs[0])
                 {
-                    m_ModelDirPaths.Remove(path);
+                    DirectoryPaths.Remove(path);
                     break;
                 }
             }

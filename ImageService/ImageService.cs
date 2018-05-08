@@ -15,6 +15,7 @@ using ImageService.Logging;
 using ImageService.Logging.Modal;
 using System.Configuration;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure;
 
 namespace ImageService
 {
@@ -145,10 +146,11 @@ namespace ImageService
         /// <summary>
         /// creates a handler for each path given.
         /// </summary>
-        /// <param name="handlers_paths">paths for handlers, each path is seperated by ;.</param>
+        /// <param name="handlers_paths">paths for handlers, each path is seperated by the delim
+        /// defined in consts.</param>
         private void CreateHandlers(string handlers_paths)
         {
-            string[] paths = handlers_paths.Split(';');
+            string[] paths = handlers_paths.Split(Consts.DELIM);
             foreach (string dir_path in paths)
             {
                 m_imageServer.CreateHandler(dir_path);

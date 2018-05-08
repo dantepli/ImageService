@@ -21,7 +21,7 @@ namespace ImageService.Commands
         {
             result = true;
             m_server.CloseHandler(args[0]);
-            return "TO CHANGE"; // TODO: CHANGE
+            return null; // TODO: CHECK
         }
     }
 }
