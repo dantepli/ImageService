@@ -6,11 +6,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ImageService.Server
+namespace ImageService.Communication.Server
 {
     public class ClientInfo
     {
-        public TcpClient Client {get; set; }
+        public TcpClient Client { get; set; }
         public NetworkStream NetworkStream { get; set; }
         public StreamReader StreamReader { get; set; }
         public StreamWriter StreamWriter { get; set; }

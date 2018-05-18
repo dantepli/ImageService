@@ -119,7 +119,6 @@ namespace ImageServiceGUI.Communication
                     DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
                 }));
             }
-            //DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
         }
     }
 }

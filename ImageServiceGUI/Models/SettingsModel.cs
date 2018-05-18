@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using ImageService.Infrastructure.Objects;
 using ImageService.Infrastructure.Enums;
 using Newtonsoft.Json.Linq;
-using ImageServiceGUI.Communication;
 using ImageService.Infrastructure.Commands;
-using ImageServiceGUI.Models.Events;
 using ImageService.Infrastructure;
+using ImageService.Communication.Client;
+using ImageService.Communication.Events;
+using System.Windows;
 
 namespace ImageServiceGUI.Models
 {
@@ -109,7 +110,10 @@ namespace ImageServiceGUI.Models
 
         private void OnConfigRecived(CommandMessage message)
         {
-            InterpretProperties(message.CommandArgs[0]);
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                InterpretProperties(message.CommandArgs[0]);
+            }));
         }
 
         public void InterpretProperties(string properties)
@@ -149,14 +153,17 @@ namespace ImageServiceGUI.Models
 
         private void OnRemoveHandler(CommandMessage message)
         {
-            foreach (DirectoryPath path in DirectoryPaths)
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
             {
-                if (path.DirPath == message.CommandArgs[0])
+                foreach (DirectoryPath path in DirectoryPaths)
                 {
-                    DirectoryPaths.Remove(path);
-                    break;
+                    if (path.DirPath == message.CommandArgs[0])
+                    {
+                        DirectoryPaths.Remove(path);
+                        break;
+                    }
                 }
-            }
+            }));
         }
     }
 }

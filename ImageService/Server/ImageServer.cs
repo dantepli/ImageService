@@ -1,7 +1,10 @@
 ﻿using ImageService.Commands;
+using ImageService.Communication.Server;
+using ImageService.Communication.Events;
 using ImageService.Controller;
 using ImageService.Controller.Handlers;
 using ImageService.Infrastructure;
+using ImageService.Infrastructure.Commands;
 using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
 using ImageService.Logging;
@@ -39,10 +42,22 @@ namespace ImageService.Server
             m_logging = log;
             m_logging.MessageRecieved += OnLogEntry;
 
-            m_tcpServer = new TcpServer(8000, new ClientHandler(controller));
+            m_tcpServer = new TcpServer(8000, new ClientHandler());
+            m_tcpServer.DataRecieved += OnDataRecieved;
 
             // starts the tcp server in a seperate thread.
             new Task(() => { m_tcpServer.Start(); }).Start();
+        }
+
+        private void OnDataRecieved(object sender, DataReceivedEventArgs e)
+        {
+            CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
+            bool result;
+            string msg = m_controller.ExecuteCommand(cmdMsg.CommandID, cmdMsg.CommandArgs, out result);
+            if (result)
+            {
+                m_tcpServer.sendToClient(e.Client, (CommandEnum)cmdMsg.CommandID, msg);
+            }
         }
 
         private void OnLogEntry(object sender, MessageRecievedEventArgs e)
@@ -95,7 +110,7 @@ namespace ImageService.Server
         }
 
         /// <summary>
-        /// Close server, notifies handlers.
+        /// Closes server, notifies handlers.
         /// </summary>
         public void CloseServer()
         {

@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
 using Newtonsoft.Json.Linq;
-using ImageServiceGUI.Communication;
 using ImageService.Infrastructure.Commands;
-using ImageServiceGUI.Models.Events;
 using ImageService.Infrastructure;
 using Newtonsoft.Json;
+using ImageService.Communication.Client;
+using ImageService.Communication.Events;
+using System.Windows;
 
 namespace ImageServiceGUI.Models
 {
@@ -61,7 +62,10 @@ namespace ImageServiceGUI.Models
 
         private void OnLogReceived(CommandMessage message)
         {
-            InterpretLogs(message.CommandArgs);
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                InterpretLogs(message.CommandArgs);
+            }));
         }
 
         public void InterpretLogs(string[] logs)
