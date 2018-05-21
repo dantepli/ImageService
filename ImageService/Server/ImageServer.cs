@@ -49,17 +49,27 @@ namespace ImageService.Server
             new Task(() => { m_tcpServer.Start(); }).Start();
         }
 
+        /// <summary>
+        /// executes a command recieved from a client.
+        /// </summary>
+        /// <param name="sender">object that invoked the event.</param>
+        /// <param name="e">the data that was recieved by the server.</param>
         private void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
             bool result;
             string msg = m_controller.ExecuteCommand(cmdMsg.CommandID, cmdMsg.CommandArgs, out result);
-            if (result)
+            if (result && msg != null)
             {
                 m_tcpServer.sendToClient(e.Client, (CommandEnum)cmdMsg.CommandID, msg);
             }
         }
 
+        /// <summary>
+        /// sends a new log entry to all the clients.
+        /// </summary>
+        /// <param name="sender">invoker of the event.</param>
+        /// <param name="e">the log entry to send.</param>
         private void OnLogEntry(object sender, MessageRecievedEventArgs e)
         {
             LogRecord logRecord = new LogRecord()
