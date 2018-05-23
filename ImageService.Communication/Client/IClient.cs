@@ -11,8 +11,7 @@ namespace ImageService.Communication.Client
 {
     public interface IClient
     {
-        bool IsConnected { get; set; }
-        bool CanWrite { get; set; }
+        bool IsConnected { get; }
         TcpClient Client { get; }
         event EventHandler<DataReceivedEventArgs> DataRecieved;
 

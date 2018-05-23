@@ -23,8 +23,10 @@ namespace ImageService.Communication.Client
 
         private SingletonClient() { }
 
-        public bool IsConnected { get; set; }
-        public bool CanWrite { get; set; }
+        public bool IsConnected
+        {
+            get { return Instance.Client.Connected; }
+        }
         public TcpClient Client { get; private set; }
 
         public event EventHandler<DataReceivedEventArgs> DataRecieved;
@@ -59,15 +61,11 @@ namespace ImageService.Communication.Client
             }
             catch (SocketException)
             {
-                IsConnected = false;
-                CanWrite = false;
                 return IsConnected;
             }
             m_networkStream = Client.GetStream();
             m_streamReader = new StreamReader(m_networkStream, Encoding.ASCII);
             m_streamWriter = new StreamWriter(m_networkStream, Encoding.ASCII);
-            IsConnected = true;
-            CanWrite = true;
             Task t = new Task(() => { ReadDataFromServer(); });
             t.Start();
             return IsConnected;
@@ -92,9 +90,12 @@ namespace ImageService.Communication.Client
         /// <param name="args">arguments for the command.</param>
         public void SendCommand(CommandMessage cmdMsg)
         {
-            string toSend = cmdMsg.ToJSON();
-            m_streamWriter.WriteLine(toSend);
-            m_streamWriter.Flush();
+            if (IsConnected)
+            {
+                string toSend = cmdMsg.ToJSON();
+                m_streamWriter.WriteLine(toSend);
+                m_streamWriter.Flush();
+            }
         }
 
         /// <summary>
@@ -111,11 +112,6 @@ namespace ImageService.Communication.Client
                 {
                     data += m_streamReader.ReadLine();
                 }
-                // update GUI thread on data received.
-                //Application.Current.Dispatcher.BeginInvoke((Action)(() =>
-                //{
-                //    DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
-                //}));
                 DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
             }
         }

@@ -79,6 +79,12 @@ namespace ImageService.Communication.Server
             m_ch.SendToAll(commandEnum, msg);
         }
 
+        /// <summary>
+        /// send a message to a specific client.
+        /// </summary>
+        /// <param name="client">client to send to.</param>
+        /// <param name="commandEnum">the command's enum.</param>
+        /// <param name="msg">message to send.</param>
         public void sendToClient(TcpClient client, CommandEnum commandEnum, string msg)
         {
             m_ch.sendToClient(client, commandEnum, msg);

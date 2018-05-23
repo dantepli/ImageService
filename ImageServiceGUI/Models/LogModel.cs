@@ -70,14 +70,6 @@ namespace ImageServiceGUI.Models
 
         public void InterpretLogs(string[] logs)
         {
-            //foreach (string log in logs)
-            //{
-            //    string[] logDetails = log.Split(',');
-            //    int type;
-            //    int.TryParse(logDetails[0], out type);
-
-            //    m_ModelLogs.Add(new LogRecord() { Type = (MessageTypeEnum)type, Message = logDetails[1] });
-            //}
             ICollection<LogRecord> logRecords = JsonConvert.DeserializeObject<ICollection<LogRecord>>(logs[0]);
             foreach (LogRecord logRecord in logRecords)
             {

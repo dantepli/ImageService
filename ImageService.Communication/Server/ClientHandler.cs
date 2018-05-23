@@ -23,6 +23,10 @@ namespace ImageService.Communication.Server
 
         }
 
+        /// <summary>
+        /// handles a specific client.
+        /// </summary>
+        /// <param name="client">a client to handle.</param>
         public void HandleClient(TcpClient client)
         {
             ClientInfo clientInfo = new ClientInfo();
@@ -42,20 +46,7 @@ namespace ImageService.Communication.Server
                         json += clientInfo.StreamReader.ReadLine();
                     }
                     DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = json, Client = clientInfo.Client });
-                    //CommandMessage cmdMsg = CommandMessage.FromJSON(json);
-                    //bool result;
-                    //string msg = m_controller.ExecuteCommand(cmdMsg.CommandID, cmdMsg.CommandArgs, out result);
-                    //if (String.IsNullOrEmpty(msg))
-                    //{
-                    //    // no msg to pass on to client.
-                    //    continue;
-                    //}
-                    //string[] args = { msg };
-                    //CommandMessage response = new CommandMessage() { CommandID = cmdMsg.CommandID, CommandArgs = args };
-                    //clientInfo.StreamWriter.WriteLine(response.ToJSON());
-                    //clientInfo.StreamWriter.Flush();
                 }
-                //client.Close();
             }).Start();
         }
 
@@ -93,6 +84,12 @@ namespace ImageService.Communication.Server
             }).Start();
         }
 
+        /// <summary>
+        /// sends a msg to a specific client.
+        /// </summary>
+        /// <param name="tcpClient">client to send a message to.</param>
+        /// <param name="commandEnum">the command enum.</param>
+        /// <param name="msg">message to send.</param>
         public void sendToClient(TcpClient tcpClient, CommandEnum commandEnum, string msg)
         {
             new Task(() =>

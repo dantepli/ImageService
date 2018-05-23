@@ -23,6 +23,13 @@ namespace ImageService.Communication.Server
         /// </summary>
         /// <param name="msg">a message to send.</param>
         void SendToAll(CommandEnum commandEnum, string msg);
+
+        /// <summary>
+        /// sends a message to the specified client.
+        /// </summary>
+        /// <param name="tcpClient">the client to send.</param>
+        /// <param name="commandEnum">the command to send.</param>
+        /// <param name="msg">message to send.</param>
         void sendToClient(TcpClient tcpClient, CommandEnum commandEnum, string msg);
     }
 }

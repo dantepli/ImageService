@@ -65,10 +65,6 @@ namespace ImageServiceGUI.ViewModels
 
             m_model.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
             {
-                //if (e.PropertyName == "DirectoryPaths")
-                //{
-                //    NotifyPropertyChanged("DirectoryPaths");
-                //}
                 NotifyPropertyChanged(e.PropertyName);
             };
         }
