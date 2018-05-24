@@ -23,6 +23,7 @@ namespace ImageServiceGUI.Views
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainWindowViewModel(new MainWindowModel());
         }
     }
 }

@@ -13,6 +13,7 @@ namespace ImageService.Communication.Client
     {
         bool IsConnected { get; }
         TcpClient Client { get; }
+        event EventHandler<ConnectedArgs> ConnectedNotifyEvent;
         event EventHandler<DataReceivedEventArgs> DataRecieved;
 
         /// <summary>

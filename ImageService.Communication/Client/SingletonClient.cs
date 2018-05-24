@@ -23,6 +23,7 @@ namespace ImageService.Communication.Client
 
         private SingletonClient() { }
 
+        public event EventHandler<ConnectedArgs> ConnectedNotifyEvent;
         public bool IsConnected
         {
             get { return Instance.Client.Connected; }
@@ -68,6 +69,8 @@ namespace ImageService.Communication.Client
             m_streamWriter = new StreamWriter(m_networkStream, Encoding.ASCII);
             Task t = new Task(() => { ReadDataFromServer(); });
             t.Start();
+
+            ConnectedNotifyEvent?.Invoke(this, new ConnectedArgs() { IsConnected = true });
             return IsConnected;
 
         }
@@ -77,6 +80,8 @@ namespace ImageService.Communication.Client
         /// </summary>
         public void Disconnect()
         {
+            ConnectedNotifyEvent?.Invoke(this, new ConnectedArgs() { IsConnected = false });
+
             m_streamReader.Close();
             m_streamWriter.Close();
             m_networkStream.Close();

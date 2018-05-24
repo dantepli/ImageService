@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\ConnectedArgs.cs" />
     <Compile Include="Server\ClientHandler.cs" />
     <Compile Include="Server\ClientInfo.cs" />
     <Compile Include="Events\DataReceivedEventArgs.cs" />
