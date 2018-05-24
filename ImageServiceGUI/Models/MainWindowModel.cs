@@ -29,7 +29,7 @@ namespace ImageServiceGUI.Models
 
         public MainWindowModel()
         {
-            MainFrameColor = false;
+            MainFrameColor = SingletonClient.Instance.IsConnected;
 
             SingletonClient.Instance.ConnectedNotifyEvent += ConnectStatus;
         }

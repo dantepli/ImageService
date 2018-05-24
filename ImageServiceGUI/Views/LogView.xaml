@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:ImageServiceGUI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:TypeToColor x:Key="TypeToColor"></local:TypeToColor>
+    </UserControl.Resources>
     <Grid>
         <DataGrid x:Name="LogData" ItemsSource="{Binding Logs}" AutoGenerateColumns="False" IsReadOnly="True" HorizontalAlignment="Left" Height="365" Margin="10,10,0,0" VerticalAlignment="Top" Width="760">
             <DataGrid.Columns>
