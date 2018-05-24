@@ -70,7 +70,7 @@ namespace ImageService.Communication.Client
             Task t = new Task(() => { ReadDataFromServer(); });
             t.Start();
 
-            ConnectedNotifyEvent?.Invoke(this, new ConnectedArgs() { IsConnected = true });
+            ConnectedNotifyEvent?.Invoke(this, new ConnectedArgs() { IsConnected = IsConnected });
             return IsConnected;
 
         }
