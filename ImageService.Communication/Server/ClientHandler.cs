@@ -45,7 +45,11 @@ namespace ImageService.Communication.Server
                     {
                         json += clientInfo.StreamReader.ReadLine();
                     }
-                    DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = json, Client = clientInfo.Client });
+                    DataRecieved?.Invoke(this, new DataReceivedEventArgs()
+                    {
+                        Data = json,
+                        Client = clientInfo.Client
+                    });
                 }
             }).Start();
         }
@@ -65,7 +69,11 @@ namespace ImageService.Communication.Server
                         if (clientInfo.Client.Connected == true)
                         {
                             string[] args = { msg };
-                            CommandMessage cmdMsg = new CommandMessage() { CommandID = (int)commandEnum, CommandArgs = args };
+                            CommandMessage cmdMsg = new CommandMessage()
+                            {
+                                CommandID = (int)commandEnum,
+                                CommandArgs = args
+                            };
                             lock (clientInfo.StreamWriter)
                             {
                                 clientInfo.StreamWriter.WriteLine(cmdMsg.ToJSON());
@@ -102,7 +110,11 @@ namespace ImageService.Communication.Server
                         {
                             // client found.
                             string[] args = { msg };
-                            CommandMessage response = new CommandMessage() { CommandID = (int)commandEnum, CommandArgs = args };
+                            CommandMessage response = new CommandMessage()
+                            {
+                                CommandID = (int)commandEnum,
+                                CommandArgs = args
+                            };
                             lock (clientInfo.StreamWriter)
                             {
                                 clientInfo.StreamWriter.WriteLine(response.ToJSON());

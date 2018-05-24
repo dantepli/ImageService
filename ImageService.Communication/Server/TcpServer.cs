@@ -71,9 +71,10 @@ namespace ImageService.Communication.Server
         }
 
         /// <summary>
-        /// 
+        /// sends a given message to all connected clients.
         /// </summary>
-        /// <param name="msg"></param>
+        /// <param name="commandEnum">the command enum.</param>
+        /// <param name="msg">the message to send.</param>
         public void SendToAll(CommandEnum commandEnum, string msg)
         {
             m_ch.SendToAll(commandEnum, msg);
