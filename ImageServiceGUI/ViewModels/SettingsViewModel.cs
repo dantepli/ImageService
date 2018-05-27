@@ -17,7 +17,7 @@ namespace ImageServiceGUI.ViewModels
         private ISettingsModel m_model;
         private DirectoryPath m_selectedPath;
 
-
+        // service settings
         public string OutputDir
         {
             get { return m_model.OutputDir; }
@@ -57,6 +57,10 @@ namespace ImageServiceGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// c'tor
+        /// </summary>
+        /// <param name="sm">settings model</param>
         public SettingsViewModel(ISettingsModel sm)
         {
             this.m_model = sm;
@@ -94,6 +98,11 @@ namespace ImageServiceGUI.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// action to do to remove handler
+        /// </summary>
+        /// <param name="sender">sender of data</param>
+        /// <param name="e">args to represent data</param>
         private void OnRemove(object obj)
         {
             m_model.RemoveHandler(SelectedPath);

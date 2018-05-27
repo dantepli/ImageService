@@ -10,8 +10,15 @@ namespace ImageServiceGUI.Models
 {
     interface IMainWindowModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// boolean to represent color of frame -- is the gui connected
+        /// </summary>
         bool MainFrameColor { get; }
 
+        /// <summary>
+        /// notify listeners
+        /// </summary>
+        /// <param name="name">proproty that had changed</param>
         void NotifyPropertyChanged(string name);
     }
 }

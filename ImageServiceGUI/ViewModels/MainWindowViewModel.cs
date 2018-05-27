@@ -18,6 +18,10 @@ namespace ImageServiceGUI.ViewModels
             get { return m_model.MainFrameColor; }
         }
 
+        /// <summary>
+        /// c'tor
+        /// </summary>
+        /// <param name="mwm">main window model</param>
         public MainWindowViewModel(IMainWindowModel mwm)
         {
             this.m_model = mwm;

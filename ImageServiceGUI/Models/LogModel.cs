@@ -53,6 +53,11 @@ namespace ImageServiceGUI.Models
             };
         }
 
+        /// <summary>
+        /// handle data recived from server
+        /// </summary>
+        /// <param name="sender">sender of data</param>
+        /// <param name="e">args to represent data</param>
         public void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             CommandMessage message = CommandMessage.FromJSON(e.Data);
@@ -63,6 +68,10 @@ namespace ImageServiceGUI.Models
             }
         }
 
+        /// <summary>
+        /// handle log recived from server
+        /// </summary>
+        /// <param name="message">Command to represent log\s</param>
         private void OnLogReceived(CommandMessage message)
         {
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
@@ -71,6 +80,10 @@ namespace ImageServiceGUI.Models
             }));
         }
 
+        /// <summary>
+        /// interpret logs
+        /// </summary>
+        /// <param name="logs">string array to represent logs</param>
         public void InterpretLogs(string[] logs)
         {
             ICollection<LogRecord> logRecords = JsonConvert.DeserializeObject<ICollection<LogRecord>>(logs[0]);
@@ -83,6 +96,10 @@ namespace ImageServiceGUI.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// notify listeners
+        /// </summary>
+        /// <param name="name">proproty that had changed</param>
         public void NotifyPropertyChanged(string name)
         {
             if (PropertyChanged != null)

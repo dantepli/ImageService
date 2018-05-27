@@ -11,6 +11,7 @@ namespace ImageServiceGUI.Models
 {
     interface ISettingsModel : INotifyPropertyChanged
     {
+        // settings of service
         string OutputDir { get; }
         string SourceName { get; }
         string LogName { get; }
@@ -18,7 +19,16 @@ namespace ImageServiceGUI.Models
 
         ObservableCollection<DirectoryPath> DirectoryPaths { get; set; }
 
+        /// <summary>
+        /// notify listeners
+        /// </summary>
+        /// <param name="name">proproty that had changed</param>
         void NotifyPropertyChanged(string name);
+
+        /// <summary>
+        /// remove handler from service
+        /// </summary>
+        /// <param name="rmPath">path of handler</param>
         void RemoveHandler(DirectoryPath rmPath);
     }
 }

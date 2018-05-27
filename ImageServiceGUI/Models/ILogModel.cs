@@ -11,8 +11,15 @@ namespace ImageServiceGUI.Models
 {
     interface ILogModel : INotifyPropertyChanged
     {
+        /// <summary>
+        /// logs of the model
+        /// </summary>
         ObservableCollection<LogRecord> ModelLogs { get; set; }
         
+        /// <summary>
+        /// notify listeners
+        /// </summary>
+        /// <param name="name">proproty that had changed</param>
         void NotifyPropertyChanged(string name);
     }
 }

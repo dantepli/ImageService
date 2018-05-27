@@ -23,6 +23,9 @@ namespace ImageServiceGUI.Views
     /// </summary>
     public partial class SettingsView : UserControl
     {
+        /// <summary>
+        /// c'tor
+        /// </summary>
         public SettingsView()
         {
             InitializeComponent();

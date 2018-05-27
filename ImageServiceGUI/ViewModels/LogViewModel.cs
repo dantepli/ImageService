@@ -14,7 +14,7 @@ namespace ImageServiceGUI.ViewModels
     class LogViewModel : ViewModel
     {
         private ILogModel m_model;
-
+        
         public ObservableCollection<LogRecord> Logs
         {
             get { return m_model.ModelLogs; }
@@ -24,6 +24,10 @@ namespace ImageServiceGUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// c'tor
+        /// </summary>
+        /// <param name="lm">log model</param>
         public LogViewModel(ILogModel lm)
         {
             m_model = lm;

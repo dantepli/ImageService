@@ -22,6 +22,9 @@ namespace ImageServiceGUI.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// c'tor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();

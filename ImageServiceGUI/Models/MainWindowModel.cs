@@ -27,6 +27,9 @@ namespace ImageServiceGUI.Models
             }
         }
 
+        /// <summary>
+        /// c'tor
+        /// </summary>
         public MainWindowModel()
         {
             MainFrameColor = SingletonClient.Instance.IsConnected;
@@ -34,6 +37,11 @@ namespace ImageServiceGUI.Models
             SingletonClient.Instance.ConnectedNotifyEvent += ConnectStatus;
         }
 
+        /// <summary>
+        /// change connected status to be as the client
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void ConnectStatus(object sender, ConnectedArgs e)
         {
             MainFrameColor = e.IsConnected;
@@ -41,6 +49,10 @@ namespace ImageServiceGUI.Models
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// notify listeners
+        /// </summary>
+        /// <param name="name">proproty that had changed</param>
         public void NotifyPropertyChanged(string name)
         {
             if (PropertyChanged != null)

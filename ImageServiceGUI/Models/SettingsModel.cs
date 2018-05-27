@@ -21,6 +21,7 @@ namespace ImageServiceGUI.Models
         delegate void CommandAction(CommandMessage message);
         private Dictionary<int, CommandAction> m_actions;
 
+        // settings of service
         private string m_outputDir;
         private string m_sourceName;
         private string m_logName;
@@ -81,6 +82,9 @@ namespace ImageServiceGUI.Models
 
         public ObservableCollection<DirectoryPath> DirectoryPaths { get; set; }
 
+        /// <summary>
+        /// c'tor
+        /// </summary>
         public SettingsModel()
         {
             DirectoryPaths = new ObservableCollection<DirectoryPath>();
@@ -98,6 +102,11 @@ namespace ImageServiceGUI.Models
             };
         }
 
+        /// <summary>
+        /// handle data recived from server
+        /// </summary>
+        /// <param name="sender">sender of data</param>
+        /// <param name="e">args to represent data</param>
         public void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             CommandMessage message = CommandMessage.FromJSON(e.Data);
@@ -108,6 +117,10 @@ namespace ImageServiceGUI.Models
             }
         }
 
+        /// <summary>
+        /// action to do once config had been recived
+        /// </summary>
+        /// <param name="message">message to represet handler's path</param>
         private void OnConfigRecived(CommandMessage message)
         {
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>
@@ -116,6 +129,10 @@ namespace ImageServiceGUI.Models
             }));
         }
 
+        /// <summary>
+        /// interpret properties
+        /// </summary>
+        /// <param name="logs">JSON to represent properties</param>
         public void InterpretProperties(string properties)
         {
             JObject appConfigObj = JObject.Parse(properties);
@@ -135,7 +152,10 @@ namespace ImageServiceGUI.Models
             }
         }
 
-
+        /// <summary>
+        /// notify listeners
+        /// </summary>
+        /// <param name="name">proproty that had changed</param>
         public void NotifyPropertyChanged(string name)
         {
             if (PropertyChanged != null)
@@ -144,6 +164,10 @@ namespace ImageServiceGUI.Models
             }
         }
 
+        /// <summary>
+        /// remove handler from service
+        /// </summary>
+        /// <param name="rmPath">path of handler</param>
         public void RemoveHandler(DirectoryPath rmPath)
         {
             string[] args = { rmPath.DirPath };
@@ -151,6 +175,10 @@ namespace ImageServiceGUI.Models
             SingletonClient.Instance.SendCommand(message);
         }
 
+        /// <summary>
+        /// action to do once a handler had been removed
+        /// </summary>
+        /// <param name="message">message to represet handler's path</param>
         private void OnRemoveHandler(CommandMessage message)
         {
             Application.Current.Dispatcher.BeginInvoke((Action)(() =>

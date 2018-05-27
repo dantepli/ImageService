@@ -15,6 +15,9 @@ namespace ImageServiceGUI.Views
     /// </summary>
     public partial class LogView : UserControl
     {
+        /// <summary>
+        /// c'tor
+        /// </summary>
         public LogView()
         {
             InitializeComponent();

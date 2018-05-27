@@ -12,6 +12,14 @@ namespace ImageServiceGUI.Views
 {
     public class TypeToColor : IValueConverter
     {
+        /// <summary>
+        /// covert type of log to color
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if ((MessageTypeEnum) value == MessageTypeEnum.INFO)
