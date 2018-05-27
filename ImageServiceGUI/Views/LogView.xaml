@@ -8,11 +8,46 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:TypeToColor x:Key="TypeToColor"></local:TypeToColor>
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Height" Value="100" />
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Style.Triggers>
+                <Trigger Property="SortDirection" Value="{x:Null}">
+                    <Setter Property="Background" Value="Silver" />
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True" />
+                        <Condition Property="SortDirection" Value="{x:Null}" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="Green" />
+                </MultiTrigger>
+
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="true" />
+                        <Condition Property="SortDirection" Value="{x:Null}" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" Value="DimGray" />
+                </MultiTrigger>
+                <Trigger Property="SortDirection" Value="Ascending">
+                    <Setter Property="Background" Value="Blue" />
+                </Trigger>
+                <Trigger Property="SortDirection" Value="Descending">
+                    <Setter Property="Background" Value="Purple" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <DataGrid x:Name="LogData" ItemsSource="{Binding Logs}" AutoGenerateColumns="False" IsReadOnly="True" HorizontalAlignment="Left" Height="365" Margin="10,10,0,0" VerticalAlignment="Top" Width="760">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Type" Binding="{Binding Path=Type, Mode=TwoWay}">
+                <DataGridTextColumn Header="Type" Width="60"  Binding="{Binding Path=Type, Mode=TwoWay}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Background" Value="{Binding Path=Type, Converter={StaticResource TypeToColor}}"/>
