@@ -51,6 +51,10 @@ namespace ImageService
             return handlers.ToArray();
         }
 
+        /// <summary>
+        /// converts the object into a string represnation of a json object.
+        /// </summary>
+        /// <returns>a string representation of the corresponding json object.</returns>
         public static string toJSON()
         {
             JObject appConfigObj = new JObject();
@@ -62,22 +66,16 @@ namespace ImageService
             return appConfigObj.ToString();
         }
 
+        /// <summary>
+        /// event triggered by the closing of a handler.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="DirectoryCloseEventArgs"/> instance containing the event data.</param>
         public static void OnHandlerClose(object sender, DirectoryCloseEventArgs e)
         {
-            // TODO: Mutex?
             var handlersList = Handlers.ToList();
             handlersList.Remove(e.DirectoryPath);
             Handlers = handlersList.ToArray();
         }
-        //public static string toJSON()
-        //{
-        //    JObject appConfigObj = new JObject();
-        //    appConfigObj["OutputDir"] = ConfigurationManager.AppSettings["OutputDir"];
-        //    appConfigObj["SourceName"] = ConfigurationManager.AppSettings["SourceName"];
-        //    appConfigObj["LogName"] = ConfigurationManager.AppSettings["LogName"];
-        //    appConfigObj["ThumbnailSize"] = Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]);
-        //    appConfigObj["Handler"] = ConfigurationManager.AppSettings["Handler"];
-        //    return appConfigObj.ToString();
-        //}
     }
 }

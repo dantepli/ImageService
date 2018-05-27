@@ -77,7 +77,6 @@ namespace ImageService.Server
                 Message = e.Message,
                 Type = e.Status
             };
-            // TODO: CHANGE ICOLLECTION
             ICollection<LogRecord> logRecords = new List<LogRecord>
             {
                 logRecord
@@ -116,7 +115,6 @@ namespace ImageService.Server
             CommandRecieved -= h.OnCommandRecieved;
             m_logging.Log(e.Message, MessageTypeEnum.INFO);
             m_tcpServer.SendToAll(CommandEnum.CloseCommand, e.DirectoryPath);
-            // TODO do we need onCommand -= h.OnCloseServer;
         }
 
         /// <summary>

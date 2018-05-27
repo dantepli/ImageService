@@ -34,6 +34,9 @@ namespace ImageServiceGUI.Models
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogModel"/> class.
+        /// </summary>
         public LogModel()
         {
             SingletonClient.Instance.DataRecieved += OnDataRecieved;

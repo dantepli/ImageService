@@ -17,11 +17,17 @@ namespace ImageService.Commands
             m_server = imageServer;
         }
 
+        /// <summary>
+        /// Executes the close command.
+        /// </summary>
+        /// <param name="args">args to command.</param>
+        /// <param name="result">return true if successful.</param>
+        /// <returns>null.</returns>
         public string Execute(string[] args, out bool result)
         {
             result = true;
             m_server.CloseHandler(args[0]);
-            return null; // TODO: CHECK
+            return null;
         }
     }
 }

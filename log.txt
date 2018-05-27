@@ -1,3 +1,312 @@
+commit 3f8a0eea36aab43079e337fddcd5202773cb90d3
+Merge: 8dcedfe 632648a
+Author: dantepli <dan932@gmail.com>
+Date:   Thu May 24 13:28:32 2018 +0300
+
+    Merge branch 'TcpTest' of https://github.com/dantepli/ImageService into TcpTest
+
+commit 8dcedfe319c7b8ef66d2c867987fec02d54f0052
+Author: dantepli <dan932@gmail.com>
+Date:   Thu May 24 13:28:24 2018 +0300
+
+    comments added.
+
+commit 632648a58271db27d0424edd495bc042999e268d
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 24 13:27:44 2018 +0300
+
+    converters are up and running
+
+commit 96fc29095c4934260eb8d3445233552dfa69c45f
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 24 13:03:28 2018 +0300
+
+    added Message type converter to color
+
+commit 6d51199115440ea235db308b84cfe85bfb566c8d
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 24 12:31:56 2018 +0300
+
+    color sign to show connected status to server
+
+commit cf9990650ae6cf1596e16d01437dad2af4ba4e79
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 23 13:04:50 2018 +0300
+
+    Connection check added.
+
+commit 8e8cc951e1ebe33ab8a1b150cdf3167d22affcab
+Author: dantepli <dan932@gmail.com>
+Date:   Mon May 21 17:44:11 2018 +0300
+
+    comments added and data recieved modified.
+
+commit ba85bacb078648ed64a2d37e60fc8a045a579faf
+Author: dantepli <dan932@gmail.com>
+Date:   Fri May 18 14:22:41 2018 +0300
+
+    split to communication project.
+
+commit 5b23572a0f007f881a6afb8a9d34b57ed880f36c
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 9 01:15:54 2018 +0300
+
+    AppConfig Parsing and Logging TCP.
+
+commit da5ca5696c287c168c08eb43c9b6833847903edf
+Author: dantepli <dan932@gmail.com>
+Date:   Tue May 8 18:09:40 2018 +0300
+
+    Introduced consts, fixed binding in GUI.
+
+commit 80bd3ef2e731746311fd4748eef19d7c9ee6ba5f
+Author: dantepli <dan932@gmail.com>
+Date:   Mon May 7 12:14:30 2018 +0300
+
+    GUI thread sync.
+
+commit dd3108ec4e094070e5cf6d32172074c9b094b9c6
+Author: dantepli <dan932@gmail.com>
+Date:   Mon May 7 01:44:33 2018 +0300
+
+    GetConfig work.
+
+commit 811b25d35fc2325b8d82dcf17c239a27e029a172
+Merge: 7fb5197 e60d483
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Sun May 6 22:44:11 2018 +0300
+
+    Merge branch 'TcpTest' of https://github.com/dantepli/ImageService into TcpTest
+
+commit 7fb51973d7be96ee4ca1999ea3d7222df64880a3
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Sun May 6 22:44:04 2018 +0300
+
+    synchronized models with client singleton.
+
+commit e60d48302f4725ec369760ecaf13e783baa30578
+Author: dantepli <dan932@gmail.com>
+Date:   Sun May 6 22:24:17 2018 +0300
+
+    IClient Interface change. SingletonClient changes.
+
+commit de9f9256b07873797a7bf1a9ff400ab43b9ead9c
+Merge: e3983b6 e914acf
+Author: dantepli <dan932@gmail.com>
+Date:   Sun May 6 22:12:20 2018 +0300
+
+    Merge branch 'TcpTest' of https://github.com/dantepli/ImageService into TcpTest
+
+commit e3983b6a841fbc9cf638c3076bfbd6c0ed7e37bf
+Author: dantepli <dan932@gmail.com>
+Date:   Sun May 6 22:11:56 2018 +0300
+
+    SIngletonClient Changes.
+
+commit e914acf1efe4e07fada7d24705edc0fd14490030
+Merge: 829af3f ccfda2a
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Sun May 6 22:01:29 2018 +0300
+
+    Merge branch 'TcpTest' of https://github.com/dantepli/ImageService into TcpTest
+
+commit 829af3f18c4ebfc718c356e4b7c4bb7a924f309b
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Sun May 6 22:01:16 2018 +0300
+
+    moved icommand to infrastructure.
+
+commit ccfda2a5c76524d91a57c4f6b33fac6e53ccb706
+Author: dantepli <dan932@gmail.com>
+Date:   Sun May 6 21:58:06 2018 +0300
+
+    Command Message and DataRecieved event.
+
+commit 3736f0138710621d5927c3d2af6669c2d1634ee7
+Author: dantepli <dan932@gmail.com>
+Date:   Sun May 6 19:24:17 2018 +0300
+
+    TCP work, added ClientInfo to hold
+    the streams.
+
+commit 21ecf94af9d70ba7c605ed908170bce7da46873e
+Author: dantepli <dan932@gmail.com>
+Date:   Sat May 5 20:31:51 2018 +0300
+
+    Initial TCP work. Initial AppConfig works.
+
+commit f1421ec2e994f83c5970d11d739971a69cdff0e3
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 3 19:35:07 2018 +0300
+
+    settings model and log model are ready to be represented by client singlton to server.
+
+commit 7ba78f359cfbb1d9ed676a29f91f2d971079a285
+Merge: 2a6c44a b9a6d30
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 3 14:39:19 2018 +0300
+
+    Merge branch 'master' of https://github.com/dantepli/ImageService
+
+commit 2a6c44a594f27cd9ae151e764c55dba2c6633549
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 3 14:39:09 2018 +0300
+
+    settings model is reading appconfig from server.
+
+commit b9a6d30ab277e0bd985702de4d8ebc58becbf897
+Merge: 9dfabd3 af098e0
+Author: dantepli <dan932@gmail.com>
+Date:   Thu May 3 12:37:37 2018 +0300
+
+    Merge branch 'master' of https://github.com/dantepli/ImageService
+
+commit 9dfabd39775ac69f79c1eda9a0a80df3c8093b9a
+Author: dantepli <dan932@gmail.com>
+Date:   Thu May 3 12:36:57 2018 +0300
+
+    location of tcp communication changed.
+
+commit af098e04fc018333971047dfec9f54fdf88b5d32
+Merge: 4fd0254 5f4fa06
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 3 12:36:26 2018 +0300
+
+    Merge branch 'master' of https://github.com/dantepli/ImageService
+
+commit 4fd02541479c96442da34df380931c13aa8bfcaa
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 3 12:36:14 2018 +0300
+
+    created infrastructure objects.
+
+commit 5f4fa06cdeac41dad9de7778602a942a3db30517
+Author: dantepli <dan932@gmail.com>
+Date:   Thu May 3 12:30:09 2018 +0300
+
+    CloseHandler function added.
+
+commit da32e221ee7e5657afb1887a16d676d9ce98ad11
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 3 12:21:41 2018 +0300
+
+    finished model skelaton, waiting on server.
+
+commit 2ee2a0e1a87cf219a3b1c2d0222b193130ae0bde
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Thu May 3 11:47:19 2018 +0300
+
+    finished model connection to viewmodel.
+
+commit b2abb73182a365a8fd16e3a5849dedd241601158
+Merge: bde79ac b5e0f00
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 2 20:08:05 2018 +0300
+
+    Merge branch 'master' of https://github.com/dantepli/ImageService
+
+commit bde79ac7b885fa0b2532b9be63238a94e3be2ee6
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 2 20:07:42 2018 +0300
+
+    Changed Communication.
+
+commit b5e0f0016febbcbfd1e5ca2a9c6ccef8e9a766b8
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Wed May 2 20:07:22 2018 +0300
+
+    log model init.
+
+commit beea34dd7ab8ef5c5eddf4c0ad712b456092b262
+Merge: 284fb12 e30dac3
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Wed May 2 19:24:21 2018 +0300
+
+    restore state.
+
+commit 284fb12bbbf7fe760fa82713030d7ab4c5db223f
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Wed May 2 19:21:50 2018 +0300
+
+    restore state.
+
+commit e30dac3caa1411cc22801e40fa10c583ef6b2b86
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 2 19:13:38 2018 +0300
+
+    Deleted ImageGUI folder.
+
+commit f310280fc516c802a058704824b94266abdbbe26
+Merge: 2449d74 b459055
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 2 19:12:30 2018 +0300
+
+    merged settings view model.
+
+commit 2449d748824be96d29451f46e7b06be0c86c81a9
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 2 19:11:44 2018 +0300
+
+    Renamed folder and Communication project created.
+
+commit b459055307b17275bfc955d2fa89333df3507544
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Wed May 2 19:00:23 2018 +0300
+
+    Revert "Revert "finished views and viewmodels""
+    
+    This reverts commit 6cc73b20950ab28cd55a5e47f88eb4e4985a6e50.
+
+commit 6cc73b20950ab28cd55a5e47f88eb4e4985a6e50
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Wed May 2 18:56:05 2018 +0300
+
+    Revert "finished views and viewmodels"
+    
+    This reverts commit 4bae0741a054ab1ca361ce93d87816aba397b6be.
+
+commit 4bae0741a054ab1ca361ce93d87816aba397b6be
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Wed May 2 18:55:48 2018 +0300
+
+    finished views and viewmodels
+
+commit 94660671e8b9654ccb48a4e8863fae7374e5a7b4
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 2 15:28:55 2018 +0300
+
+    Remove Button added
+
+commit 1e95f823d5453fd2adb00233fe90fc6d09aab66c
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Wed May 2 13:52:35 2018 +0300
+
+    started working on remove button
+
+commit 28e68658e5498d9c832e946aab10a7cd9a3af4e3
+Author: dantepli <dan932@gmail.com>
+Date:   Wed May 2 13:29:59 2018 +0300
+
+    ListBox data binding and TCP initial
+
+commit 90f5081a503acb528dd9089c8fb80940c7a77671
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Tue May 1 19:03:18 2018 +0300
+
+    added settings view and viewmodel.
+
+commit 11c1651a7cce6b6b419345795efe52c1406056cf
+Author: bar katz <barkatz13897@gmail.com>
+Date:   Tue May 1 11:51:03 2018 +0300
+
+    start working on GUI
+
+commit 39eab7e24227571bc25b7b8b130cbe0e5991b281
+Author: dantepli <dan932@gmail.com>
+Date:   Sun Apr 15 17:16:01 2018 +0300
+
+    finalizing v3.4
+
 commit 8b7ea92bb5f6dde02496c9699f7f42ff090a2c6b
 Author: dantepli <dan932@gmail.com>
 Date:   Sat Apr 14 14:07:02 2018 +0300

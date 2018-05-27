@@ -18,7 +18,7 @@ namespace ImageService.Commands
         }
 
         /// <summary>
-        /// Execute new file command in image modal.
+        /// Execute new file command in image model.
         /// </summary>
         /// <param name="args">path to directory to create file in</param>
         /// <param name="result">return true if successful</param>
