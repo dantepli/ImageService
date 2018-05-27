@@ -17,50 +17,6 @@ namespace ImageServiceGUI.ViewModels
         private ISettingsModel m_model;
         private DirectoryPath m_selectedPath;
 
-        public ICommand RemoveCommand { get; private set; }
-        public DirectoryPath SelectedPath
-        {
-            get { return m_selectedPath; }
-            set
-            {
-                m_selectedPath = value;
-                NotifyPropertyChanged("SelectedPath");
-            }
-        }
-
-        public ObservableCollection<DirectoryPath> DirectoryPaths
-        {
-            get { return m_model.ModelDirPaths; }
-            set
-            {
-                m_model.ModelDirPaths = value;
-            }
-        }
-
-        public SettingsViewModel(ISettingsModel sm)
-        {
-            this.m_model = sm;
-            RemoveCommand = new DelegateCommand<object>(OnRemove, CanRemove);
-            this.PropertyChanged += RemoveCommandPropertyChanged;
-
-            m_model.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e) {
-                if (e.PropertyName == "ModelDirPaths")
-                {
-                    NotifyPropertyChanged("DirectoryPaths");
-                }
-            };
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender">sender of the event.</param>
-        /// <param name="e">the event arguments.</param>
-        private void RemoveCommandPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var command = this.RemoveCommand as DelegateCommand<object>;
-            command.RaiseCanExecuteChanged();
-        }
 
         public string OutputDir
         {
@@ -81,6 +37,48 @@ namespace ImageServiceGUI.ViewModels
         {
             get { return m_model.ThumbnailSize; }
         }
+        public ICommand RemoveCommand { get; private set; }
+        public DirectoryPath SelectedPath
+        {
+            get { return m_selectedPath; }
+            set
+            {
+                m_selectedPath = value;
+                NotifyPropertyChanged("SelectedPath");
+            }
+        }
+
+        public ObservableCollection<DirectoryPath> DirectoryPaths
+        {
+            get { return m_model.DirectoryPaths; }
+            set
+            {
+                m_model.DirectoryPaths = value;
+            }
+        }
+
+        public SettingsViewModel(ISettingsModel sm)
+        {
+            this.m_model = sm;
+            RemoveCommand = new DelegateCommand<object>(OnRemove, CanRemove);
+            this.PropertyChanged += RemoveCommandPropertyChanged;
+
+            m_model.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
+            {
+                NotifyPropertyChanged(e.PropertyName);
+            };
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender">sender of the event.</param>
+        /// <param name="e">the event arguments.</param>
+        private void RemoveCommandPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var command = this.RemoveCommand as DelegateCommand<object>;
+            command.RaiseCanExecuteChanged();
+        }
 
         /// <summary>
         /// Checks if a directory path was selected.
@@ -98,13 +96,7 @@ namespace ImageServiceGUI.ViewModels
 
         private void OnRemove(object obj)
         {
-            bool success = m_model.RemoveHandler(SelectedPath);
-
-            if (success)
-            {
-                m_model.ModelDirPaths.Remove(SelectedPath);
-                SelectedPath = null;
-            }
+            m_model.RemoveHandler(SelectedPath);
         }
     }
 }

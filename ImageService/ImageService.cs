@@ -15,6 +15,7 @@ using ImageService.Logging;
 using ImageService.Logging.Modal;
 using System.Configuration;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure;
 
 namespace ImageService
 {
@@ -49,7 +50,7 @@ namespace ImageService
 
         private int eventId = 1;
         private ImageServer m_imageServer;      // The Image Server
-		private IImageServiceModel m_modal;
+		private IImageServiceModel m_model;
 		private IImageController m_controller;
         private ILoggingService m_logging;
 
@@ -83,11 +84,11 @@ namespace ImageService
             m_logging = new LoggingService();
             m_logging.MessageRecieved += OnLog;
 
-            m_modal = new ImageServiceModal(
+            m_model = new ImageServiceModal(
                 ConfigurationManager.AppSettings["OutputDir"],
                 Int32.Parse(ConfigurationManager.AppSettings["ThumbnailSize"]));
 
-            m_controller = new ImageController(m_modal);
+            m_controller = new ImageController(m_model, m_logging);
             
             m_imageServer = new ImageServer(m_logging, m_controller);
 
@@ -145,10 +146,11 @@ namespace ImageService
         /// <summary>
         /// creates a handler for each path given.
         /// </summary>
-        /// <param name="handlers_paths">paths for handlers, each path is seperated by ;.</param>
+        /// <param name="handlers_paths">paths for handlers, each path is seperated by the delim
+        /// defined in consts.</param>
         private void CreateHandlers(string handlers_paths)
         {
-            string[] paths = handlers_paths.Split(';');
+            string[] paths = handlers_paths.Split(Consts.DELIM);
             foreach (string dir_path in paths)
             {
                 m_imageServer.CreateHandler(dir_path);

@@ -7,13 +7,21 @@ using System.Text;
 using System.Threading.Tasks;
 using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Objects;
-using ImageService.Communication;
 using Newtonsoft.Json.Linq;
+using ImageService.Infrastructure.Commands;
+using ImageService.Infrastructure;
+using Newtonsoft.Json;
+using ImageService.Communication.Client;
+using ImageService.Communication.Events;
+using System.Windows;
 
 namespace ImageServiceGUI.Models
 {
     class LogModel : ILogModel
     {
+        delegate void CommandAction(CommandMessage message);
+        private Dictionary<int, CommandAction> m_actions;
+
         private ObservableCollection<LogRecord> m_ModelLogs;
 
         public ObservableCollection<LogRecord> ModelLogs
@@ -26,41 +34,58 @@ namespace ImageServiceGUI.Models
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogModel"/> class.
+        /// </summary>
         public LogModel()
         {
+            SingletonClient.Instance.DataRecieved += OnDataRecieved;
+
             m_ModelLogs = new ObservableCollection<LogRecord>();
 
-            string[] args = { "*" };
-            bool result;
-            string logsJSON = Client.Instance.ExecuteCommand(CommandEnum.LogCommand, args, out result);
+            string[] args = { Consts.ALL };
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.LogCommand, CommandArgs = args };
+            SingletonClient.Instance.SendCommand(message);
 
-            FromJSON(logsJSON);
+            m_actions = new Dictionary<int, CommandAction>()
+            {
+                { (int)CommandEnum.LogCommand, OnLogReceived }
+            };
         }
 
-        public void FromJSON(string LogsJSON)
+        public void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
-            JObject logsObj = JObject.Parse(LogsJSON);
+            CommandMessage message = CommandMessage.FromJSON(e.Data);
 
-            string allLogs = (string)logsObj["Logs"];
-            string[] logs = allLogs.Split(';');
-
-            foreach (string log in logs)
+            if (m_actions.ContainsKey(message.CommandID))
             {
-                string[] logDetails = log.Split(',');
-                int type;
-                int.TryParse(logDetails[0], out type);
+                m_actions[message.CommandID](message);
+            }
+        }
 
-                m_ModelLogs.Add(new LogRecord() { Type = (MessageTypeEnum)type, Message = logDetails[1] });
+        private void OnLogReceived(CommandMessage message)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                InterpretLogs(message.CommandArgs);
+            }));
+        }
+
+        public void InterpretLogs(string[] logs)
+        {
+            ICollection<LogRecord> logRecords = JsonConvert.DeserializeObject<ICollection<LogRecord>>(logs[0]);
+            foreach (LogRecord logRecord in logRecords)
+            {
+                m_ModelLogs.Add(logRecord);
             }
 
-            // NotifyPropertyChanged("ModelLogs");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string name)
         {
-            if(PropertyChanged != null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }

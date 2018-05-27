@@ -2,25 +2,32 @@
 using ImageService.Infrastructure;
 using ImageService.Infrastructure.Enums;
 using ImageService.Modal;
+using ImageService.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ImageService.Infrastructure.Commands;
+using ImageService.Logging;
 
 namespace ImageService.Controller
 {
     public class ImageController : IImageController
     {
-        private IImageServiceModel m_modal;                      // The Modal Object
+        private IImageServiceModel m_model;                      // The Model Object
+        private ILoggingService m_logging;
         private Dictionary<int, ICommand> m_commands;
 
-        public ImageController(IImageServiceModel modal)
+        public ImageController(IImageServiceModel model, ILoggingService logging)
         {
-            m_modal = modal;                    // Storing the Modal Of The System
+            m_model = model;                    // Storing the Model Of The System
+            m_logging = logging;
             m_commands = new Dictionary<int, ICommand>()
             {
-                {(int) CommandEnum.NewFileCommand, new NewFileCommand(m_modal)}
+                {(int) CommandEnum.NewFileCommand, new NewFileCommand(m_model)},
+                {(int) CommandEnum.GetConfigCommand, new GetConfigCommand()},
+                {(int) CommandEnum.LogCommand, new LogCommand(m_logging)}
             };
         }
 
@@ -33,18 +40,27 @@ namespace ImageService.Controller
         /// <returns>string representing the result of the command.</returns>
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
-            Task<Tuple<string, bool>> t = new Task<Tuple<string, bool>>(() => 
+            Task<Tuple<string, bool>> t = new Task<Tuple<string, bool>>(() =>
             {
                 bool temp_result;
                 string msg = m_commands[commandID].Execute(args, out temp_result);
-                
+
                 return Tuple.Create(msg, temp_result);
             });
             t.Start();
             Tuple<string, bool> result = t.Result;
             resultSuccesful = result.Item2;
-            
+
             return result.Item1;
+        }
+
+        /// <summary>
+        /// adds a close command.
+        /// </summary>
+        /// <param name="server">the server to send the command to.</param>
+        public void AddCloseCommand(ImageServer server)
+        {
+            m_commands.Add((int)CommandEnum.CloseCommand, new CloseCommand(server));
         }
     }
 }

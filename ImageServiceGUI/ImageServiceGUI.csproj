@@ -84,18 +84,23 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\ILogModel.cs" />
+    <Compile Include="Models\IMainWindowModel.cs" />
     <Compile Include="Models\ISettingsModel.cs" />
     <Compile Include="Models\LogModel.cs" />
+    <Compile Include="Models\MainWindowModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
+    <Compile Include="Views\BoolToColor.cs" />
     <Compile Include="Views\LogView.xaml.cs">
       <DependentUpon>LogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TypeToColor.cs" />
     <Page Include="Views\LogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -158,7 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ImageService.Communication\ImageService.Communication.csproj">
-      <Project>{dd83d665-f456-4020-b3de-193f0212f354}</Project>
+      <Project>{DD83D665-F456-4020-B3DE-193F0212F354}</Project>
       <Name>ImageService.Communication</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImageService.Infrastructure\ImageService.Infrastructure.csproj">

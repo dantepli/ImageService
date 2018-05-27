@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ImageServiceGUI.Models;
+using ImageServiceGUI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,7 @@ namespace ImageServiceGUI.Views
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainWindowViewModel(new MainWindowModel());
         }
     }
 }

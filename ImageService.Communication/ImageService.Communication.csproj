@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,10 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientHandler.cs" />
-    <Compile Include="IClientHandler.cs" />
+    <Compile Include="Events\ConnectedArgs.cs" />
+    <Compile Include="Server\ClientHandler.cs" />
+    <Compile Include="Server\ClientInfo.cs" />
+    <Compile Include="Events\DataReceivedEventArgs.cs" />
+    <Compile Include="Client\IClient.cs" />
+    <Compile Include="Server\IClientHandler.cs" />
+    <Compile Include="Server\ITcpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TcpServer.cs" />
+    <Compile Include="Client\SingletonClient.cs" />
+    <Compile Include="Server\TcpServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImageService.Infrastructure\ImageService.Infrastructure.csproj">
+      <Project>{A4EE932E-C317-4F04-A480-057258784AB2}</Project>
+      <Name>ImageService.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

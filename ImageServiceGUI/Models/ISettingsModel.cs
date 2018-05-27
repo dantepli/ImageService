@@ -16,9 +16,9 @@ namespace ImageServiceGUI.Models
         string LogName { get; }
         int ThumbnailSize { get; }
 
-        ObservableCollection<DirectoryPath> ModelDirPaths { get; set; }
+        ObservableCollection<DirectoryPath> DirectoryPaths { get; set; }
 
         void NotifyPropertyChanged(string name);
-        bool RemoveHandler(DirectoryPath rmPath);
+        void RemoveHandler(DirectoryPath rmPath);
     }
 }

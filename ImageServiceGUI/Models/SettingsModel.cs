@@ -8,45 +8,118 @@ using System.Threading.Tasks;
 using ImageService.Infrastructure.Objects;
 using ImageService.Infrastructure.Enums;
 using Newtonsoft.Json.Linq;
+using ImageService.Infrastructure.Commands;
+using ImageService.Infrastructure;
+using ImageService.Communication.Client;
+using ImageService.Communication.Events;
+using System.Windows;
 
 namespace ImageServiceGUI.Models
 {
     class SettingsModel : ISettingsModel
     {
-        public string OutputDir { get; set; }
+        delegate void CommandAction(CommandMessage message);
+        private Dictionary<int, CommandAction> m_actions;
 
-        public string SourceName { get; set; }
+        private string m_outputDir;
+        private string m_sourceName;
+        private string m_logName;
+        private int m_thumbnailSize;
 
-        public string LogName { get; set; }
-
-        public int ThumbnailSize { get; set; }
-
-        private ObservableCollection<DirectoryPath> m_ModelDirPaths;
-
-        public ObservableCollection<DirectoryPath> ModelDirPaths
+        public event PropertyChangedEventHandler PropertyChanged;
+        public string OutputDir
         {
-            get { return m_ModelDirPaths; }
+            get
+            {
+                return m_outputDir;
+            }
             set
             {
-                m_ModelDirPaths = value;
-                NotifyPropertyChanged("ModelDirPaths");
+                m_outputDir = value;
+                NotifyPropertyChanged("OutputDir");
             }
         }
 
-        public SettingsModel()
+        public string SourceName
         {
-            m_ModelDirPaths = new ObservableCollection<DirectoryPath>();
-
-            string[] args = { };
-            bool result;
-            string properties = Client.Instance.ExecuteCommand(CommandEnum.GetConfigCommand, args, out result);
-
-            FromJSON(properties);
+            get
+            {
+                return m_sourceName;
+            }
+            set
+            {
+                m_sourceName = value;
+                NotifyPropertyChanged("SourceName");
+            }
         }
 
-        public void FromJSON(string properties)
+        public string LogName
+        {
+            get
+            {
+                return m_logName;
+            }
+            set
+            {
+                m_logName = value;
+                NotifyPropertyChanged("LogName");
+            }
+        }
+
+        public int ThumbnailSize
+        {
+            get
+            {
+                return m_thumbnailSize;
+            }
+            set
+            {
+                m_thumbnailSize = value;
+                NotifyPropertyChanged("ThumbnailSize");
+            }
+        }
+
+        public ObservableCollection<DirectoryPath> DirectoryPaths { get; set; }
+
+        public SettingsModel()
+        {
+            DirectoryPaths = new ObservableCollection<DirectoryPath>();
+
+            SingletonClient.Instance.DataRecieved += OnDataRecieved;
+
+            string[] args = { };
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.GetConfigCommand, CommandArgs = args };
+            SingletonClient.Instance.SendCommand(message);
+
+            m_actions = new Dictionary<int, CommandAction>()
+            {
+                { (int)CommandEnum.GetConfigCommand, OnConfigRecived },
+                { (int)CommandEnum.CloseCommand, OnRemoveHandler }
+            };
+        }
+
+        public void OnDataRecieved(object sender, DataReceivedEventArgs e)
+        {
+            CommandMessage message = CommandMessage.FromJSON(e.Data);
+
+            if (m_actions.ContainsKey(message.CommandID))
+            {
+                m_actions[message.CommandID](message);
+            }
+        }
+
+        private void OnConfigRecived(CommandMessage message)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                InterpretProperties(message.CommandArgs[0]);
+            }));
+        }
+
+        public void InterpretProperties(string properties)
         {
             JObject appConfigObj = JObject.Parse(properties);
+
 
             OutputDir = (string)appConfigObj["OutputDir"];
             SourceName = (string)appConfigObj["SourceName"];
@@ -54,17 +127,14 @@ namespace ImageServiceGUI.Models
             ThumbnailSize = (int)appConfigObj["ThumbnailSize"];
 
             string allHandlers = (string)appConfigObj["Handler"];
-            string[] handlers = allHandlers.Split(';');
+            string[] handlers = allHandlers.Split(new char[] { Consts.DELIM }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string handler in handlers)
             {
-                m_ModelDirPaths.Add(new DirectoryPath() { DirPath = handler });
+                DirectoryPaths.Add(new DirectoryPath() { DirPath = handler });
             }
-
-            // NotifyPropertyChanged("ModelDirPaths");
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string name)
         {
@@ -74,13 +144,26 @@ namespace ImageServiceGUI.Models
             }
         }
 
-        public bool RemoveHandler(DirectoryPath rmPath)
+        public void RemoveHandler(DirectoryPath rmPath)
         {
             string[] args = { rmPath.DirPath };
-            bool result;
-            string success = Client.Instance.ExecuteCommand(CommandEnum.CloseCommand, args, out result);
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.CloseCommand, CommandArgs = args };
+            SingletonClient.Instance.SendCommand(message);
+        }
 
-            return result;
+        private void OnRemoveHandler(CommandMessage message)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                foreach (DirectoryPath path in DirectoryPaths)
+                {
+                    if (path.DirPath == message.CommandArgs[0])
+                    {
+                        DirectoryPaths.Remove(path);
+                        break;
+                    }
+                }
+            }));
         }
     }
 }

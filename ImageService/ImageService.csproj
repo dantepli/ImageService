@@ -35,6 +35,9 @@
     <StartupObject>ImageService.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
@@ -50,8 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\GetConfigCommand.cs" />
+    <Compile Include="Commands\LogCommand.cs" />
     <Compile Include="Commands\NewFileCommand.cs" />
-    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\CloseCommand.cs" />
     <Compile Include="Controller\Handlers\DirectoyHandler.cs" />
     <Compile Include="Controller\Handlers\IDirectoryHandler.cs" />
     <Compile Include="Controller\IImageController.cs" />
@@ -62,6 +67,7 @@
     <Compile Include="ImageService.Designer.cs">
       <DependentUpon>ImageService.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppConfig.cs" />
     <Compile Include="Model\Event\CommandRecievedEventArgs.cs" />
     <Compile Include="Model\Event\DirectoryCloseEventArgs.cs" />
     <Compile Include="Model\IImageServiceModel.cs" />
@@ -86,8 +92,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ImageService.Communication\ImageService.Communication.csproj">
+      <Project>{DD83D665-F456-4020-B3DE-193F0212F354}</Project>
+      <Name>ImageService.Communication</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImageService.Infrastructure\ImageService.Infrastructure.csproj">
       <Project>{a4ee932e-c317-4f04-a480-057258784ab2}</Project>
       <Name>ImageService.Infrastructure</Name>
