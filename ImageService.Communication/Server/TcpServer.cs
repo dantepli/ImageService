@@ -27,6 +27,11 @@ namespace ImageService.Communication.Server
 
         }
 
+        /// <summary>
+        /// On data recieved event, invokes the data recieved event in the server.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="DataReceivedEventArgs"/> instance containing the event data.</param>
         private void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             DataRecieved?.Invoke(this, e);

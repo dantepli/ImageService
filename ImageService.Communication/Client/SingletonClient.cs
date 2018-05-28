@@ -11,6 +11,7 @@ using ImageService.Infrastructure.Enums;
 using ImageService.Infrastructure.Commands;
 using System.Windows;
 using ImageService.Communication.Events;
+using System.Configuration;
 
 namespace ImageService.Communication.Client
 {
@@ -39,7 +40,13 @@ namespace ImageService.Communication.Client
                 if (m_instance == null)
                 {
                     m_instance = new SingletonClient();
-                    m_instance.Connect("127.0.0.1", 8000);
+                    bool result = Int32.TryParse(ConfigurationManager.AppSettings["Port"], out int port);
+                    if (!result)
+                    {
+                        // trying with default settings.
+                        port = 8000;
+                    }
+                    m_instance.Connect(ConfigurationManager.AppSettings["IP"], port);
                 }
                 return m_instance;
             }

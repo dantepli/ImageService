@@ -22,6 +22,12 @@ namespace ImageService.Commands
             m_logging = logging;
         }
 
+        /// <summary>
+        /// Execute the log command.
+        /// </summary>
+        /// <param name="args">args to command.</param>
+        /// <param name="result">return true if successful.</param>
+        /// <returns>the json representation of the logs.</returns>
         public string Execute(string[] args, out bool result)
         {
             string json = JsonConvert.SerializeObject(m_logging.LogRecords);
