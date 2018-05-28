@@ -98,8 +98,15 @@ namespace ImageService.Communication.Client
             if (IsConnected)
             {
                 string toSend = cmdMsg.ToJSON();
-                m_streamWriter.WriteLine(toSend);
-                m_streamWriter.Flush();
+                try
+                {
+                    m_streamWriter.WriteLine(toSend);
+                    m_streamWriter.Flush();
+                }
+                catch
+                {
+                    return;
+                }
             }
         }
 
@@ -112,10 +119,18 @@ namespace ImageService.Communication.Client
             while (Client.Client.Connected)
             {
                 string data = null;
-                data = m_streamReader.ReadLine();
-                while (m_streamReader.Peek() > 0)
+                try
                 {
-                    data += m_streamReader.ReadLine();
+                    data = m_streamReader.ReadLine();
+                    while (m_streamReader.Peek() > 0)
+                    {
+                        data += m_streamReader.ReadLine();
+                    }
+                }
+                catch
+                {
+                    // stream error. server connection possibly lost.
+                    return;
                 }
                 DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
             }
