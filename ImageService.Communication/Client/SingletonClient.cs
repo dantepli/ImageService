@@ -119,10 +119,17 @@ namespace ImageService.Communication.Client
             while (Client.Client.Connected)
             {
                 string data = null;
-                data = m_streamReader.ReadLine();
-                while (m_streamReader.Peek() > 0)
+                try
                 {
-                    data += m_streamReader.ReadLine();
+                    data = m_streamReader.ReadLine();
+                    while (m_streamReader.Peek() > 0)
+                    {
+                        data += m_streamReader.ReadLine();
+                    }
+                }
+                catch
+                {
+                    return;
                 }
                 DataRecieved?.Invoke(this, new DataReceivedEventArgs() { Data = data });
             }
