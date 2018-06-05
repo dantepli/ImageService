@@ -1,34 +1,10 @@
-﻿@model ImageServiceWeb.Models.HomePageModel
+﻿@model ImageServiceWeb.Models.SettingsModel
 
 @{
-    ViewBag.Title = "HomeView";
+    ViewBag.Title = "Config";
 }
 
-<h2>Home</h2>
-
-
-<table class="table">
-    <tr>
-        <th>Service Status</th>
-        <td>
-            @if (Model.TcpClient.IsConnected)
-            {
-                <span class="badge badge-success">Active</span>
-            }
-            else
-            {
-                <span class="badge badge-danger">Inactive</span>
-            }
-        </td>
-    </tr>
-    <tr>
-        <th>Photos Stored</th>
-        <td>
-            <p class="font-weight-bold">@Model.NumberOfPhotos</p>
-        </td>
-    </tr>
-</table>
-
+<h>Config</h>
 <table class="table">
     <tr>
         <th>
@@ -42,7 +18,7 @@
         </th>
         <th></th>
     </tr>
-    @foreach (var item in Model.Students)
+    @foreach (var item in Model.SettingsContainer)
     {
         <tr>
             <td>

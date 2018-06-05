@@ -5,8 +5,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ImageServiceWeb.Models;
-using ImageService.Communication;
-using ImageService.Communication.Client;
 
 namespace ImageServiceWeb.Controllers
 {
@@ -22,6 +20,7 @@ namespace ImageServiceWeb.Controllers
         };
 
         static HomePageModel homePageModel = new HomePageModel();
+        static SettingsModel settingsModel = new SettingsModel();
 
         // GET: HomePage
         public ActionResult HomeView()
