@@ -8,6 +8,22 @@
 
 <table class="table">
     <tr>
+        <th>Service Status</th>
+        <td>
+            @if (Model.TcpClient.IsConnected)
+            {
+                <span class="badge badge-pill badge-success">Active</span>
+            }
+            else
+            {
+                <span class="badge badge-pill badge-success">Inactive</span>
+            }
+        </td>
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
         <th>
             @Html.DisplayNameFor(model => model.Students[0].FirstName)
         </th>
