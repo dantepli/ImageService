@@ -16,7 +16,14 @@ namespace ImageServiceWeb.Models
         private Dictionary<int, CommandAction> m_actions;
         delegate void CommandAction(CommandMessage message);
 
-        public SettingsContainer SettingsContainer { get; set; }
+        public SettingsContainer SettingsContainer
+        {
+            get
+            {
+                return SettingsContainer.Instance;
+            }
+            private set { }
+        }
 
         public IClient TcpClient
         {
@@ -27,7 +34,6 @@ namespace ImageServiceWeb.Models
         }
 
         /// <summary>
-        /// 
         /// Initializes a new instance of the <see cref="SettingsModel"/> class.
         /// </summary>
         public SettingsModel()
@@ -67,14 +73,14 @@ namespace ImageServiceWeb.Models
         private void OnConfigRecived(CommandMessage message)
         {
             JObject settingsObj = JObject.Parse(message.CommandArgs[0]);
-            SettingsContainer.OutputDir = (string)settingsObj["OutputDir"];
-            SettingsContainer.SourceName = (string)settingsObj["SourceName"];
-            SettingsContainer.LogName = (string)settingsObj["LogName"];
-            SettingsContainer.ThumbnailSize = (int)settingsObj["ThumbnailSize"];
+            SettingsContainer.Instance.OutputDir = (string)settingsObj["OutputDir"];
+            SettingsContainer.Instance.SourceName = (string)settingsObj["SourceName"];
+            SettingsContainer.Instance.LogName = (string)settingsObj["LogName"];
+            SettingsContainer.Instance.ThumbnailSize = (int)settingsObj["ThumbnailSize"];
 
             string allHandlers = (string)settingsObj["Handler"];
             string[] handlers = allHandlers.Split(new char[] { Consts.DELIM }, StringSplitOptions.RemoveEmptyEntries);
-            SettingsContainer.Handlers = handlers.ToList();
+            SettingsContainer.Instance.Handlers = handlers.ToList();
         }
     }
 }

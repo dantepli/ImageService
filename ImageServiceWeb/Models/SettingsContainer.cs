@@ -8,19 +8,35 @@ namespace ImageServiceWeb.Models
 {
     public class SettingsContainer
     {
+        private static volatile SettingsContainer m_instance;
+
+        private SettingsContainer() { }
+            
+        public static SettingsContainer Instance
+        {
+            get
+            {
+                if (m_instance == null)
+                {
+                    m_instance = new SettingsContainer();
+                }
+                return m_instance;
+            }
+        }
+
         [DataType(DataType.Text)]
         [Display(Name = "OutputDir")]
-        public static string OutputDir { get; set; }
+        public  string OutputDir { get; set; }
         [DataType(DataType.Text)]
         [Display(Name = "SourceName")]
-        public static string SourceName { get; set; }
+        public  string SourceName { get; set; }
         [DataType(DataType.Text)]
         [Display(Name = "LogName")]
-        public static string LogName { get; set; }
+        public  string LogName { get; set; }
         [Display(Name = "ThumbnailSize")]
-        public static int ThumbnailSize { get; set; }
+        public  int ThumbnailSize { get; set; }
         [DataType(DataType.Text)]
         [Display(Name = "Handlers")]
-        public static List<string> Handlers { get; set; }
+        public List<string> Handlers { get; set; }
     }
 }

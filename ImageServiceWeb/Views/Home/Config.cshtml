@@ -4,34 +4,47 @@
     ViewBag.Title = "Config";
 }
 
-<h>Config</h>
+<h2>Configuration</h2>
+
+
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Students[0].FirstName)
+            @Html.DisplayNameFor(model => model.SettingsContainer.OutputDir)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Students[0].LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Students[0].ID)
-        </th>
-        <th></th>
+        <td>@Html.DisplayFor(model => model.SettingsContainer.OutputDir)</td>
     </tr>
-    @foreach (var item in Model.SettingsContainer)
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SettingsContainer.SourceName)
+        </th>
+        <td>@Html.DisplayFor(model => model.SettingsContainer.SourceName)</td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SettingsContainer.LogName)
+        </th>
+        <td>@Html.DisplayFor(model => model.SettingsContainer.LogName)</td>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SettingsContainer.ThumbnailSize)
+        </th>
+        <td>@Html.DisplayFor(model => model.SettingsContainer.ThumbnailSize)</td>
+    </tr>
+</table>
+
+<table class="table">
+    <tr>
+        <th> @Html.DisplayNameFor(model => model.SettingsContainer.Handlers)</th>
+    </tr>
+    @foreach (var item in Model.SettingsContainer.Handlers)
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
+                @Html.DisplayFor(modelItem => item)
             </td>
         </tr>
     }
-
-
 </table>
