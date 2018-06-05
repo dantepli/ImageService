@@ -28,6 +28,12 @@ namespace ImageServiceWeb.Controllers
             return View(homePageModel);
         }
 
+        //GET: ConfigPage
+        public ActionResult Config()
+        {
+            return View(settingsModel);
+        }
+
         // GET: First
         public ActionResult Index()
         {

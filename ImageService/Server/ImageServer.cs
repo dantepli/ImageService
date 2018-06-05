@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace ImageService.Server
 {
@@ -42,7 +43,7 @@ namespace ImageService.Server
             m_logging = log;
             m_logging.MessageRecieved += OnLogEntry;
 
-            m_tcpServer = new TcpServer(8000, new ClientHandler());
+            m_tcpServer = new TcpServer(Int32.Parse(ConfigurationManager.AppSettings["ServerPort"]), new ClientHandler());
             m_tcpServer.DataRecieved += OnDataRecieved;
 
             // starts the tcp server in a seperate thread.

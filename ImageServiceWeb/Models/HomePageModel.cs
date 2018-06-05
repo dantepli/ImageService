@@ -30,7 +30,7 @@ namespace ImageServiceWeb.Models
                 }
                 else
                 {
-                    string dirPath = SettingsContainer.OutputDir;
+                    string dirPath = SettingsContainer.Instance.OutputDir;
                     dirPath = dirPath + @"\Thumbnails";
                     numOfPhotos = (from file in Directory.EnumerateFiles(dirPath, "*.*", SearchOption.AllDirectories)
                             select file).Count();
