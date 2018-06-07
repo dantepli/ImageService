@@ -3,6 +3,7 @@ using ImageService.Communication.Events;
 using ImageService.Infrastructure;
 using ImageService.Infrastructure.Commands;
 using ImageService.Infrastructure.Enums;
+using ImageService.Infrastructure.Objects;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,10 @@ namespace ImageServiceWeb.Models
             };
         }
 
+        /// <summary>
+        /// Sends the removal command to the server.
+        /// </summary>
+        /// <param name="handler">The handler.</param>
         public void RemoveHandler(string handler)
         {
             string[] args = { handler };
@@ -57,9 +62,21 @@ namespace ImageServiceWeb.Models
             TcpClient.SendCommand(message);
         }
 
+        /// <summary>
+        /// Called when a handler is removed.
+        /// Removes the handler from the list.
+        /// </summary>
+        /// <param name="message">The message.</param>
         private void OnRemoveHandler(CommandMessage message)
         {
-            throw new NotImplementedException();
+            foreach (string path in SettingsContainer.Handlers)
+            {
+                if (path == message.CommandArgs[0])
+                {
+                    SettingsContainer.Handlers.Remove(path);
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -84,14 +101,14 @@ namespace ImageServiceWeb.Models
         private void OnConfigRecived(CommandMessage message)
         {
             JObject settingsObj = JObject.Parse(message.CommandArgs[0]);
-            SettingsContainer.Instance.OutputDir = (string)settingsObj["OutputDir"];
-            SettingsContainer.Instance.SourceName = (string)settingsObj["SourceName"];
-            SettingsContainer.Instance.LogName = (string)settingsObj["LogName"];
-            SettingsContainer.Instance.ThumbnailSize = (int)settingsObj["ThumbnailSize"];
+            SettingsContainer.OutputDir = (string)settingsObj["OutputDir"];
+            SettingsContainer.SourceName = (string)settingsObj["SourceName"];
+            SettingsContainer.LogName = (string)settingsObj["LogName"];
+            SettingsContainer.ThumbnailSize = (int)settingsObj["ThumbnailSize"];
 
             string allHandlers = (string)settingsObj["Handler"];
             string[] handlers = allHandlers.Split(new char[] { Consts.DELIM }, StringSplitOptions.RemoveEmptyEntries);
-            SettingsContainer.Instance.Handlers = handlers.ToList();
+            SettingsContainer.Handlers = handlers.ToList();
         }
     }
 }
