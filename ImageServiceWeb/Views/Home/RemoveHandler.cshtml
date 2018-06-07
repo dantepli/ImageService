@@ -3,14 +3,15 @@
     ViewBag.Title = "RemoveHandler";
 
 }
-
+<br />
 <h2>RemoveHandler</h2>
 
-<p>Are you certain about your desire to remove @ViewBag.handlerVerbatimString?</p>
-<button type="button" id="removeBtn" class="btn btn-success">Yesss</button>
-<button type="button" id="cancelRemoveBtn" class="btn btn-danger" data-toggle="button">NOOOOOO I REGRET ITT</button>
-
-@Html.Hidden("RemoveConfirmed", Url.Action("Config", "Home"))
+<p>Are you certain about your desire to remove <mark><strong><em>@ViewBag.handlerVerbatimString?</em></strong></mark></p>
+<button type="button" id="removeBtn" class="btn btn-success">MY DECISION IS FINAL</button>
+<button type="button" id="cancelRemoveBtn" class="btn btn-danger">NOOOOOO I REGRET ITT</button>
+<br /> <br />
+<img id="loader" src="~/Content/processing.gif" width="120" height="120" style="display: none;">
+@Html.Hidden("RedirectToConfig", Url.Action("Config", "Home"))
 
 <script>
     $(document).ready(function () {
@@ -20,13 +21,14 @@
             var handler = {
                 handler:  "@ViewBag.handler"
             };
+            $("#loader").show();
             $.post("@Url.Action("RemoveHandlerConfirmation")", handler, function () {
-                var url = $('#RemoveConfirmed').val();
+                var url = $('#RedirectToConfig').val();
                 location.href = url;
             });
         });
         $("#cancelRemoveBtn").click(function () {
-            var url = $('#RemoveConfirmed').val();
+            var url = $('#RedirectToConfig').val();
             location.href = url;
         });
     });
