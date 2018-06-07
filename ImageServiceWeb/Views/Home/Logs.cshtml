@@ -1,0 +1,37 @@
+﻿@model ImageServiceWeb.Models.LogsModel
+
+@{
+    ViewBag.Title = "Logs";
+
+}
+
+<h2>Logs</h2>
+
+<div>
+    <form>
+        <select name="Type">
+            <option value="INFO">INFO</option>
+            <option value="WARNING">WARNING</option>
+            <option value="ERROR">ERROR</option>
+        </select>
+    </form>
+</div>
+<div>
+    <table class="table table-hover table-striped table-borderless">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Logs)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Message)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

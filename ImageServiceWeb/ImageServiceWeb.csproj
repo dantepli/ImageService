@@ -333,13 +333,13 @@
     <Content Include="Views\Home\HomeView.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Content\App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\LogsModel.cs" />
     <Compile Include="Models\SettingsContainer.cs" />
-    <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\HomePageModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\Student.cs" />
@@ -369,6 +369,7 @@
     <Content Include="scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Home\RemoveHandler.cshtml" />
+    <Content Include="Views\Home\Logs.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

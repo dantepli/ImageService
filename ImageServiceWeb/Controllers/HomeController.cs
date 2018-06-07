@@ -12,6 +12,7 @@ namespace ImageServiceWeb.Controllers
     {
         static HomePageModel homePageModel = new HomePageModel();
         static SettingsModel settingsModel = new SettingsModel();
+        static LogsModel logsModel = new LogsModel();
 
         // GET: HomePage
         public ActionResult HomeView()
@@ -23,6 +24,12 @@ namespace ImageServiceWeb.Controllers
         public ActionResult Config()
         {
             return View(settingsModel);
+        }
+
+        //GET: LogsPage
+        public ActionResult Logs()
+        {
+            return View(logsModel);
         }
 
         /// <summary>
