@@ -34,6 +34,19 @@ namespace ImageServiceWeb.Controllers
             return View(settingsModel);
         }
 
+        public ActionResult RemoveHandler(string handler)
+        {
+            ViewBag.handler = handler;
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult Config(string handler)
+        {
+            settingsModel.RemoveHandler(handler);
+            return View(settingsModel);
+        }
+
         // GET: First
         public ActionResult Index()
         {

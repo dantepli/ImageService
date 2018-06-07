@@ -50,6 +50,13 @@ namespace ImageServiceWeb.Models
             };
         }
 
+        public void RemoveHandler(string handler)
+        {
+            string[] args = { handler };
+            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.CloseCommand, CommandArgs = args };
+            TcpClient.SendCommand(message);
+        }
+
         private void OnRemoveHandler(CommandMessage message)
         {
             throw new NotImplementedException();
@@ -70,6 +77,10 @@ namespace ImageServiceWeb.Models
             }
         }
 
+        /// <summary>
+        /// Called when config was recieved from the server.
+        /// </summary>
+        /// <param name="message">The config message.</param>
         private void OnConfigRecived(CommandMessage message)
         {
             JObject settingsObj = JObject.Parse(message.CommandArgs[0]);

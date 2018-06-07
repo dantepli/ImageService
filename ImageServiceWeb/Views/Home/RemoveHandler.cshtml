@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "RemoveHandler";
+
+}
+
+<h2>RemoveHandler</h2>
+
+<p>Are you certain about your desire to remove @ViewBag.handler?</p>
+<button type="button" id="removeBtn" class="btn btn-success">Yesss</button>
+<button type="button" id="cancelRemoveBtn" class="btn btn-danger" data-toggle="button">NOOOOOO I REGRET ITT</button>
+
+<script>
+    $("#removeBtn").click(function () {
+        $(this).prop('disabled', true);
+        $(document.getElementById("cancelRemoveBtn")).prop('disabled', true);
+        var handler = {
+            handler: '@ViewBag.handler'
+        };
+        $.post("@Url.Action("Config")", handler, function () {
+            alert("CUNT");
+        });
+    });
+</script>
