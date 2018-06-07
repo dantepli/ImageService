@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 namespace ImageServiceWeb.Models
@@ -16,6 +17,8 @@ namespace ImageServiceWeb.Models
     {
         private Dictionary<int, CommandAction> m_actions;
         delegate void CommandAction(CommandMessage message);
+
+        public object Lock { get; set; } = new object();
 
         public SettingsContainer SettingsContainer
         {
@@ -60,6 +63,10 @@ namespace ImageServiceWeb.Models
             string[] args = { handler };
             CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.CloseCommand, CommandArgs = args };
             TcpClient.SendCommand(message);
+            lock(Lock)
+            {
+                Monitor.Wait(Lock);
+            }
         }
 
         /// <summary>
@@ -76,6 +83,10 @@ namespace ImageServiceWeb.Models
                     SettingsContainer.Handlers.Remove(path);
                     break;
                 }
+            }
+            lock(Lock)
+            {
+                Monitor.PulseAll(Lock);
             }
         }
 
