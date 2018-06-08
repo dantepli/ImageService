@@ -124,16 +124,5 @@ namespace ImageServiceWeb.Models
             SettingsContainer.Handlers = handlers.ToList();
         }
 
-        // TODO: Move To Photos Model.
-        private void RelativeOutputDir()
-        {
-            string path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-            //string path = HttpRuntime.AppDomainAppPath;
-            string directory = System.IO.Path.GetDirectoryName(path);
-            Uri workingDir = new Uri(directory);
-            Uri outputDir = new Uri(SettingsContainer.OutputDir);
-            string relativePath = Uri.UnescapeDataString(workingDir.MakeRelativeUri(outputDir).ToString().Replace('/', System.IO.Path.DirectorySeparatorChar));
-            SettingsContainer.OutputDir = relativePath;
-        }
     }
 }

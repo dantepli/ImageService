@@ -339,7 +339,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImageInfo.cs" />
     <Compile Include="Models\LogsModel.cs" />
+    <Compile Include="Models\PhotosModel.cs" />
     <Compile Include="Models\SettingsContainer.cs" />
     <Compile Include="Models\HomePageModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
@@ -354,10 +356,6 @@
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Edit.cshtml" />
-    <Content Include="Views\Home\Error.cshtml" />
-    <Content Include="Views\Home\AjaxView.cshtml" />
     <Content Include="scripts\umd\popper.min.js.map" />
     <Content Include="scripts\umd\popper.js.map" />
     <Content Include="scripts\umd\popper-utils.min.js.map" />
@@ -371,6 +369,9 @@
     <Content Include="scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Home\RemoveHandler.cshtml" />
     <Content Include="Views\Home\Logs.cshtml" />
+    <Content Include="Views\Home\Photos.cshtml" />
+    <Content Include="Views\Home\ViewPhoto.cshtml" />
+    <Content Include="Views\Home\DeletePhoto.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

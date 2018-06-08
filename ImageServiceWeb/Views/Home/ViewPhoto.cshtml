@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "ViewPhoto";
+}
+
+<br />
+<img class="img-fluid" src="@ViewBag.img.relativeFullImagePath" alt="..">
+<h5>@Path.GetFileNameWithoutExtension(ViewBag.img.absoluteThumbImagePath)</h5>
+<p><strong>Year Taken: @ViewBag.img.dateTaken.Year</strong></p>
+<p><strong>Month Taken: @ViewBag.img.dateTaken.ToString("MMMM")</strong></p>
+<a href="@Url.Action("DeletePhoto", "Home", new { imgPath = @ViewBag.img.relativeFullImagePath })" class="btn btn-danger btn-xs" role="button">Delete</a>
+
+

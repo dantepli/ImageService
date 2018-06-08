@@ -1,0 +1,31 @@
+﻿@model ImageServiceWeb.Models.PhotosModel
+
+@{
+    ViewBag.Title = "Photos";
+}
+
+<br />
+<h2>Photos</h2>
+<div class="container" id="tourpackages-carousel">
+    <div class="row">
+        @foreach (ImageServiceWeb.Models.ImageInfo image in Model.images)
+        {
+            <div class="col-xs-18 col-sm-6 col-md-3">
+                <div class="thumbnail">
+                    <img class="rounded-circle" src="@image.relativeThumbImagePath" alt="">
+                    <div class="caption">
+                        <h5>@Path.GetFileNameWithoutExtension(image.absoluteThumbImagePath)</h5>
+                        <p><strong>Year Taken: @image.dateTaken.Year</strong></p>
+                        <p><strong>Month Taken: @image.dateTaken.ToString("MMMM")</strong></p>
+                        <p>
+                            <a href="@Url.Action("ViewPhoto", "Home", new { imgPath = @image.relativeFullImagePath })" class="btn btn-info btn-xs" role="button">View</a> 
+                            <a href="@Url.Action("DeletePhoto", "Home", new { imgPath = @image.relativeFullImagePath })" class="btn btn-danger btn-xs" role="button">Delete</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
