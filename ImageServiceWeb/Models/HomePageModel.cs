@@ -7,6 +7,7 @@ using ImageService.Communication.Client;
 using ImageService.Communication.Events;
 using ImageService.Infrastructure.Commands;
 using ImageService.Infrastructure.Enums;
+using Newtonsoft.Json;
 
 namespace ImageServiceWeb.Models
 {
@@ -14,31 +15,20 @@ namespace ImageServiceWeb.Models
     {
         private int numOfPhotos = 0;
 
-        public List<Student> Students { get; } = new List<Student>()
-        {
-            new Student { FirstName = "Dan", LastName = "Teplitski", ID = 312895147 },
-            new Student { FirstName = "Bar", LastName = "Katz", ID = 1111}
-        };
+        public List<Student> Students { get; set; }
 
         public int NumberOfPhotos
         {
             get
             {
-                if (numOfPhotos != 0)
+                string dirPath = SettingsContainer.Instance.OutputDir;
+                dirPath = dirPath + @"\Thumbnails";
+                if (Directory.Exists(dirPath))
                 {
-                    return numOfPhotos;
+                    numOfPhotos = (from file in Directory.EnumerateFiles(dirPath, "*.*", SearchOption.AllDirectories)
+                                   select file).Count();
                 }
-                else
-                {
-                    string dirPath = SettingsContainer.Instance.OutputDir;
-                    dirPath = dirPath + @"\Thumbnails";
-                    if (Directory.Exists(dirPath))
-                    {
-                        numOfPhotos = (from file in Directory.EnumerateFiles(dirPath, "*.*", SearchOption.AllDirectories)
-                                       select file).Count();
-                    }
-                    return numOfPhotos;
-                }
+                return numOfPhotos;
             }
         }
 
@@ -48,6 +38,13 @@ namespace ImageServiceWeb.Models
             {
                 return SingletonClient.Instance;
             }
+        }
+
+        public HomePageModel()
+        {
+            string path = HttpRuntime.AppDomainAppPath;
+            string studentDataPath = path + @"\studentDetails.json";
+            Students = JsonConvert.DeserializeObject<List<Student>>(File.ReadAllText(studentDataPath));
         }
     }
 }

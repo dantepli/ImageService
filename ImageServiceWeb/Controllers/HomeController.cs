@@ -51,8 +51,6 @@ namespace ImageServiceWeb.Controllers
         public void RemoveHandlerConfirmation(string handler)
         {
             settingsModel.RemoveHandler(handler);
-            //TODO: REMOVE
-            System.Threading.Thread.Sleep(2000);
         }
 
         // GET: First

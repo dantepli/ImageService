@@ -18,7 +18,7 @@ namespace ImageServiceWeb.Models
         private Dictionary<int, CommandAction> m_actions;
         delegate void CommandAction(CommandMessage message);
 
-        public object Lock { get; set; } = new object();
+        private object Lock { get; set; } = new object();
 
         public SettingsContainer SettingsContainer
         {
@@ -60,12 +60,15 @@ namespace ImageServiceWeb.Models
         /// <param name="handler">The handler.</param>
         public void RemoveHandler(string handler)
         {
-            string[] args = { handler };
-            CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.CloseCommand, CommandArgs = args };
-            TcpClient.SendCommand(message);
-            lock(Lock)
+            if (SettingsContainer.Handlers.Contains(handler))
             {
-                Monitor.Wait(Lock);
+                string[] args = { handler };
+                CommandMessage message = new CommandMessage() { CommandID = (int)CommandEnum.CloseCommand, CommandArgs = args };
+                TcpClient.SendCommand(message);
+                lock (Lock)
+                {
+                    Monitor.Wait(Lock);
+                }
             }
         }
 
@@ -84,7 +87,7 @@ namespace ImageServiceWeb.Models
                     break;
                 }
             }
-            lock(Lock)
+            lock (Lock)
             {
                 Monitor.PulseAll(Lock);
             }
@@ -116,10 +119,21 @@ namespace ImageServiceWeb.Models
             SettingsContainer.SourceName = (string)settingsObj["SourceName"];
             SettingsContainer.LogName = (string)settingsObj["LogName"];
             SettingsContainer.ThumbnailSize = (int)settingsObj["ThumbnailSize"];
-
             string allHandlers = (string)settingsObj["Handler"];
             string[] handlers = allHandlers.Split(new char[] { Consts.DELIM }, StringSplitOptions.RemoveEmptyEntries);
             SettingsContainer.Handlers = handlers.ToList();
+        }
+
+        // TODO: Move To Photos Model.
+        private void RelativeOutputDir()
+        {
+            string path = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            //string path = HttpRuntime.AppDomainAppPath;
+            string directory = System.IO.Path.GetDirectoryName(path);
+            Uri workingDir = new Uri(directory);
+            Uri outputDir = new Uri(SettingsContainer.OutputDir);
+            string relativePath = Uri.UnescapeDataString(workingDir.MakeRelativeUri(outputDir).ToString().Replace('/', System.IO.Path.DirectorySeparatorChar));
+            SettingsContainer.OutputDir = relativePath;
         }
     }
 }

@@ -37,7 +37,7 @@
 </table>
 
 <div class="list-group">
-    <li class="list-group-item">@Html.DisplayNameFor(model => model.SettingsContainer.Handlers)</li>
+    <li class="list-group-item"><strong>@Html.DisplayNameFor(model => model.SettingsContainer.Handlers)</strong></li>
     @foreach (var item in Model.SettingsContainer.Handlers)
     {
         <a href="@Url.Action("RemoveHandler", "Home", new { handler = @item })" class="list-group-item list-group-item-action">@Html.DisplayFor(modelItem => item)</a>
