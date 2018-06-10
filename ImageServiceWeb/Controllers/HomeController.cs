@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ImageServiceWeb.Models;
+using ImageService.Infrastructure;
 
 namespace ImageServiceWeb.Controllers
 {
@@ -51,7 +52,7 @@ namespace ImageServiceWeb.Controllers
             photosModel.UpdatePhotos();
             return View(photosModel);
         }
-
+        
         public ActionResult GetByType(string type)
         {
             logsModel.UpdateByType(type);

@@ -8,22 +8,24 @@
 <h2>Logs</h2>
 
 <div>
-    <form id="logForm">
-        <select id="typeSelector" name="Type">
+    <form id="logForm" class="form-inline">
+        <select id="typeSelector" name="Type" class="form-control-sm" style="margin: 10px">
+            <option value="*">ALL</option>
             <option value="INFO">INFO</option>
             <option value="WARNING">WARNING</option>
             <option value="FAIL">FAIL</option>
         </select>
-        <input type="submit" value="filter"/>
+        <button class="btn btn-outline-primary" type="submit">filter</button>
     </form>
 
     <script>
         $(document).ready(function () {
+
             $("#logForm").submit(function () {
                 var data = {
                     type: $("#typeSelector").val()
                 };
-                $.post("@Url.Action("GetByType")", data, function () {
+                $.get("@Url.Action("GetByType")", data, function () {
                     location.reload();
                 });
             });
