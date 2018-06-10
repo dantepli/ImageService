@@ -15,24 +15,37 @@ namespace ImageServiceWeb.Controllers
         static LogsModel logsModel = new LogsModel();
         static PhotosModel photosModel = new PhotosModel();
 
-        // GET: HomePage
+        /// <summary>
+        /// Get request for home view.
+        /// </summary>
+        /// <returns>The home view.</returns>
         public ActionResult HomeView()
         {
             return View(homePageModel);
         }
 
-        //GET: ConfigPage
+        /// <summary>
+        /// Get request for config view.
+        /// </summary>
+        /// <returns>The config view.</returns>
         public ActionResult Config()
         {
             return View(settingsModel);
         }
 
-        //GET: LogsPage
+        /// <summary>
+        /// Get request for logs view.
+        /// </summary>
+        /// <returns>The logs view.</returns>
         public ActionResult Logs()
         {
             return View(logsModel);
         }
 
+        /// <summary>
+        /// Get request for photos view.
+        /// </summary>
+        /// <returns>The photos view.</returns>
         public ActionResult Photos()
         {
             photosModel.UpdatePhotos();
@@ -54,34 +67,48 @@ namespace ImageServiceWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Removes the handler given.
+        /// </summary>
+        /// <param name="handler">The handler to remove.</param>
         [HttpPost]
         public void RemoveHandlerConfirmation(string handler)
         {
             settingsModel.RemoveHandler(handler);
         }
 
+        /// <summary>
+        /// Get request for ViewPhoto view.
+        /// Displays the image with the given path.
+        /// </summary>
+        /// <param name="imgPath">The img path.</param>
+        /// <returns>The ViewPhoto view.</returns>
         public ActionResult ViewPhoto(string imgPath)
         {
             ViewBag.img = photosModel.FindImageByRelativeFullImgPath(imgPath);
             return View();
         }
 
+        /// <summary>
+        /// Get request for the DeletePhoto view.
+        /// </summary>
+        /// <param name="imgPath">The img path of the photo to remove.</param>
+        /// <returns>The DeletePhoto view with the path given as a paramater.</returns>
         public ActionResult DeletePhoto(string imgPath)
         {
             ViewBag.img = photosModel.FindImageByRelativeFullImgPath(imgPath);
             return View();
         }
 
+        /// <summary>
+        /// Deletes the photo with the given path and redirects to the Photos View.
+        /// </summary>
+        /// <param name="imgPath">The img path.</param>
+        /// <returns>The Photos View.</returns>
         public ActionResult DeletePhotoConfirmation(string imgPath)
         {
             photosModel.DeletePhotoByRelativeFullImgPath(imgPath);
             return RedirectToAction("Photos");
-        }
-
-        // GET: First
-        public ActionResult Index()
-        {
-            return View();
         }
     }
 }

@@ -94,10 +94,10 @@ namespace ImageServiceWeb.Models
         }
 
         /// <summary>
-        /// handle data recived from server
+        /// handle data recived from server.
         /// </summary>
-        /// <param name="sender">sender of data</param>
-        /// <param name="e">args to represent data</param>
+        /// <param name="sender">sender of data.</param>
+        /// <param name="e">args to represent data.</param>
         public void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             CommandMessage message = CommandMessage.FromJSON(e.Data);
