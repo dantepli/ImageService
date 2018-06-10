@@ -18,12 +18,24 @@ namespace ImageServiceWeb.Models
         private Dictionary<int, CommandAction> m_actions;
         delegate void CommandAction(CommandMessage message);
 
+        public string filterType;
         private List<LogRecord> m_logs;
         public List<LogRecord> Logs
         {
             get
             {
-                return m_logs;
+                List<LogRecord> viewList = new List<LogRecord>();
+                
+                foreach(LogRecord log in m_logs)
+                {
+                    if(string.Compare(log.Type.ToString("G"), filterType) == 0 ||
+                        string.Compare(Consts.ALL, filterType) == 0)
+                    {
+                        viewList.Add(log);
+                    }
+                }
+
+                return viewList;
             }
             private set
             {
@@ -46,6 +58,7 @@ namespace ImageServiceWeb.Models
         {
             TcpClient.DataRecieved += OnDataRecieved;
 
+            filterType = Consts.ALL;
             m_logs = new List<LogRecord>();
 
             string[] args = { Consts.ALL };
@@ -86,6 +99,11 @@ namespace ImageServiceWeb.Models
             {
                 m_logs.Add(logRecord);
             }
+        }
+
+        public void UpdateByType(string type)
+        {
+            filterType = string.Copy(type);
         }
     }
 }
