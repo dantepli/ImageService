@@ -72,11 +72,10 @@ namespace ImageServiceWeb.Controllers
             return View();
         }
 
-        //TODO: CHANGE?
         public ActionResult DeletePhotoConfirmation(string imgPath)
         {
             photosModel.DeletePhotoByRelativeFullImgPath(imgPath);
-            return View("~/Views/Home/Photos.cshtml", photosModel);
+            return RedirectToAction("Photos");
         }
 
         // GET: First
