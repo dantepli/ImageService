@@ -66,7 +66,7 @@ namespace ImageService.Communication.Server
                 {
                     foreach (ClientInfo clientInfo in m_clients)
                     {
-                        if (clientInfo.Client.Connected == true)
+                        if (clientInfo.Client.Connected)
                         {
                             string[] args = { msg };
                             CommandMessage cmdMsg = new CommandMessage()
