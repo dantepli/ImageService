@@ -8,13 +8,28 @@
 <h2>Logs</h2>
 
 <div>
-    <form>
-        <select name="Type">
+    <form id="logForm">
+        <select id="typeSelector" name="Type">
             <option value="INFO">INFO</option>
             <option value="WARNING">WARNING</option>
             <option value="ERROR">ERROR</option>
         </select>
+        <input type="submit" value="filter"/>
     </form>
+
+    <script>
+        $(document).ready(function () {
+            $("#logForm").submit(function () {
+                var data = {
+                    type: $("#typeSelector").val()
+                };
+                $.post("@Url.Action("GetByType")", data, function () {
+                    location.reload();
+                });
+            });
+        });
+
+    </script>
 </div>
 <div>
     <table class="table table-hover table-striped table-borderless">

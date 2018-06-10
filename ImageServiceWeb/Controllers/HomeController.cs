@@ -52,6 +52,12 @@ namespace ImageServiceWeb.Controllers
             return View(photosModel);
         }
 
+        public ActionResult GetByType(string type)
+        {
+            logsModel.UpdateByType(type);
+            return View(logsModel);
+        }
+
         /// <summary>
         /// Removes the handler.
         /// </summary>
