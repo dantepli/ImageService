@@ -25,9 +25,7 @@
                 var data = {
                     type: $("#typeSelector").val()
                 };
-                $.get("@Url.Action("GetByType")", data, function () {
-                    location.reload();
-                });
+                $.get("@Url.Action("Logs")", data, function () { });
             });
         });
 
