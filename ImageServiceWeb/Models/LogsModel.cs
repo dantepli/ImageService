@@ -101,6 +101,10 @@ namespace ImageServiceWeb.Models
             }
         }
 
+        /// <summary>
+        /// Updates the type to filter the list by.
+        /// </summary>
+        /// <param name="type">The type.</param>
         public void UpdateByType(string type)
         {
             filterType = string.Copy(type);
