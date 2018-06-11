@@ -38,10 +38,10 @@ namespace ImageServiceWeb.Controllers
         /// Get request for logs view.
         /// </summary>
         /// <returns>The logs view.</returns>
-        public ActionResult Logs()
-        {
-            return View(logsModel);
-        }
+        //public ActionResult Logs()
+        //{
+        //    return View(logsModel);
+        //}
 
         /// <summary>
         /// Get request for photos view.
@@ -53,9 +53,14 @@ namespace ImageServiceWeb.Controllers
             return View(photosModel);
         }
         
-        public ActionResult GetByType(string type)
+        public ActionResult Logs(string type)
         {
-            logsModel.UpdateByType(type);
+            if (type != null)
+            {
+                logsModel.UpdateByType(type);
+            } else {
+                logsModel.UpdateByType("*");
+            }
             return View(logsModel);
         }
 
