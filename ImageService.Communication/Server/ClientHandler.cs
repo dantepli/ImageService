@@ -78,7 +78,7 @@ namespace ImageService.Communication.Server
                             {
                                 clientInfo.StreamWriter.WriteLine(cmdMsg.ToJSON());
                                 clientInfo.StreamWriter.Flush();
-                                System.Threading.Thread.Sleep(100);
+                                System.Threading.Thread.Sleep(200);
                             }
                         }
                         else
@@ -120,7 +120,7 @@ namespace ImageService.Communication.Server
                             {
                                 clientInfo.StreamWriter.WriteLine(response.ToJSON());
                                 clientInfo.StreamWriter.Flush();
-                                System.Threading.Thread.Sleep(100);
+                                System.Threading.Thread.Sleep(200);
                             }
                         }
                     }

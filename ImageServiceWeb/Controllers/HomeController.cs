@@ -35,15 +35,6 @@ namespace ImageServiceWeb.Controllers
         }
 
         /// <summary>
-        /// Get request for logs view.
-        /// </summary>
-        /// <returns>The logs view.</returns>
-        //public ActionResult Logs()
-        //{
-        //    return View(logsModel);
-        //}
-
-        /// <summary>
         /// Get request for photos view.
         /// </summary>
         /// <returns>The photos view.</returns>
@@ -52,14 +43,20 @@ namespace ImageServiceWeb.Controllers
             photosModel.UpdatePhotos();
             return View(photosModel);
         }
-        
+
+        /// <summary>
+        /// Get request for logs view.
+        /// Filters the list, if no param is given filters by all.
+        /// </summary>
+        /// <param name="type">The type to filter the list by.</param>
+        /// <returns>The logs view.</returns>
         public ActionResult Logs(string type)
         {
             if (type != null)
             {
                 logsModel.UpdateByType(type);
             } else {
-                logsModel.UpdateByType("*");
+                logsModel.UpdateByType(Consts.ALL);
             }
             return View(logsModel);
         }
