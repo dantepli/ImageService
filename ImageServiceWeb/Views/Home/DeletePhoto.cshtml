@@ -22,7 +22,7 @@
                 <p><strong>Year Taken: @ViewBag.img.dateTaken.Year</strong></p>
                 <p><strong>Month Taken: @ViewBag.img.dateTaken.ToString("MMMM")</strong></p>
                 <p>
-                    <a href="@Url.Action("ViewPhoto", "Home", new { imgPath = @ViewBag.img.relativeFullImagePath })" class="btn btn-info btn-xs" role="button">Cancel</a>
+                    <a href="@Url.Action("Photos", "Home")" class="btn btn-info btn-xs" role="button">Cancel</a>
                     <a href="@Url.Action("DeletePhotoConfirmation", "Home", new { imgPath = @ViewBag.img.relativeFullImagePath })" class="btn btn-danger btn-xs" role="button">Delete</a>
                 </p>
             </div>
