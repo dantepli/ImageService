@@ -8,12 +8,12 @@
 <h2>Logs</h2>
 
 <div>
-    <form id="logForm" class="form-inline">
+    <form id="logForm" class="form-inline" name="logForm">
         <select id="typeSelector" name="Type" class="form-control-sm" style="margin: 10px">
-            <option value="*">ALL</option>
-            <option value="INFO">INFO</option>
-            <option value="WARNING">WARNING</option>
-            <option value="FAIL">FAIL</option>
+            <option value="*" data-sort="1">ALL</option>
+            <option value="INFO" data-sort="2">INFO</option>
+            <option value="WARNING" data-sort="3">WARNING</option>
+            <option value="FAIL" data-sort="4">FAIL</option>
         </select>
         <button class="btn btn-outline-primary" type="submit">filter</button>
     </form>
@@ -30,6 +30,17 @@
                 });
             });
         });
+
+        window.onload = function () {
+            var selItem = sessionStorage.getItem("InfoItem");
+            $('#typeSelector').val(selItem);
+        }
+
+        $('#typeSelector').change(function () {
+            var val = $(this).val();
+            sessionStorage.setItem("InfoItem", val);
+        });
+               
 
     </script>
 </div>
