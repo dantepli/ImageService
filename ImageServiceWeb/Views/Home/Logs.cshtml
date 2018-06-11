@@ -32,8 +32,12 @@
         });
 
         window.onload = function () {
-            var selItem = sessionStorage.getItem("InfoItem");
-            $('#typeSelector').val(selItem);
+            if (this.sessionStorage.length != 0) {
+                var selItem = sessionStorage.getItem("InfoItem");
+                $('#typeSelector').val(selItem);
+            } else {
+                $('#typeSelector').val("*");
+            }
         }
 
         $('#typeSelector').change(function () {
