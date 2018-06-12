@@ -30,17 +30,20 @@ namespace ImageServiceWeb.Models
             List<string> thumbnailPhotosPaths = new List<string>();
             if (Directory.Exists(SettingsContainer.Instance.OutputDir))
             {
-                thumbnailPhotosPaths = Directory.GetFiles(SettingsContainer.Instance.OutputDir, "*.*", SearchOption.AllDirectories).Where(d => d.Contains(thumbnailsFolder)).ToList();
+                thumbnailPhotosPaths = Directory.GetFiles(SettingsContainer.Instance.OutputDir, "*.*", SearchOption.AllDirectories)
+                    .Where(d => d.Contains(thumbnailsFolder)).ToList();
             }
             foreach (string thumbPath in thumbnailPhotosPaths)
             {
                 ImageInfo imageInfo = new ImageInfo()
                 {
                     absoluteThumbImagePath = thumbPath,
-                    relativeThumbImagePath = thumbPath.Replace(HttpRuntime.AppDomainAppPath, Path.DirectorySeparatorChar.ToString()).Replace(Path.DirectorySeparatorChar, '/'),
+                    relativeThumbImagePath = thumbPath.Replace(HttpRuntime.AppDomainAppPath, Path.DirectorySeparatorChar.ToString())
+                    .Replace(Path.DirectorySeparatorChar, '/'),
                     absoluteFullImagePath = thumbPath.Replace(thumbnailsFolder, ""),
                 };
-                imageInfo.relativeFullImagePath = imageInfo.absoluteFullImagePath.Replace(HttpRuntime.AppDomainAppPath, Path.DirectorySeparatorChar.ToString())
+                imageInfo.relativeFullImagePath = imageInfo.absoluteFullImagePath
+                    .Replace(HttpRuntime.AppDomainAppPath, Path.DirectorySeparatorChar.ToString())
                     .Replace(Path.DirectorySeparatorChar, '/');
                 imageInfo.dateTaken = GetDateTakenFromImage(imageInfo.absoluteFullImagePath);
                 images.Add(imageInfo);

@@ -40,10 +40,13 @@ namespace ImageServiceWeb.Models
             }
         }
 
+        /// <summary>
+        /// C'tor. Reads the students data from file.
+        /// </summary>
         public HomePageModel()
         {
             string path = HttpRuntime.AppDomainAppPath;
-            string studentDataPath = path + @"\studentDetails.json";
+            string studentDataPath = path + @"\App_Data" + @"\studentDetails.json";
             Students = JsonConvert.DeserializeObject<List<Student>>(File.ReadAllText(studentDataPath));
         }
     }
