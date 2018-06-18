@@ -12,7 +12,7 @@ namespace ImageService.Communication.Server
     public interface ITcpServer
     {
         event EventHandler<DataReceivedEventArgs> DataRecieved;
-
+        event EventHandler<ImageDataReceivedEventArgs> ImageDataRecieved;
         /// <summary>
         /// starts the server and starts accepting connections.
         /// </summary>

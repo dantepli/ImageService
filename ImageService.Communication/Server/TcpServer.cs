@@ -18,6 +18,7 @@ namespace ImageService.Communication.Server
         private IClientHandler m_ch;
 
         public event EventHandler<DataReceivedEventArgs> DataRecieved;
+        public event EventHandler<ImageDataReceivedEventArgs> ImageDataRecieved;
 
         public TcpServer(int port, IClientHandler ch)
         {
@@ -35,6 +36,16 @@ namespace ImageService.Communication.Server
         private void OnDataRecieved(object sender, DataReceivedEventArgs e)
         {
             DataRecieved?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// On image data recieved event, invokes the data recieved event in the server.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ImageDataReceivedEventArgs"/> instance containing the event data.</param>
+        private void OnImageDataRecieved(object sender, ImageDataReceivedEventArgs e)
+        {
+            ImageDataRecieved?.Invoke(this, e);
         }
 
         /// <summary>

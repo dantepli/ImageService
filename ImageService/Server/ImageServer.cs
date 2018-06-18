@@ -17,6 +17,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
+using System.IO;
+using System.Drawing;
 
 namespace ImageService.Server
 {
@@ -26,6 +28,7 @@ namespace ImageService.Server
         private IImageController m_controller;
         private ILoggingService m_logging;
         private ITcpServer m_tcpServer;
+        private ITcpServer m_androidTcpServer;
         #endregion
 
         #region Properties
@@ -45,9 +48,12 @@ namespace ImageService.Server
 
             m_tcpServer = new TcpServer(Int32.Parse(ConfigurationManager.AppSettings["ServerPort"]), new ClientHandler());
             m_tcpServer.DataRecieved += OnDataRecieved;
-
+            m_androidTcpServer = new TcpServer(Int32.Parse(ConfigurationManager.AppSettings["AndroidPort"]),
+                new AndroidClientHandler());
+            m_androidTcpServer.ImageDataRecieved += OnImageDataRecieved;
             // starts the tcp server in a seperate thread.
             new Task(() => { m_tcpServer.Start(); }).Start();
+            new Task(() => { m_androidTcpServer.Start(); }).Start();
         }
 
         /// <summary>
@@ -63,6 +69,29 @@ namespace ImageService.Server
             if (result && msg != null)
             {
                 m_tcpServer.sendToClient(e.Client, (CommandEnum)cmdMsg.CommandID, msg);
+            }
+        }
+
+        /// <summary>
+        /// converts the image bytes recieved to png file and transfers it to a 
+        /// handled directory.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ImageDataReceivedEventArgs"/> instance containing the event data.</param>
+        private void OnImageDataRecieved(object sender, ImageDataReceivedEventArgs e)
+        {
+            Image image;
+            using (var ms = new MemoryStream(e.ImageBytes))
+            {
+                image = Image.FromStream(ms);
+            }
+            string[] dir = AppConfig.Handlers;
+            if(dir!=null)
+            {
+                if(dir[0]!=null)
+                {
+                    image.Save(dir + e.Name);
+                }
             }
         }
 

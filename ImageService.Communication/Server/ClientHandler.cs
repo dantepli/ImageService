@@ -16,6 +16,7 @@ namespace ImageService.Communication.Server
         private ICollection<ClientInfo> m_clients;
 
         public event EventHandler<DataReceivedEventArgs> DataRecieved;
+        public event EventHandler<ImageDataReceivedEventArgs> ImageDataReceived;
 
         public ClientHandler()
         {

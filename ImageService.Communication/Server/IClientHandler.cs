@@ -12,6 +12,8 @@ namespace ImageService.Communication.Server
     public interface IClientHandler
     {
         event EventHandler<DataReceivedEventArgs> DataRecieved;
+        event EventHandler<ImageDataReceivedEventArgs> ImageDataReceived;
+
         /// <summary>
         /// handles a client request.
         /// </summary>
