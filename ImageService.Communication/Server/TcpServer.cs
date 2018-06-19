@@ -25,6 +25,7 @@ namespace ImageService.Communication.Server
             m_port = port;
             m_ch = ch;
             m_ch.DataRecieved += OnDataRecieved;
+            m_ch.ImageDataReceived += OnImageDataRecieved;
 
         }
 

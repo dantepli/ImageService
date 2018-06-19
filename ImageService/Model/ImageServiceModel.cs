@@ -237,12 +237,19 @@ namespace ImageService.Modal
         /// <returns>a DateTime object corresponding to the ImageTaken Property.</returns>
         private DateTime GetDateTakenFromImage(string path)
         {
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
-            using (Image myImage = Image.FromStream(fs, false, false))
+            try
             {
-                  PropertyItem propItem = myImage.GetPropertyItem(36867);
-                  string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                  return DateTime.Parse(dateTaken);
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                using (Image myImage = Image.FromStream(fs, false, false))
+                {
+                    PropertyItem propItem = myImage.GetPropertyItem(36867);
+                    string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
+                    return DateTime.Parse(dateTaken);
+                }
+            }
+            catch
+            {
+                return File.GetCreationTime(path);
             }
         }
 

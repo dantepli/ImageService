@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,17 +24,14 @@ namespace ImageService.Communication.Server
                 {
                     byte[] imageBytes = null;
                     BinaryReader binaryReader = new BinaryReader(client.GetStream());
-                    int bytesToRead = binaryReader.ReadInt32();
+                    int bytesToRead = IPAddress.NetworkToHostOrder(binaryReader.ReadInt32());
                     byte[] nameBytes = binaryReader.ReadBytes(bytesToRead);
-                    bytesToRead = binaryReader.ReadInt32();
-                    while (binaryReader.PeekChar() > 0)
-                    {
-                        imageBytes = binaryReader.ReadBytes(bytesToRead);
-                    }
+                    bytesToRead = IPAddress.NetworkToHostOrder(binaryReader.ReadInt32());
+                    imageBytes = binaryReader.ReadBytes(bytesToRead);
+                    //Array.Reverse(imageBytes);
                     string name = Encoding.Default.GetString(nameBytes);
                     ImageDataReceived?.Invoke(this,
                            new ImageDataReceivedEventArgs() { Name = name,  ImageBytes = imageBytes });
-                    break;
                 }
             }).Start();
         }
