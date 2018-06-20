@@ -80,18 +80,18 @@ namespace ImageService.Server
         /// <param name="e">The <see cref="ImageDataReceivedEventArgs"/> instance containing the event data.</param>
         private void OnImageDataRecieved(object sender, ImageDataReceivedEventArgs e)
         {
-            //Image image;
-            //using (var ms = new MemoryStream(e.ImageBytes))
-            //{
-            //    image = Image.FromStream(ms);
-            //}
+            Image image;
+            using (var ms = new MemoryStream(e.ImageBytes))
+            {
+                image = Image.FromStream(ms);
+            }
             string[] dir = AppConfig.Handlers;
-            if(dir!=null)
+            if (dir!=null)
             {
                 if(dir[0]!=null)
                 {
                     string path = Path.Combine(dir[0], e.Name);
-                    File.WriteAllBytes(path, e.ImageBytes);
+                    image.Save(path);
                 }
             }
         }
@@ -121,7 +121,7 @@ namespace ImageService.Server
         /// <param name="dir_path">path to directory.</param>
         public void CreateHandler(string dir_path)
         {
-            if (!Directory.Exists(dir_path))
+            if (!System.IO.Directory.Exists(dir_path))
             {
                 m_logging.Log($"Failed creating a handler for the following directory: {dir_path}." +
                     $" Reason: Directory doesn't exist.", MessageTypeEnum.FAIL);

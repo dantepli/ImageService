@@ -22,16 +22,22 @@ namespace ImageService.Communication.Server
             {
                 while (true)
                 {
-                    byte[] imageBytes = null;
-                    BinaryReader binaryReader = new BinaryReader(client.GetStream());
-                    int bytesToRead = IPAddress.NetworkToHostOrder(binaryReader.ReadInt32());
-                    byte[] nameBytes = binaryReader.ReadBytes(bytesToRead);
-                    bytesToRead = IPAddress.NetworkToHostOrder(binaryReader.ReadInt32());
-                    imageBytes = binaryReader.ReadBytes(bytesToRead);
-                    //Array.Reverse(imageBytes);
-                    string name = Encoding.Default.GetString(nameBytes);
-                    ImageDataReceived?.Invoke(this,
-                           new ImageDataReceivedEventArgs() { Name = name,  ImageBytes = imageBytes });
+                    try
+                    {
+                        byte[] imageBytes = null;
+                        BinaryReader binaryReader = new BinaryReader(client.GetStream());
+                        int bytesToRead = IPAddress.NetworkToHostOrder(binaryReader.ReadInt32());
+                        byte[] nameBytes = binaryReader.ReadBytes(bytesToRead);
+                        bytesToRead = IPAddress.NetworkToHostOrder(binaryReader.ReadInt32());
+                        imageBytes = binaryReader.ReadBytes(bytesToRead);
+                        string name = Encoding.Default.GetString(nameBytes);
+                        ImageDataReceived?.Invoke(this,
+                               new ImageDataReceivedEventArgs() { Name = name, ImageBytes = imageBytes });
+                    }
+                    catch
+                    {
+                        return;
+                    }
                 }
             }).Start();
         }

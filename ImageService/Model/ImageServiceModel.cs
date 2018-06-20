@@ -192,21 +192,29 @@ namespace ImageService.Modal
         /// <returns>true if successful.</returns>
         private string HandleDuplicateFile(string srcPath, string outputPath, out bool result)
         {
-            string directory = Path.GetDirectoryName(outputPath);
-            string fileName = Path.GetFileNameWithoutExtension(outputPath) + " " + "({0})";
-            string extension = Path.GetExtension(outputPath);
-            int duplicatesAllowed = 100;
-            for(int i = 1; i < duplicatesAllowed; ++i)
-            {
-                string filePath = Path.Combine(directory, string.Format(fileName, i) + extension);
-                if(!File.Exists(filePath)) {
-                    File.Move(srcPath, filePath);
-                    result = true;
-                    return filePath;
-                }
-            }
-            result = false;
-            return null;
+            string path = outputPath.Replace(m_OutputFolder, "");
+            //string thumbPath = Path.Combine(m_OutputFolder, "Thumbnails", path);
+            string thumbPath = m_OutputFolder + "\\" + "Thumbnails" + "\\" + path;
+            File.Delete(thumbPath);
+            File.Delete(outputPath);
+            File.Move(srcPath, outputPath);
+            result = true;
+            return outputPath;
+            //string directory = Path.GetDirectoryName(outputPath);
+            //string fileName = Path.GetFileNameWithoutExtension(outputPath) + " " + "({0})";
+            //string extension = Path.GetExtension(outputPath);
+            //int duplicatesAllowed = 100;
+            //for(int i = 1; i < duplicatesAllowed; ++i)
+            //{
+            //    string filePath = Path.Combine(directory, string.Format(fileName, i) + extension);
+            //    if(!File.Exists(filePath)) {
+            //        File.Move(srcPath, filePath);
+            //        result = true;
+            //        return filePath;
+            //    }
+            //}
+            //result = false;
+            //return null;
         }
 
         /// <summary>
